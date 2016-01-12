@@ -1,4 +1,4 @@
-# Phalcon Validators
+# Phalcon Validator
 
 Easy validation for Phalcon Framework (in development)
 
