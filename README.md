@@ -2,6 +2,11 @@
 
 Easy validation for Phalcon Framework
 
+### Available rules
+- [x]  required
+- [x]  min
+- [x]  unique
+- [x] email
 
 ### Examples
 ```php
