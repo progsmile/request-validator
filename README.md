@@ -4,14 +4,14 @@ Easy validation for Phalcon Framework
 
 
 ### Examples
-
+```php
 //Fetch data from request
 $postData = $this->request->getPost();
 
 //Create new Validator, pass data, define rules and custom messages
 //Also has errors messages by default 
 
-```php
+
 $validator = new Validator($postData, [
    'firstname' => 'required|min:2',
    'lastname'  => 'required|min:5',
