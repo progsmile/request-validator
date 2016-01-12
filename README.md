@@ -1,6 +1,7 @@
 # Phalcon Validators
 
-Easy validation for Phalcon Framework
+Easy validation for Phalcon Framework (in development)
+
 
 ### Available rules
 - [x]  required
