@@ -3,9 +3,10 @@ namespace Progsmile\Validator;
 
 use Progsmile\Validator\Format\HTML as FormatHTML;
 
-// working example
-// will composer load all of the classes?
+//@todo: Uniqueness validation
+//@todo: Image validation
 
+// working example
 include 'Rules/RulesInterface.php';
 include 'Format/FormatInterface.php';
 include 'Format/HTML.php';
@@ -20,14 +21,17 @@ foreach (array_slice(scandir(__DIR__ . '/Rules'), 2) as $class) {
 
 class Validator
 {
-   // #dns static field for versions 5.4, 5.5
    private static $MAP = [
       'required' => 'Field :first: is required.',
       'email'    => 'Field :first: has a bad email format.',
       'min'      => 'Field :first: should be minimum :second:.',
       'max'      => 'Field :first: should be maximum :second:.',
       'unique'   => 'Field :first: is not unique.',
-      'accepted' => 'Field :first: should be accepted',
+      'accepted' => 'Field :first: should be accepted.',
+      'numeric'  => 'Field :first: is not a number.',
+      'boolean'  => 'Field :first: is not a boolean.',
+      'alpha'    => 'Field :first: has not alpha format',
+      'url'      => 'Field :first: is not URL ',
    ];
 
    private $isValid = true;
@@ -40,6 +44,8 @@ class Validator
 
    public function make($data, $rules, $userMessages = [])
    {
+
+
       foreach ($rules as $fieldName => $fieldRules) {
 
          $groupedRules = explode('|', $fieldRules);
@@ -53,7 +59,7 @@ class Validator
             $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
             $instance = new $class;
-            $instance->setParams([ $data[$fieldName], $ruleParam ]);
+            $instance->setParams([$data[$fieldName], $ruleParam]);
 
             $this->isValid = $instance->fire();
 
