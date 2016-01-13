@@ -11,7 +11,7 @@ class Accepted implements RulesInterface
 
    public function fire()
    {
-      return in_array($this->params[0], ['yes', 'on', 1, true]);
+      return isset($this->params[0]);// && in_array($this->params[0], ['yes', 'on', 1, true]);
    }
 
 

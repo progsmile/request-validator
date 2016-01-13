@@ -7,6 +7,8 @@ use Progsmile\Validator\Format\HTML as FormatHTML;
 //@todo: Image validation
 
 // working example
+// would composer include all these files for us?
+
 include 'Rules/RulesInterface.php';
 include 'Format/FormatInterface.php';
 include 'Format/HTML.php';
@@ -45,7 +47,6 @@ class Validator
    public function make($data, $rules, $userMessages = [])
    {
 
-
       foreach ($rules as $fieldName => $fieldRules) {
 
          $groupedRules = explode('|', $fieldRules);
@@ -59,7 +60,12 @@ class Validator
             $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
             $instance = new $class;
-            $instance->setParams([$data[$fieldName], $ruleParam]);
+
+            if ( isset($data[$fieldName]) && $data[$fieldName] && $ruleParam ){
+
+               $instance->setParams([$data[$fieldName], $ruleParam]);
+
+            }
 
             $this->isValid = $instance->fire();
 
@@ -73,9 +79,7 @@ class Validator
 
                } else {
 
-                  $message = self::$MAP[$ruleName];
-
-                  $message = strtr($message, [
+                  $message = strtr(self::$MAP[$ruleName], [
                         ':first:'  => $fieldName,
                         ':second:' => $ruleParam,
                      ]
