@@ -3,88 +3,114 @@ namespace Progsmile\Validator;
 
 use Progsmile\Validator\Format\HTML as FormatHTML;
 
+// working example
+// will composer load all of the classes?
+
+include 'Rules/RulesInterface.php';
+include 'Format/FormatInterface.php';
+include 'Format/HTML.php';
+include 'Format/Json.php';
+
+foreach (array_slice(scandir(__DIR__ . '/Rules'), 2) as $class) {
+   if ( $class !== 'RulesInterface.php' ){
+      include __DIR__ . '/Rules/' . $class;
+   }
+}
+
+
 class Validator
 {
-    const MAP = [
-        'required' => 'Field :first: is required.',
-        'email'    => 'Field :first: has a bad email format.',
-        'min'      => 'Field :first: should be minimum :second:.',
-        'max'      => 'Field :first: should be maximum :second:.',
-        'email'    => 'Field :first: has a bad email format.',
-    ];
+   // #dns static field for versions 5.4, 5.5
+   private static $MAP = [
+      'required' => 'Field :first: is required.',
+      'email'    => 'Field :first: has a bad email format.',
+      'min'      => 'Field :first: should be minimum :second:.',
+      'max'      => 'Field :first: should be maximum :second:.',
+      'unique'   => 'Field :first: is not unique.',
+      'accepted' => 'Field :first: should be accepted',
+   ];
 
-    private $isValid = true;
-    private $errorMessages = [];
+   private $isValid = true;
 
-    public function make($data, $rules, $userMessages = [])
-    {
-        foreach ($rules as $fieldName => $fieldRules) {
+   private $errorMessages = [];
 
-            $groupedRules = explode('|', $fieldRules);
 
-            foreach ($groupedRules as $concreteRule) {
 
-                $ruleNameParam = explode(':', $concreteRule);
-                $ruleName      = $ruleNameParam[0];
-                $ruleParam     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
 
-                $class = __NAMESPACE__.'\\Rules\\'.ucfirst($ruleName);
 
-                $instance = new $class;
-                $instance->setParams([
-                    $data[$fieldName],
-                    $ruleParam,
-                ]);
+   public function make($data, $rules, $userMessages = [])
+   {
+      foreach ($rules as $fieldName => $fieldRules) {
 
-                $this->isValid = $instance->fire();
+         $groupedRules = explode('|', $fieldRules);
 
-                if ( $this->isValid == false ) {
+         foreach ($groupedRules as $concreteRule) {
 
-                    $ruleErrorFormat = $fieldName.'.'.$ruleName;
+            $ruleNameParam = explode(':', $concreteRule);
+            $ruleName      = $ruleNameParam[0];
+            $ruleParam     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
 
-                    if ( isset($userMessages[$ruleErrorFormat]) ) {
+            $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
-                        $this->errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
+            $instance = new $class;
+            $instance->setParams([ $data[$fieldName], $ruleParam ]);
 
-                    } else {
+            $this->isValid = $instance->fire();
 
-                        $message = self::MAP[$ruleName];
+            if ( $this->isValid == false ){
 
-                        $message = strtr(
-                            $message,
-                            [
-                                ':first:'  => $fieldName,
-                                ':second:' => $ruleParam,
-                            ]
-                        );
+               $ruleErrorFormat = $fieldName . '.' . $ruleName;
 
-                        $this->errorMessages[$fieldName][] = $message;
-                    }
-                }
+               if ( isset($userMessages[$ruleErrorFormat]) ){
 
-                return $this;
+                  $this->errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
+
+               } else {
+
+                  $message = self::$MAP[$ruleName];
+
+                  $message = strtr($message, [
+                        ':first:'  => $fieldName,
+                        ':second:' => $ruleParam,
+                     ]
+                  );
+
+                  $this->errorMessages[$fieldName][] = $message;
+               }
             }
+         }
+      }
 
-        }
-    }
+      return $this;
+   }
 
-    public function isValid()
-    {
-        if ( $this->isValid ) {
 
-            return true;
-        }
 
-        return false;
-    }
 
-    public function messages()
-    {
-        return $this->errorMessages;
-    }
 
-    public function format($class = FormatHTML::class)
-    {
-        return (new $class)->reformat($this->errorMessages);
-    }
+   public function isValid()
+   {
+      //#dns if all rules failed, and the last valid, result will be OK
+      //so, return $this->isValid not good idea)
+
+      return count($this->errorMessages) == 0;
+   }
+
+
+
+
+
+   public function messages()
+   {
+      return $this->errorMessages;
+   }
+
+
+
+
+
+   public function format($class = FormatHTML::class)
+   {
+      return (new $class)->reformat($this->errorMessages);
+   }
 }

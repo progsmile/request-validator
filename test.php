@@ -1,10 +1,12 @@
 <?php
 namespace Progsmile\Validator;
 
-include_once 'vendor/autoload.php';
+use Progsmile\Validator\Format\Json;
 
-$validator = (new Validator)->make(
-    [
+ini_set('display_errors', '1');
+//include_once 'vendor/autoload.php';
+
+$validator = (new Validator)->make([
         'amt' => 201,
     ],
     [
@@ -22,4 +24,4 @@ echo 'HTML Message: ';
 var_dump($validator->format());
 
 echo 'JSON Message: ';
-var_dump($validator->format(\Progsmile\Validator\Format\Json::class));
+var_dump($validator->format(Json::class));
