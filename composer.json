@@ -1,0 +1,8 @@
+{
+    "name": "progsmile/phalcon-validator",
+    "autoload": {
+        "classmap": [
+            "."
+        ]
+    }
+}
