@@ -1,11 +1,5 @@
 {
     "name": "progsmile/phalcon-validator",
-    "authors": [
-        {
-            "name": "Daison Carino",
-            "email": "daison12006013@gmail.com"
-        }
-    ],
     "autoload": {
         "classmap": [
             "."
