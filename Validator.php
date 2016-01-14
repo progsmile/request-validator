@@ -5,12 +5,8 @@ use Progsmile\Validator\Format\HTML as FormatHTML;
 
 class Validator
 {
-    const MAP = [
-        'required' => 'Field :first: is required.',
-        'email'    => 'Field :first: has a bad email format.',
-        'min'      => 'Field :first: should be minimum :second:.',
-        'max'      => 'Field :first: should be maximum :second:.',
-        'email'    => 'Field :first: has a bad email format.',
+    private $config = [
+        'orm' => \Progsmile\Validator\Frameworks\Phalcon\ORM::class,
     ];
 
     private $isValid = true;
@@ -26,17 +22,19 @@ class Validator
 
                 $ruleNameParam = explode(':', $concreteRule);
                 $ruleName      = $ruleNameParam[0];
-                $ruleParam     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
+                $ruleValue     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
 
                 $class = __NAMESPACE__.'\\Rules\\'.ucfirst($ruleName);
 
-                $instance = new $class;
+                $instance = new $class($this->config);
+
                 $instance->setParams([
-                    $data[$fieldName],
-                    $ruleParam,
+                    $fieldName,                                        // The field name
+                    isset($data[$fieldName]) ? $data[$fieldName] : '', // The provided value
+                    $ruleValue,                                        // The rule's value
                 ]);
 
-                $this->isValid = $instance->fire();
+                $this->isValid = $instance->isValid();
 
                 if ( $this->isValid == false ) {
 
@@ -48,24 +46,23 @@ class Validator
 
                     } else {
 
-                        $message = self::MAP[$ruleName];
+                        $message = $instance->getMessage();
 
                         $message = strtr(
                             $message,
                             [
-                                ':first:'  => $fieldName,
-                                ':second:' => $ruleParam,
+                                ':field:' => $fieldName,
+                                ':value:' => $ruleValue,
                             ]
                         );
 
                         $this->errorMessages[$fieldName][] = $message;
                     }
                 }
-
-                return $this;
             }
-
         }
+
+        return $this;
     }
 
     public function isValid()
@@ -86,5 +83,12 @@ class Validator
     public function format($class = FormatHTML::class)
     {
         return (new $class)->reformat($this->errorMessages);
+    }
+
+    public function configure($config)
+    {
+        $this->config = array_merge($this->config, $config);
+
+        return $this;
     }
 }

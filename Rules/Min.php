@@ -1,17 +1,30 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Min implements RulesInterface
+
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Min extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
-        return strlen($this->params[0]) >= $this->params[1];
+        if ( $this->params[2] <= strlen($this->params[1]) ) {
+
+            return true;
+        }
+
+        return false;
     }
 
     public function setParams($params)
     {
         $this->params = $params;
+    }
+
+    public function getMessage()
+    {
+        return 'Field :field: should be atleast :value: characters.';
     }
 }

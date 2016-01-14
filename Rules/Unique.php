@@ -1,40 +1,32 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Unique implements RulesInterface
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Unique extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
-        $class = $this->params[1];
+        $config = $this->getConfig();
 
-        $object = new $class;
+        $field = $this->params[0];
+        $value = $this->params[1];
+        $table = $this->params[2];
 
-        // if ( !$object instanceof IUniqueness ) {
-        //     throw new \Exception('Model with unique validator should implement IUniqueness interface');
-        // }
+        $instance = new $config['orm']($field, $value, $table);
 
-        $result = forward_static_call_array(
-            $function = [
-                $object,
-                'count'
-            ],
-            $parameters = [
-                [
-                    'conditions' => $object->getUniqueFieldName() . ' = ?0',
-                    'bind'       => [
-                        $this->params[0]
-                    ],
-                ],
-            ]
-        );
-
-        return $result == 0;
+        return $instance->isUnique();
     }
 
     public function setParams($params)
     {
         $this->params = $params;
+    }
+
+    public function getMessage()
+    {
+        return 'Field :field: must be unique.';
     }
 }

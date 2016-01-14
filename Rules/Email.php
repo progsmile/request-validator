@@ -1,17 +1,25 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Email implements RulesInterface
+
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Email extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
-        return (bool) filter_var($this->params[0], FILTER_VALIDATE_EMAIL);
+        return (bool) filter_var($this->params[1], FILTER_VALIDATE_EMAIL);
     }
 
     public function setParams($params)
     {
         $this->params = $params;
+    }
+
+    public function getMessage()
+    {
+        return 'Field :field: has a bad email format.';
     }
 }

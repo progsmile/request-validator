@@ -1,17 +1,30 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Max implements RulesInterface
+
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Max extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
-        return $this->params[0] <= $this->params[1];
+        if ( strlen($this->params[1]) <= (int) $this->params[2] ) {
+
+            return true;
+        }
+
+        return false;
     }
 
     public function setParams($params)
     {
         $this->params = $params;
+    }
+
+    public function getMessage()
+    {
+        return 'Field :field: should be maximum of :value: characters.';
     }
 }

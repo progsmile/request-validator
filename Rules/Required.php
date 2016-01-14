@@ -1,17 +1,25 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Required implements RulesInterface
+
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Required extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
-        return (bool) $this->params[0];
+        return (bool) $this->params[1];
     }
 
     public function setParams($params)
     {
         $this->params = $params;
+    }
+
+    public function getMessage()
+    {
+        return 'Field :field: is required';
     }
 }
