@@ -41,7 +41,7 @@ $validator = (new Validator)::make($postData, [
 
 #### Rules - make your own class that will help you to validate data.
 
-```
+```php
 use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
 class ArraySuccessCheck implements RulesInterface
@@ -73,7 +73,7 @@ class ArraySuccessCheck implements RulesInterface
 
 Now you've created your own class, inject this class to the Validator class
 
-```
+```php
 $instance = new Validator(ArraySuccessCheck::class);
 
 # or you can call injectClass() function
@@ -92,7 +92,7 @@ The `$validator->format()`, by default, the messages will be formatted to html `
 
 You can create your own class to format the array `$validator->messages()` into a well formed result.
 
-```
+```php
 use Progsmile\Validator\Contracts\Format\FormatInterface;
 
 class MarkdownFormatter implements FormatInterface
@@ -116,7 +116,7 @@ class MarkdownFormatter implements FormatInterface
 
 Then in to use this call, you must do this way:
 
-```
+```php
 $validator = new Validator;
 # ... some code here...
 echo $validator->format(MarkdownFormatter::class);
