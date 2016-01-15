@@ -7,7 +7,7 @@ class Numeric extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
         return is_numeric($this->params[1]);
     }
@@ -15,6 +15,8 @@ class Numeric extends BaseRule implements RulesInterface
     public function setParams($params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getMessage()

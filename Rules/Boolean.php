@@ -7,7 +7,7 @@ class Boolean extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
         return is_bool($this->params[1]);
     }
@@ -15,6 +15,8 @@ class Boolean extends BaseRule implements RulesInterface
     public function setParams($params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getMessage()

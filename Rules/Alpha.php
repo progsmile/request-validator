@@ -7,7 +7,7 @@ class Alpha extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
         return is_string($this->params[1]) && preg_match('/^[\pL\pM]+$/u', $this->params[1]);
     }
@@ -19,6 +19,8 @@ class Alpha extends BaseRule implements RulesInterface
     public function setParams($params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getMessage()

@@ -15,8 +15,14 @@ class Validator
         'orm' => \Progsmile\Validator\Frameworks\Phalcon\ORM::class,
     ];
 
+    private $class = null;
     private $isValid = true;
     private $errorMessages = [];
+
+    public function __construct($class = null)
+    {
+        $this->class = $class;
+    }
 
     public function make($data, $rules, $userMessages = [])
     {
@@ -31,6 +37,10 @@ class Validator
                 $ruleValue     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
 
                 $class = __NAMESPACE__.'\\Rules\\'.ucfirst($ruleName);
+
+                if ( $this->class ) {
+                    $class = $this->class;
+                }
 
                 $instance = new $class($this->config);
 
@@ -73,8 +83,8 @@ class Validator
 
     public function isValid()
     {
-        //#dns if all rules failed, and the last valid, result will be OK
-        //so, return $this->isValid not good idea)
+        // #dns if all rules failed, and the last valid, result will be OK
+        // so, return $this->isValid not good idea)
 
         return count($this->errorMessages) == 0;
     }
@@ -92,6 +102,13 @@ class Validator
     public function configure($config)
     {
         $this->config = array_merge($this->config, $config);
+
+        return $this;
+    }
+
+    public function injectClass($class)
+    {
+        $this->class = $class;
 
         return $this;
     }

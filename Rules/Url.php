@@ -7,7 +7,7 @@ class Url extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
         return filter_var($this->params[1], FILTER_VALIDATE_URL) === false;
     }
@@ -15,6 +15,8 @@ class Url extends BaseRule implements RulesInterface
     public function setParams($params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getMessage()

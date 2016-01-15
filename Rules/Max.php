@@ -20,6 +20,8 @@ class Max extends BaseRule implements RulesInterface
     public function setParams($params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getMessage()

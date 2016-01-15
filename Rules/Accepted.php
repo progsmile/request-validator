@@ -7,7 +7,7 @@ class Accepted extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function fire()
+    public function isValid()
     {
         return isset($this->params[1]); // && in_array($this->params[1], ['yes', 'on', 1, true]);
     }
@@ -15,6 +15,8 @@ class Accepted extends BaseRule implements RulesInterface
     public function setParams($params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getMessage()

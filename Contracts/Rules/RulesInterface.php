@@ -16,4 +16,11 @@ interface RulesInterface
      * @param array $params
      */
     public function setParams($params);
+
+    /**
+     * Get the message if error occured
+     *
+     * @return string
+     */
+    public function getMessage();
 }
