@@ -1,16 +1,19 @@
 <?php
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Format\Json;
+include_once 'vendor/autoload.php';
 
-ini_set('display_errors', '1');
-//include_once 'vendor/autoload.php';
-
-$validator = (new Validator)->make([
-        'amt' => 201,
+$validator = (new Validator)->make(
+    [
+        'first_name' => 'Daison Pascual Carino',
+        'password'   => 'abcde',
+        // 'email'   => 'daison12006013@gmail.com',
     ],
     [
-        'amt' => 'max:200',
+        'first_name' => 'max:20',
+        'password'   => 'min:10',
+        'age'        => 'required',
+        // 'email'   => 'unique:Users',
     ]
 );
 
@@ -24,4 +27,4 @@ echo 'HTML Message: ';
 var_dump($validator->format());
 
 echo 'JSON Message: ';
-var_dump($validator->format(Json::class));
+var_dump($validator->format(\Progsmile\Validator\Format\Json::class));

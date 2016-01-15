@@ -1,25 +1,26 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Boolean implements RulesInterface
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Boolean extends BaseRule implements RulesInterface
 {
-   private $params;
+    private $params;
 
+    public function isValid()
+    {
+        return is_bool($this->params[1]);
+    }
 
+    public function setParams($params)
+    {
+        $this->params = $params;
 
+        return $this;
+    }
 
-
-   public function fire()
-   {
-      return is_bool($this->params[0]);
-   }
-
-
-
-
-
-   public function setParams($params)
-   {
-      $this->params = $params;
-   }
+    public function getMessage()
+    {
+        return 'Field :field: is not a boolean.';
+    }
 }

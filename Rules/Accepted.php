@@ -1,25 +1,26 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class Accepted implements RulesInterface
+use Progsmile\Validator\Contracts\Rules\RulesInterface;
+
+class Accepted extends BaseRule implements RulesInterface
 {
-   private $params;
+    private $params;
 
+    public function isValid()
+    {
+        return isset($this->params[1]); // && in_array($this->params[1], ['yes', 'on', 1, true]);
+    }
 
+    public function setParams($params)
+    {
+        $this->params = $params;
 
+        return $this;
+    }
 
-
-   public function fire()
-   {
-      return isset($this->params[0]);// && in_array($this->params[0], ['yes', 'on', 1, true]);
-   }
-
-
-
-
-
-   public function setParams($params)
-   {
-      $this->params = $params;
-   }
+    public function getMessage()
+    {
+        return 'Field :field: should be accepted.';
+    }
 }

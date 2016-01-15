@@ -1,5 +1,5 @@
 <?php
-namespace Progsmile\Validator\Rules;
+namespace Progsmile\Validator\Contracts\Rules;
 
 interface RulesInterface
 {
@@ -8,7 +8,7 @@ interface RulesInterface
      *
      * @return boolean Return the result if valid or not
      */
-    public function fire();
+    public function isValid();
 
     /**
      * Set the value of the inputted attributes
@@ -16,4 +16,11 @@ interface RulesInterface
      * @param array $params
      */
     public function setParams($params);
+
+    /**
+     * Get the message if error occured
+     *
+     * @return string
+     */
+    public function getMessage();
 }
