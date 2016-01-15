@@ -9,7 +9,7 @@ class Accepted extends BaseRule implements RulesInterface
 
     public function isValid()
     {
-        return isset($this->params[1]); // && in_array($this->params[1], ['yes', 'on', 1, true]);
+        return isset($this->params[1]) && $this->params[1];
     }
 
     public function setParams($params)

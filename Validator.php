@@ -3,12 +3,6 @@ namespace Progsmile\Validator;
 
 use Progsmile\Validator\Format\HTML as FormatHTML;
 
-//@todo: Uniqueness validation
-//@todo: Image validation
-
-// working example
-// would composer include all these files for us?
-
 class Validator
 {
     private $config = [
@@ -36,9 +30,9 @@ class Validator
                 $ruleName      = $ruleNameParam[0];
                 $ruleValue     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
 
-                $class = __NAMESPACE__.'\\Rules\\'.ucfirst($ruleName);
+                $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
-                if ( $this->class ) {
+                if ($this->class) {
                     $class = $this->class;
                 }
 
@@ -52,11 +46,11 @@ class Validator
 
                 $this->isValid = $instance->isValid();
 
-                if ( $this->isValid == false ) {
+                if ($this->isValid == false) {
 
-                    $ruleErrorFormat = $fieldName.'.'.$ruleName;
+                    $ruleErrorFormat = $fieldName . '.' . $ruleName;
 
-                    if ( isset($userMessages[$ruleErrorFormat]) ) {
+                    if (isset($userMessages[$ruleErrorFormat])) {
 
                         $this->errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
 
@@ -83,9 +77,6 @@ class Validator
 
     public function isValid()
     {
-        // #dns if all rules failed, and the last valid, result will be OK
-        // so, return $this->isValid not good idea)
-
         return count($this->errorMessages) == 0;
     }
 

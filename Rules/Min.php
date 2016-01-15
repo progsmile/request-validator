@@ -7,14 +7,18 @@ class Min extends BaseRule implements RulesInterface
 {
     private $params;
 
+    private $isNumeric = false;
+
     public function isValid()
     {
-        if ( $this->params[2] <= strlen($this->params[1]) ) {
+        if (is_numeric($this->params[1])) {
 
-            return true;
+            $this->isNumeric = true;
+
+            return $this->params[1] >= $this->params[2];
         }
 
-        return false;
+        return is_string($this->params[1]) && strlen($this->params[1]) >= $this->params[2];
     }
 
     public function setParams($params)
@@ -26,6 +30,15 @@ class Min extends BaseRule implements RulesInterface
 
     public function getMessage()
     {
-        return 'Field :field: should be atleast :value: characters.';
+        if ($this->isNumeric) {
+
+            $message = 'Field :field: should be grater than :value:.';
+
+        } else {
+
+            $message = 'Field :field: should be at least :value: characters.';
+        }
+
+        return $message;
     }
 }

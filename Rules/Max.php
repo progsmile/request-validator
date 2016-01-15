@@ -7,14 +7,18 @@ class Max extends BaseRule implements RulesInterface
 {
     private $params;
 
+    private $isNumeric = false;
+
     public function isValid()
     {
-        if ( strlen($this->params[1]) <= (int) $this->params[2] ) {
+        if (is_numeric($this->params[1])) {
 
-            return true;
+            $this->isNumeric = true;
+
+            return $this->params[1] <= $this->params[2];
         }
 
-        return false;
+        return is_string($this->params[1]) && strlen($this->params[1]) <= $this->params[2];
     }
 
     public function setParams($params)
@@ -26,6 +30,15 @@ class Max extends BaseRule implements RulesInterface
 
     public function getMessage()
     {
-        return 'Field :field: should be maximum of :value: characters.';
+        if ($this->isNumeric) {
+
+            $message = 'Field :field: must be less than or equal to :value:.';
+
+        } else {
+
+            $message = 'Field :field: should be maximum of :value: characters.';
+        }
+
+        return $message;
     }
 }
