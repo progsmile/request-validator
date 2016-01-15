@@ -3,6 +3,12 @@ namespace Progsmile\Validator;
 
 use Progsmile\Validator\Format\HTML as FormatHTML;
 
+//@todo: Uniqueness validation
+//@todo: Image validation
+
+// working example
+// would composer include all these files for us?
+
 class Validator
 {
     private $config = [
@@ -67,12 +73,10 @@ class Validator
 
     public function isValid()
     {
-        if ( $this->isValid ) {
+        //#dns if all rules failed, and the last valid, result will be OK
+        //so, return $this->isValid not good idea)
 
-            return true;
-        }
-
-        return false;
+        return count($this->errorMessages) == 0;
     }
 
     public function messages()

@@ -1,7 +1,6 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-
 use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
 class Min extends BaseRule implements RulesInterface

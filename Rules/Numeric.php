@@ -3,13 +3,13 @@ namespace Progsmile\Validator\Rules;
 
 use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
-class Email extends BaseRule implements RulesInterface
+class Numeric extends BaseRule implements RulesInterface
 {
     private $params;
 
-    public function isValid()
+    public function fire()
     {
-        return (bool) filter_var($this->params[1], FILTER_VALIDATE_EMAIL);
+        return is_numeric($this->params[1]);
     }
 
     public function setParams($params)
@@ -19,6 +19,6 @@ class Email extends BaseRule implements RulesInterface
 
     public function getMessage()
     {
-        return 'Field :field: has a bad email format.';
+        return 'Field :field: is not a number.';
     }
 }
