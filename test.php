@@ -7,13 +7,16 @@ $validator = (new Validator)->make(
     [
         'first_name' => 'Daison Pascual Carino',
         'password'   => 'abcde',
-        // 'email'   => 'daison12006013@gmail.com',
+        'email'      => 'daison12006013@gmail.com',
+//        'age'        => 22,
+//        'rule'       => 'On',
     ],
     [
         'first_name' => 'max:20',
-        'password'   => 'min:10',
-        'age'        => 'required',
-        // 'email'   => 'unique:Users',
+        'password'   => 'min:8', //for strings
+        'age'        => 'required|min:16', //for numbers
+        'email'      => 'required|email|unique:users',
+        'rule'       => 'accepted',
     ]
 );
 

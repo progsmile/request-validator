@@ -15,7 +15,7 @@ class ORM implements OrmInterface
     {
         $di = DI::getDefault();
 
-        $this->db = $di->get('db');
+        $this->db    = $di->get('db');
         $this->field = $field;
         $this->value = $value;
         $this->table = $table;
@@ -23,6 +23,7 @@ class ORM implements OrmInterface
 
     public function isUnique()
     {
-        // TODO: do a query now...
+        return $this->db->fetchColumn(
+            'SELECT COUNT(*) FROM ' . $this->table . ' WHERE ' . $this->field . ' = "' . $this->value . '"') == 0;
     }
 }

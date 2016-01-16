@@ -12,6 +12,7 @@ class Validator
     private $class = null;
     private $isValid = true;
     private $errorMessages = [];
+    private $userClassNotUsed = false;
 
     public function __construct($class = null)
     {
@@ -32,8 +33,11 @@ class Validator
 
                 $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
-                if ($this->class) {
+                if ($this->class && !$this->userClassNotUsed) {
+
                     $class = $this->class;
+
+                    $this->userClassNotUsed = true;
                 }
 
                 $instance = new $class($this->config);
