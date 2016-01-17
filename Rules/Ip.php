@@ -3,7 +3,7 @@ namespace Progsmile\Validator\Rules;
 
 use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
-class Numeric extends BaseRule implements RulesInterface
+class Ip extends BaseRule implements RulesInterface
 {
     public function isValid()
     {
@@ -11,11 +11,11 @@ class Numeric extends BaseRule implements RulesInterface
             return true;
         }
 
-        return is_numeric($this->params[1]);
+        return filter_var($this->params[1], FILTER_VALIDATE_IP) !== false;
     }
 
     public function getMessage()
     {
-        return 'Field :field: is not a number.';
+        return 'Field :field: is not valid IP address.';
     }
 }

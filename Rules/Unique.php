@@ -5,26 +5,21 @@ use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
 class Unique extends BaseRule implements RulesInterface
 {
-    private $params;
-
     public function isValid()
     {
+        if ($this->isNotRequired()) {
+            return true;
+        }
+
         $config = $this->getConfig();
 
         $field = $this->params[0];
         $value = $this->params[1];
         $table = $this->params[2];
 
-        $instance = new $config['orm']($field, $value, $table);
+        $instance = new $config[BaseRule::CONFIG_ORM]($field, $value, $table);
 
         return $instance->isUnique();
-    }
-
-    public function setParams($params)
-    {
-        $this->params = $params;
-
-        return $this;
     }
 
     public function getMessage()

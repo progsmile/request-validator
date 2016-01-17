@@ -2,6 +2,7 @@
 namespace Progsmile\Validator;
 
 use Progsmile\Validator\Format\HTML as FormatHTML;
+use Progsmile\Validator\Rules\BaseRule;
 
 class Validator
 {
@@ -23,6 +24,13 @@ class Validator
     {
         foreach ($rules as $fieldName => $fieldRules) {
 
+            $fieldRules = trim($fieldRules);
+
+            if(!$fieldRules){
+                //no rules
+                continue;
+            }
+
             $groupedRules = explode('|', $fieldRules);
 
             foreach ($groupedRules as $concreteRule) {
@@ -32,6 +40,9 @@ class Validator
                 $ruleValue     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
 
                 $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
+
+                $this->config[BaseRule::CONFIG_DATA]        = $data;
+                $this->config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
 
                 if ($this->class && !$this->userClassNotUsed) {
 

@@ -5,18 +5,9 @@ use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
 class Boolean extends BaseRule implements RulesInterface
 {
-    private $params;
-
     public function isValid()
     {
         return is_bool($this->params[1]);
-    }
-
-    public function setParams($params)
-    {
-        $this->params = $params;
-
-        return $this;
     }
 
     public function getMessage()

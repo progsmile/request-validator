@@ -5,13 +5,16 @@ use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
 class Min extends BaseRule implements RulesInterface
 {
-    private $params;
-
     private $isNumeric = false;
 
     public function isValid()
     {
-        if (is_numeric($this->params[1])) {
+        if ($this->isNotRequired()) {
+            return true;
+        }
+
+        //if `numeric` rule founds - validate as a number
+        if ( $this->hasRule('numeric') !== false ) {
 
             $this->isNumeric = true;
 
@@ -19,13 +22,6 @@ class Min extends BaseRule implements RulesInterface
         }
 
         return is_string($this->params[1]) && strlen($this->params[1]) >= $this->params[2];
-    }
-
-    public function setParams($params)
-    {
-        $this->params = $params;
-
-        return $this;
     }
 
     public function getMessage()

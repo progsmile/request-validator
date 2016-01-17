@@ -5,18 +5,13 @@ use Progsmile\Validator\Contracts\Rules\RulesInterface;
 
 class Same extends BaseRule implements RulesInterface
 {
-    private $params;
-
     public function isValid()
     {
-        //
-    }
+        $fieldValue        = $this->params[1];
+        $comparedFieldName = $this->params[2];
+        $userData          = $this->getConfig(BaseRule::CONFIG_DATA);
 
-    public function setParams($params)
-    {
-        $this->params = $params;
-
-        return $this;
+        return $fieldValue == $userData[$comparedFieldName];
     }
 
     public function getMessage()
