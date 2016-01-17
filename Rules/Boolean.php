@@ -7,6 +7,10 @@ class Boolean extends BaseRule implements RulesInterface
 {
     public function isValid()
     {
+        if ($this->isNotRequired()) {
+            return true;
+        }
+
         return is_bool($this->params[1]);
     }
 
