@@ -12,7 +12,8 @@ Easy validation for Phalcon Framework (in development)
 - [x]  min
 - [x]  numeric
 - [x]  required
-- [ ]  unique
+- [ ]  same
+- [x]  unique
 - [x]  url
 
 ### Examples
