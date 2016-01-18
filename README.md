@@ -8,27 +8,28 @@ Easy validation for Phalcon Framework (in development)
 - [x]  alpha
 - [x]  boolean
 - [x]  email
+- [x]  json
+- [ ]  image
+- [x]  ip
 - [x]  max
 - [x]  min
 - [x]  numeric
 - [x]  required
-- [ ]  same
+- [x]  same
 - [x]  unique
 - [x]  url
 
 ### Examples
 ```php
 # Fetch data from request
-
 $postData = $this->request->getPost();
 
 # Create new Validator, pass data, define rules and custom messages
 # Also has errors messages by default
-
 $validator = (new Validator)::make($postData, [
    'firstname' => 'required|min:2',
    'lastname'  => 'required|max:5',
-   'email'     => 'required|email|unique:Users', //Multiple\Shared\Models\Users in modular app
+   'email'     => 'required|email|unique:users',
    'password'  => 'required|min:6',
 ], [
    'email.required'     => 'Email is required',
