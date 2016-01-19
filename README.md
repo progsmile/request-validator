@@ -9,7 +9,7 @@ Easy validation for Phalcon Framework (in development)
 - [x]  boolean
 - [x]  email
 - [x]  json
-- [ ]  image
+- [x]  image
 - [x]  ip
 - [x]  max
 - [x]  min
