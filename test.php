@@ -1,7 +1,12 @@
 <?php
 namespace Progsmile\Validator;
 
+use Progsmile\Validator\Frameworks\Phalcon\ORM;
+
 include_once 'vendor/autoload.php';
+
+Validator::setupDbProvider(ORM::class);
+
 
 $validator = Validator::make($_POST, //here your data
     [

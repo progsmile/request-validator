@@ -1,7 +1,6 @@
-# Phalcon Validator
+# Easy Validators
 
-Easy validation for Phalcon Framework (in development)
-
+Easy validation for Popular Frameworks, CMS/CMF (in development)
 
 ### Available rules
 - [x]  accepted
@@ -19,18 +18,22 @@ Easy validation for Phalcon Framework (in development)
 - [x]  unique
 - [x]  url
 
+### Systems support
+- [x] Phalcon
+- [x] WordPress
+
+
 ### Examples
 ```php
-# Fetch data from request
-$postData = $this->request->getPost();
-
 # Create new Validator, pass data, define rules and custom messages
 # Also has errors messages by default
-$validator = (new Validator)::make($postData, [
+$validator = Validator::make($_POST, [
    'firstname' => 'required|min:2',
    'lastname'  => 'required|max:5',
    'email'     => 'required|email|unique:users',
    'password'  => 'required|min:6',
+   'rule'      => 'accepted',
+   'website'   => 'url'
 ], [
    'email.required'     => 'Email is required',
    'email.email'        => 'Email has bad format',
@@ -38,32 +41,40 @@ $validator = (new Validator)::make($postData, [
 ]);
 ```
 
+
 ### Advanced Usage
 ----
+
+#### Setup your ORM system and use
+```php
+use Progsmile\Validator\Frameworks\Phalcon\ORM;
+
+Validator::setupDbProvider(ORM::class); // Phalcon ORM comes from the box
+
+$validator = Validator::make($this->request->getPost(), [
+    'password'        => 'min:6',
+    'password_repeat' => 'same:password',
+    'json'            => 'json'
+]);
+
+
+```
+
 
 #### Rules - make your own class that will help you to validate data.
 
 ```php
-use Progsmile\Validator\Contracts\Rules\RulesInterface;
+use Progsmile\Validator\Rules\BaseRule;
 
-class ArraySuccessCheck implements RulesInterface
+class ArraySuccessCheck extends BaseRule
 {
-    private $params;
-
     public function isValid()
     {
         $field = $this->params[0];
-        $value = $this->params[1]
+        $value = $this->params[1];
         $table = $this->params[2];
 
-        return isset($value['success']) ? true : false;
-    }
-
-    public function setParams($params)
-    {
-        $this->params = $params;
-
-        return $this;
+        return isset($value['success']);
     }
 
     public function getMessage()
@@ -76,9 +87,7 @@ class ArraySuccessCheck implements RulesInterface
 Now you've created your own class, inject this class to the Validator class
 
 ```php
-$instance = new Validator(ArraySuccessCheck::class);
-
-# or you can call injectClass() function
+# Just call injectClass() function
 $instance->injectClass(ArraySuccessCheck::class);
 
 $validator = $instance->make();
@@ -119,8 +128,10 @@ class MarkdownFormatter implements FormatInterface
 Then in to use this call, you must do this way:
 
 ```php
-$validator = new Validator;
-# ... some code here...
+$validator = Validator::make(
+    # ... some code here...
+);
+
 echo $validator->format(MarkdownFormatter::class);
 ```
 

@@ -1,12 +1,13 @@
 <?php
 namespace Progsmile\Validator;
 
+use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
 use Progsmile\Validator\Format\HTML as FormatHTML;
 use Progsmile\Validator\Rules\BaseRule;
 
 class Validator
 {
-    private $config = [
+    private static $config = [
         'orm' => \Progsmile\Validator\Frameworks\Phalcon\ORM::class,
     ];
 
@@ -17,6 +18,11 @@ class Validator
 
     private function __construct()
     {
+    }
+
+    public static function setupDbProvider($orm)
+    {
+        self::$config[BaseRule::CONFIG_ORM] = $orm;
     }
 
     /**
@@ -55,8 +61,8 @@ class Validator
 
                 $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
-                $this->config[BaseRule::CONFIG_DATA]        = $data;
-                $this->config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
+                self::$config[BaseRule::CONFIG_DATA]        = $data;
+                self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
 
 //                if ($this->classes) {
 //
@@ -65,7 +71,7 @@ class Validator
 
 
                 /** @var BaseRule $instance */
-                $instance = new $class($this->config);
+                $instance = new $class(self::$config);
 
                 $instance->setParams([
                     $fieldName,                                        // The field name
@@ -127,7 +133,7 @@ class Validator
 
     public function configure($config)
     {
-        $this->config = array_merge($this->config, $config);
+        self::$config = array_merge(self::$config, $config);
 
         return $this;
     }
