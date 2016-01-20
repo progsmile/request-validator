@@ -1,22 +1,22 @@
 <?php
-namespace Progsmile\Validator\Frameworks\Phalcon;
+namespace Progsmile\Validator\DbProviders;
 
-use Phalcon\DI;
 use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
+use Phalcon\DI;
 
-class ORM implements OrmInterface
+class PhalconORM implements OrmInterface
 {
     private $db;
     private $field;
     private $value;
     private $table;
 
-    public function __construct($field, $value, $table)
+    public function __construct($attribute, $value, $table)
     {
         $di = DI::getDefault();
 
         $this->db    = $di->get('db');
-        $this->field = $field;
+        $this->field = $attribute;
         $this->value = $value;
         $this->table = $table;
     }

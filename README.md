@@ -1,6 +1,6 @@
 # Easy Validators
 
-Easy validation for Popular Frameworks, CMS/CMF (in development)
+Easy validation for popular PHP Frameworks, CMS/CMF (in development)
 
 ### Available rules
 - [x]  accepted
@@ -47,9 +47,9 @@ $validator = Validator::make($_POST, [
 
 #### Setup your ORM system and use
 ```php
-use Progsmile\Validator\Frameworks\Phalcon\ORM;
+use Progsmile\Validator\DbProviders\PhalconORM;
 
-Validator::setupDbProvider(ORM::class); // Phalcon ORM comes from the box
+Validator::setupDbProvider(PhalconORM::class); // Phalcon ORM comes from the box
 
 $validator = Validator::make($this->request->getPost(), [
     'password'        => 'min:6',

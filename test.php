@@ -1,12 +1,13 @@
 <?php
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Frameworks\Phalcon\ORM;
+use Progsmile\Validator\DbProviders\PhalconORM;
 
 include_once 'vendor/autoload.php';
 
-Validator::setupDbProvider(ORM::class);
+//Validator::setDbProvider(\Progsmile\Validator\DbProviders\WordPress\Wpdb::class);
 
+Validator::setDbProvider(PhalconORM::class);
 
 $validator = Validator::make($_POST, //here your data
     [

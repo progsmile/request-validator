@@ -8,19 +8,18 @@ use Progsmile\Validator\Rules\BaseRule;
 class Validator
 {
     private static $config = [
-        'orm' => \Progsmile\Validator\Frameworks\Phalcon\ORM::class,
+        'orm' => \Progsmile\Validator\DbProviders\PhalconORM::class,
     ];
 
     private $classes = [];
-    private $isValid = true;
-    private $errorMessages = [];
+    private static $errorMessages = [];
 
 
     private function __construct()
     {
     }
 
-    public static function setupDbProvider($orm)
+    public static function setDbProvider($orm)
     {
         self::$config[BaseRule::CONFIG_ORM] = $orm;
     }
@@ -40,7 +39,7 @@ class Validator
 
     private function validate($data, $rules, $userMessages = [])
     {
-        $this->errorMessages = [];
+        self::$errorMessages = [];
 
         foreach ($rules as $fieldName => $fieldRules) {
 
@@ -64,12 +63,6 @@ class Validator
                 self::$config[BaseRule::CONFIG_DATA]        = $data;
                 self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
 
-//                if ($this->classes) {
-//
-//                    $class = $this->classes;
-//                }
-
-
                 /** @var BaseRule $instance */
                 $instance = new $class(self::$config);
 
@@ -79,19 +72,17 @@ class Validator
                     $ruleValue,                                        // The rule's value
                 ]);
 
-                $this->isValid = $instance->isValid();
-
-                if ($this->isValid == false){
+                if ( !$instance->isValid()){
 
                     $ruleErrorFormat = $fieldName . '.' . $ruleName;
 
                     if (isset($userMessages[$ruleErrorFormat])){
 
-                        $this->errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
+                        self::$errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
 
                     } else {
 
-                        $this->errorMessages[$fieldName][] = strtr($instance->getMessage(), [
+                        self::$errorMessages[$fieldName][] = strtr($instance->getMessage(), [
                                 ':field:' => $fieldName,
                                 ':value:' => $ruleValue,
                             ]
@@ -106,20 +97,20 @@ class Validator
 
     public function isValid()
     {
-        return count($this->errorMessages) == 0;
+        return count(self::$errorMessages) == 0;
     }
 
     public function getMessages($field = '')
     {
         //get messages for specific field
         if ($field){
-            return isset($this->errorMessages[$field]) ? $this->errorMessages[$field] : [];
+            return isset(self::$errorMessages[$field]) ? self::$errorMessages[$field] : [];
         }
 
         //return plain messages array
         $messages = [];
 
-        array_walk_recursive($this->errorMessages, function ($message) use (&$messages) {
+        array_walk_recursive(self::$errorMessages, function ($message) use (&$messages) {
             $messages[] = $message;
         });
 
@@ -128,7 +119,7 @@ class Validator
 
     public function format($class = FormatHTML::class)
     {
-        return (new $class)->reformat($this->errorMessages);
+        return (new $class)->reformat(self::$errorMessages);
     }
 
     public function configure($config)
@@ -140,7 +131,7 @@ class Validator
 
     public function injectClass(BaseRule $class)
     {
-        if(!$class instanceof BaseRule){
+        if ( !$class instanceof BaseRule){
             throw new \Exception('Class should be instance of BaseRule');
         }
 

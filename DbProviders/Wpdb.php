@@ -1,5 +1,5 @@
 <?php
-namespace Progsmile\Validator\Frameworks\WordPress;
+namespace Progsmile\Validator\DbProviders;
 
 use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
 
@@ -9,11 +9,11 @@ class Wpdb implements OrmInterface
     private $value;
     private $table;
 
-    public function __construct($field, $value, $table)
+    public function __construct($attribute, $value, $table)
     {
         global $wpdb;
 
-        $this->field = trim($field);
+        $this->field = trim($attribute);
         $this->value = trim($value);
         $this->table = $wpdb->prefix . $table;
     }
@@ -22,10 +22,10 @@ class Wpdb implements OrmInterface
     {
         global $wpdb;
 
-        $res = $wpdb->get_results(
+        $recordsCount = $wpdb->get_results(
            "SELECT COUNT(*) as c FROM $this->table WHERE $this->field = '$this->value'", ARRAY_A
         );
 
-        return reset(reset($res)) == '0';
+        return reset(reset($recordsCount)) == 0;
     }
 }
