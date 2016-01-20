@@ -3,28 +3,34 @@ namespace Progsmile\Validator;
 
 include_once 'vendor/autoload.php';
 
-$validator = (new Validator)->make(
+$validator = Validator::make($_POST, //here your data
     [
-        'first_name' => 'Daison Pascual Carino',
-        'password'   => 'abcde',
-        'email'      => 'daison12006013@gmail.com',
-//        'age'        => 22,
-//        'rule'       => 'On',
-    ],
-    [
-        'first_name' => 'max:20',
-        'password'   => 'min:8', //for strings
-        'age'        => 'required|min:16', //for numbers
-        'email'      => 'required|email|unique:users',
-        'rule'       => 'accepted',
+        'firstname'       => 'required|alpha|min:2',
+        'lastname'        => 'required|alpha|min:2|max:18',
+        'email'           => 'required|email|unique:users',
+        'age'             => 'min:16|numeric',
+        'rule'            => 'accepted',
+        'ip'              => 'required|ip',
+        'password'        => 'min:6',
+        'password_repeat' => 'same:password',
+        'json'            => 'json',
+        'myImage'         => 'image',
+    ], [
+        'email.required' => 'Please, enter your email!',
+        'email.unique'   => 'Choose another email, somebody uses it)',
+        'json.json'      => 'It\'s not json man!',
     ]
 );
+
 
 echo 'Is Valid: ';
 var_dump($validator->isValid());
 
 echo 'Array Message: ';
-var_dump($validator->messages());
+var_dump($validator->getMessages());
+
+echo 'Pass field for getting messages: ';
+var_dump($validator->getMessages('email'));
 
 echo 'HTML Message: ';
 var_dump($validator->format());

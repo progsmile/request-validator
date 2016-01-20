@@ -1,9 +1,7 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-use Progsmile\Validator\Contracts\Rules\RulesInterface;
-
-class Image extends BaseRule implements RulesInterface
+class Image extends BaseRule
 {
     public function isValid()
     {

@@ -10,23 +10,37 @@ class Validator
         'orm' => \Progsmile\Validator\Frameworks\Phalcon\ORM::class,
     ];
 
-    private $class = null;
+    private $classes = [];
     private $isValid = true;
     private $errorMessages = [];
-    private $userClassNotUsed = false;
 
-    public function __construct($class = null)
+
+    private function __construct()
     {
-        $this->class = $class;
     }
 
-    public function make($data, $rules, $userMessages = [])
+    /**
+     * Make validation
+     *
+     * @param array $data user request data
+     * @param array $rules validation rules
+     * @param array $userMessages custom error messages
+     * @return Validator
+     */
+    public static function make($data, $rules, $userMessages = [])
     {
+        return (new static())->validate($data, $rules, $userMessages);
+    }
+
+    private function validate($data, $rules, $userMessages = [])
+    {
+        $this->errorMessages = [];
+
         foreach ($rules as $fieldName => $fieldRules) {
 
             $fieldRules = trim($fieldRules);
 
-            if(!$fieldRules){
+            if ( !$fieldRules){
                 //no rules
                 continue;
             }
@@ -44,13 +58,13 @@ class Validator
                 $this->config[BaseRule::CONFIG_DATA]        = $data;
                 $this->config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
 
-                if ($this->class && !$this->userClassNotUsed) {
+//                if ($this->classes) {
+//
+//                    $class = $this->classes;
+//                }
 
-                    $class = $this->class;
 
-                    $this->userClassNotUsed = true;
-                }
-
+                /** @var BaseRule $instance */
                 $instance = new $class($this->config);
 
                 $instance->setParams([
@@ -61,27 +75,21 @@ class Validator
 
                 $this->isValid = $instance->isValid();
 
-                if ($this->isValid == false) {
+                if ($this->isValid == false){
 
                     $ruleErrorFormat = $fieldName . '.' . $ruleName;
 
-                    if (isset($userMessages[$ruleErrorFormat])) {
+                    if (isset($userMessages[$ruleErrorFormat])){
 
                         $this->errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
 
                     } else {
 
-                        $message = $instance->getMessage();
-
-                        $message = strtr(
-                            $message,
-                            [
+                        $this->errorMessages[$fieldName][] = strtr($instance->getMessage(), [
                                 ':field:' => $fieldName,
                                 ':value:' => $ruleValue,
                             ]
                         );
-
-                        $this->errorMessages[$fieldName][] = $message;
                     }
                 }
             }
@@ -95,9 +103,21 @@ class Validator
         return count($this->errorMessages) == 0;
     }
 
-    public function messages()
+    public function getMessages($field = '')
     {
-        return $this->errorMessages;
+        //get messages for specific field
+        if ($field){
+            return isset($this->errorMessages[$field]) ? $this->errorMessages[$field] : [];
+        }
+
+        //return plain messages array
+        $messages = [];
+
+        array_walk_recursive($this->errorMessages, function ($message) use (&$messages) {
+            $messages[] = $message;
+        });
+
+        return $messages;
     }
 
     public function format($class = FormatHTML::class)
@@ -112,9 +132,13 @@ class Validator
         return $this;
     }
 
-    public function injectClass($class)
+    public function injectClass(BaseRule $class)
     {
-        $this->class = $class;
+        if(!$class instanceof BaseRule){
+            throw new \Exception('Class should be instance of BaseRule');
+        }
+
+        $this->classes[] = $class;
 
         return $this;
     }

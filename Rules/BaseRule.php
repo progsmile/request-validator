@@ -1,7 +1,7 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-class BaseRule
+abstract class BaseRule
 {
     const CONFIG_ALL         = 'all';
     const CONFIG_DATA        = 'data';
@@ -19,7 +19,7 @@ class BaseRule
 
     protected function getConfig($type = self::CONFIG_ALL)
     {
-        if ($type == self::CONFIG_ALL) {
+        if ($type == self::CONFIG_ALL){
             return $this->config;
         }
 
@@ -42,4 +42,22 @@ class BaseRule
 
         return $this;
     }
+
+    /**
+     * Get the message if error occured
+     *
+     * @return string
+     */
+    public abstract function getMessage();
+
+
+
+    /**
+     * Will the process to check if it is valid or not
+     *
+     * @return boolean Return the result if valid or not
+     */
+    public abstract function isValid();
+
+
 }

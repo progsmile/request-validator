@@ -1,9 +1,7 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-use Progsmile\Validator\Contracts\Rules\RulesInterface;
-
-class Json extends BaseRule implements RulesInterface
+class Json extends BaseRule
 {
     public function isValid()
     {

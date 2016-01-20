@@ -1,9 +1,7 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-use Progsmile\Validator\Contracts\Rules\RulesInterface;
-
-class Ip extends BaseRule implements RulesInterface
+class Ip extends BaseRule
 {
     public function isValid()
     {
