@@ -26,14 +26,35 @@ abstract class BaseRule
         return isset($this->config[$type]) ? $this->config[$type] : [];
     }
 
-    protected function hasRule($rule = 'required')
+    protected function hasRule($rule)
     {
+        if(!$rule){
+            return false;
+        }
+
         return strpos($this->getConfig(self::CONFIG_FIELD_RULES), $rule) !== false;
     }
 
-    protected function isNotRequired()
+    /**
+     * Check if variable is not required - to prevent error messages from another validators
+     *
+     * @param string $type | 'var' or 'file'
+     * @return bool
+     */
+    protected function isNotRequired($type = 'var')
     {
-        return !$this->hasRule('required') && !$this->params[1];
+        $condition = false;
+
+        if ($type == 'var'){
+            $condition = !$this->params[1];
+
+        } elseif ($type == 'file') {
+
+            //when file field is not required, but we send it
+            $condition = isset($_FILES[$this->params[0]]['size']) && $_FILES[$this->params[0]]['size'] == 0;
+        }
+
+        return !$this->hasRule('required') && $condition;
     }
 
     public function setParams($params)
@@ -51,13 +72,11 @@ abstract class BaseRule
     public abstract function getMessage();
 
 
-
     /**
      * Will the process to check if it is valid or not
      *
      * @return boolean Return the result if valid or not
      */
     public abstract function isValid();
-
 
 }

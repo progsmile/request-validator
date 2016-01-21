@@ -9,7 +9,8 @@ class Required extends BaseRule
             return true;
         }
 
-        return (bool) $this->params[1];
+        return (bool) $this->params[1] || $this->hasRule('image') && isset($_FILES[$this->params[0]])
+                                        && $_FILES[$this->params[0]]['name'];
     }
 
     public function getMessage()

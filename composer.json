@@ -4,5 +4,11 @@
         "classmap": [
             "."
         ]
+    },
+    "required-dev" :{
+
+    },
+    "require": {
+        "phpunit/phpunit": "^5.1"
     }
 }
