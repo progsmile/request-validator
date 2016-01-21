@@ -1,4 +1,4 @@
-# Easy Validators
+# PHP Easy Validators
 
 Easy validation for popular PHP Frameworks, CMS/CMF (in development)
 

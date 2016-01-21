@@ -22,10 +22,12 @@ class Wpdb implements OrmInterface
     {
         global $wpdb;
 
-        $recordsCount = $wpdb->get_results(
-           "SELECT COUNT(*) as c FROM $this->table WHERE $this->field = '$this->value'", ARRAY_A
+        $recordsCount = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM $this->table WHERE $this->field = %s",  $this->value
+            )
         );
 
-        return reset(reset($recordsCount)) == 0;
+        return $recordsCount == 0;
     }
 }
