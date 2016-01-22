@@ -4,11 +4,22 @@ php:
   - 5.4
   - 5.5
   - 5.6
-  - 7
-  - nightly
+
+services:
+  - mysql
+
+sudo: false
+
+env:
+  - PHALCON_VERSION="2.1.x"
+  - PHALCON_VERSION="2.0.x"
+  - PHALCON_VERSION="phalcon-v2.0.9"
 
 before_script:
-  - curl -s http://getcomposer.org/installer | php
-  - php cpmposer.phar install
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
+  - cd cphalcon/ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize && ./configure --enable-phalcon && make -j4 && make install && phpenv config-add ../unit-tests/ci/phalcon.ini
+  - php -r 'echo \Phalcon\Version::get()."\n";'
+  - cd ../..
+
 
 script: phpunit

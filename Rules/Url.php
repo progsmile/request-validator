@@ -9,7 +9,7 @@ class Url extends BaseRule
             return true;
         }
 
-        return filter_var($this->params[1], FILTER_VALIDATE_URL) === false;
+        return filter_var($this->params[1], FILTER_VALIDATE_URL) !== false;
     }
 
     public function getMessage()
