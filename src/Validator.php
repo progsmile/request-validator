@@ -1,23 +1,31 @@
 <?php
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
 use Progsmile\Validator\Format\HTML as FormatHTML;
 use Progsmile\Validator\Rules\BaseRule;
 
-class Validator
+final class Validator
 {
+    private static $validatorInstance = null;
+
+    private static $errorMessages = [];
+
     private static $config = [
         'orm' => \Progsmile\Validator\DbProviders\PhalconORM::class,
     ];
 
-    private $classes = [];
-    private static $errorMessages = [];
-
-
     private function __construct()
     {
     }
+
+    private function __clone()
+    {
+    }
+
+    private function __wakeup()
+    {
+    }
+
 
     public static function setDbProvider($orm)
     {
@@ -32,16 +40,28 @@ class Validator
      * @param array $userMessages custom error messages
      * @return Validator
      */
-    public static function make($data, $rules, $userMessages = [])
+    public static function make(array $data, array $rules, array $userMessages = [])
     {
-        return (new static())->validate($data, $rules, $userMessages);
+        if (self::$validatorInstance == null){
+            self::$validatorInstance = new Validator();
+        }
+
+        return self::$validatorInstance->validate($data, $rules, $userMessages);
     }
 
+    /**
+     * Validation process
+     *
+     * @param $data
+     * @param $rules
+     * @param array $userMessages
+     * @return $this
+     */
     private function validate($data, $rules, $userMessages = [])
     {
         self::$errorMessages = [];
 
-        foreach ($rules as $fieldName => $fieldRules) {
+        foreach ($rules as $groupedFieldNames => $fieldRules) {
 
             $fieldRules = trim($fieldRules);
 
@@ -50,43 +70,59 @@ class Validator
                 continue;
             }
 
-            $groupedRules = explode('|', $fieldRules);
+            //for fields separated with comma
+            $fieldNames = explode(',', $groupedFieldNames);
 
-            foreach ($groupedRules as $concreteRule) {
+            foreach ($fieldNames as $fieldName) {
 
-                $ruleNameParam = explode(':', $concreteRule);
-                $ruleName      = $ruleNameParam[0];
-                $ruleValue     = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
+                $fieldName = trim($fieldName);
 
-                $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
+                $groupedRules = explode('|', $fieldRules);
 
-                self::$config[BaseRule::CONFIG_DATA]        = $data;
-                self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
+                foreach ($groupedRules as $concreteRule) {
 
-                /** @var BaseRule $instance */
-                $instance = new $class(self::$config);
+                    $ruleNameParam = explode(':', $concreteRule);
+                    $ruleName      = $ruleNameParam[0];
 
-                $instance->setParams([
-                    $fieldName,                                        // The field name
-                    isset($data[$fieldName]) ? $data[$fieldName] : '', // The provided value
-                    $ruleValue,                                        // The rule's value
-                ]);
+                    //for date/time validators
+                    if (count($ruleNameParam) >= 2){
+                        $ruleValue = implode(':', array_slice($ruleNameParam, 1));
 
-                if ( !$instance->isValid()){
-
-                    $ruleErrorFormat = $fieldName . '.' . $ruleName;
-
-                    if (isset($userMessages[$ruleErrorFormat])){
-
-                        self::$errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
-
+                    //for other params
                     } else {
+                        $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
+                    }
 
-                        self::$errorMessages[$fieldName][] = strtr($instance->getMessage(), [
-                                ':field:' => $fieldName,
-                                ':value:' => $ruleValue,
-                            ]
-                        );
+                    $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
+
+                    self::$config[BaseRule::CONFIG_DATA]        = $data;
+                    self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
+
+                    /** @var BaseRule $instance */
+                    $instance = new $class(self::$config);
+
+                    $instance->setParams([
+                        $fieldName,                                        // The field name
+                        isset($data[$fieldName]) ? $data[$fieldName] : '', // The provided value
+                        $ruleValue,                                        // The rule's value
+                    ]);
+
+                    if ( !$instance->isValid()){
+
+                        $ruleErrorFormat = $fieldName . '.' . $ruleName;
+
+                        if (isset($userMessages[$ruleErrorFormat])){
+
+                            self::$errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
+
+                        } else {
+
+                            self::$errorMessages[$fieldName][] = strtr($instance->getMessage(), [
+                                    ':field:' => $fieldName,
+                                    ':value:' => $ruleValue,
+                                ]
+                            );
+                        }
                     }
                 }
             }
@@ -117,26 +153,13 @@ class Validator
         return $messages;
     }
 
+    public function getFirstMessage($field = '')
+    {
+        return isset(self::$errorMessages[$field]) ? array_pop(self::$errorMessages[$field]) : '';
+    }
+
     public function format($class = FormatHTML::class)
     {
         return (new $class)->reformat(self::$errorMessages);
-    }
-
-    public function configure($config)
-    {
-        self::$config = array_merge(self::$config, $config);
-
-        return $this;
-    }
-
-    public function injectClass(BaseRule $class)
-    {
-        if ( !$class instanceof BaseRule){
-            throw new \Exception('Class should be instance of BaseRule');
-        }
-
-        $this->classes[] = $class;
-
-        return $this;
     }
 }

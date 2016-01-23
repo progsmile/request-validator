@@ -6,16 +6,17 @@ use \Progsmile\Validator\Validator;
 include __DIR__ . '/../vendor/autoload.php';
 
 
+//little test helper
+function dd($var)
+{
+    var_dump($var);
+    ob_flush();
+}
+
 class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     private $postData;
     private $nonUniqueEmail;
-
-    public static function dd($var)
-    {
-        var_dump($var);
-        ob_flush();
-    }
 
     public function setUp()
     {
@@ -24,6 +25,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'lastname'        => 'Klimenko',
             'email'           => 'denis.klimenko.dx@gmail.com',
             'age'             => '21',
+            'date'            => '12-2013.01 23:32',
             'rule'            => 'on',
             'ip'              => '192.168.0.0',
             'password'        => '123456789',
@@ -40,21 +42,22 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testValidationOK()
     {
         $validationResult = Validator::make($this->postData, [
-            'firstname'       => 'alpha|min:2',
-            'lastname'        => 'alpha|min:2|max:18',
-            'email'           => 'email|unique:users',
-            'age'             => 'min:16|numeric',
-            'rule'            => 'accepted',
-            'randNum'         => 'between:1, 100',
-            'ip'              => 'ip',
-            'password'        => 'required|min:6',
-            'password_repeat' => 'same:password',
-            'json'            => 'json',
-            'site'            => 'url',
+            'firstname, lastname' => 'required|alpha|min:2',
+            'lastname'            => 'max:18',
+            'email'               => 'email|unique:users',
+            'age'                 => 'min:16|numeric',
+            'date'                => 'dateFormat:(m-Y.d H:i)',
+            'rule'                => 'accepted',
+            'randNum'             => 'between:1, 100',
+            'ip'                  => 'ip',
+            'password'            => 'required|min:6',
+            'password_repeat'     => 'same:password',
+            'json'                => 'json',
+            'site'                => 'url',
         ]);
 
 
-//        self::dd($validationResult->getMessages());
+        dd($validationResult->getMessages());
 
         $this->assertEmpty($validationResult->getMessages());
     }
@@ -88,8 +91,46 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3' => 'numeric',
         ]);
 
-//        self::dd($validationResult->getMessages());
+        dd($validationResult->getMessages());
 
         $this->assertCount(2, $validationResult->getMessages());
+    }
+
+
+    /** @test */
+    public function testGroupedRules()
+    {
+        $validationResult = Validator::make([
+            'n1'        => '111',
+            'n2'        => '333',
+            'n3'        => '7s7s7',
+            'firstname' => 'Den1s',
+            'lastname'  => 'Klimenko',
+        ], [
+            'n1, n2, n3'          => 'required|numeric',
+            'firstname, lastname' => 'required|alpha',
+        ], [
+            'firstname.alpha' => 'Your real name needed)',
+            'n3.numeric'      => 'N3 is not a number',
+        ]);
+
+        dd($validationResult->getMessages());
+
+        $this->assertCount(2, $validationResult->getMessages());
+    }
+
+    public function testPDOClass()
+    {
+        Validator::setDbProvider(\Progsmile\Validator\DbProviders\DefaultPDO::class);
+
+        $validationResult = Validator::make([
+            'email'  => $this->nonUniqueEmail,
+        ], [
+            'email' => 'required|email|unique:users',
+        ]);
+
+        dd($validationResult->getMessages());
+
+        $this->assertTrue($validationResult->isValid());
     }
 }
