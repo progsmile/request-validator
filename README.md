@@ -2,9 +2,14 @@
 
 Easy validation for popular PHP Frameworks, CMS/CMF (in development)
 
-### Available rules
+## Systems support
+- [x] Phalcon
+- [x] WordPress
+
+## Available rules
 - [x]  accepted
 - [x]  alpha
+- [x]  between
 - [x]  boolean
 - [x]  email
 - [x]  json
@@ -18,19 +23,15 @@ Easy validation for popular PHP Frameworks, CMS/CMF (in development)
 - [x]  unique
 - [x]  url
 
-### Systems support
-- [x] Phalcon
-- [x] WordPress
-
-
 ### Examples
 ```php
 # Create new Validator, pass data, define rules and custom messages
 # Also has errors messages by default
 $validator = Validator::make($_POST, [
-   'firstname' => 'required|min:2',
-   'lastname'  => 'required|max:5',
+   'firstname' => 'required|min:2|max:14',
+   'lastname'  => 'required|min:2|max:30',
    'email'     => 'required|email|unique:users',
+   'age'       => 'required|numeric|min:18',
    'password'  => 'required|min:6',
    'rule'      => 'accepted',
    'website'   => 'url'
