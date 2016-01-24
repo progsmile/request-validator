@@ -65,18 +65,17 @@ abstract class BaseRule
     }
 
     /**
-     * Get the message if error occured
-     *
-     * @return string
-     */
-    public abstract function getMessage();
-
-
-    /**
      * Will the process to check if it is valid or not
      *
      * @return boolean Return the result if valid or not
      */
     public abstract function isValid();
+
+    /**
+     * Get the message if error occured
+     *
+     * @return string
+     */
+    public abstract function getMessage();
 
 }
