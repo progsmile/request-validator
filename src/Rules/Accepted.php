@@ -5,7 +5,9 @@ class Accepted extends BaseRule
 {
     public function isValid()
     {
-        return isset($this->params[1]) && $this->params[1];
+        $value = isset($this->params[1]) ? $this->params[1] : false;
+
+        return in_array($value, ['yes', 'on', 1, true] );
     }
 
     public function getMessage()

@@ -118,6 +118,40 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $validationResult->getMessages());
     }
 
+    /** @test */
+    public function testRequiredRule()
+    {
+        $validationResult = Validator::make([
+            'fieldZero'  => '0',
+            'fieldSpace' => ' ',   //false
+            'fieldEmpty' => '',    //false
+            'fieldNull'  => null,  //false
+            'fieldFalse' => 'false',
+        ], [
+            'fieldZero, fieldSpace, fieldEmpty, fieldFalse, fieldNull' => 'required',
+        ]);
+
+        dd($validationResult->getMessages());
+
+        $this->assertCount(3, $validationResult->getMessages());
+    }
+
+    /** @test */
+    public function testAccepted()
+    {
+        $validationResult = Validator::make([
+            'license'   => '1',
+            'agreement' => 'yes',
+            'terms'     => 'on',
+            'subscribe' => null,  //false
+        ], [
+            'license,agreement, terms, subscribe' => 'accepted',
+        ]);
+
+        dd($validationResult->getMessages());
+
+        $this->assertCount(1, $validationResult->getMessages());
+    }
 
     /** @test */
     public function testPhoneMask()
