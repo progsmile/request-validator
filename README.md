@@ -8,24 +8,27 @@ use \Progsmile\Validator\Validator as V;
 # Create new Validator, pass data, define rules and custom messages
 # Also has errors messages by default
 $validator = V::make($_POST, [
-    'firstname, lastname' => 'required|alpha|min:2',
-    'lastname'            => 'max:18',
-    'email'               => 'email|unique:users', //table in db
-    'age'                 => 'min:16|numeric',
-    'date'                => 'dateFormat:(m-Y.d H:i)', //any format you set
-    'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',
-    'rule'                => 'accepted',
-    'randNum'             => 'between:1, 100',
-    'ip'                  => 'ip',
-    'password'            => 'required|min:6',
-    'password_repeat'     => 'same:password',
-    'json'                => 'json',
-    'site'                => 'url',
-    'cash10, cash25'      => 'in:1, 2, 5, 10, 20, 50, 100, 200, 500',
-    'elevatorFloor'       => 'notIn:13'
+
+    //group validation fields
+    'firstname, lastname' => 'required|alpha|min:2',         //alphabetic support
+    'lastname'            => 'max:18',                       //string max length
+    'email'               => 'email|unique:users',           //email uniqueness
+    'age'                 => 'min:16|numeric',               //numeric min
+    'date'                => 'dateFormat:(m-Y.d H:i)',       //custom date time format
+    'profileImg'          => 'image',                        //image
+    'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',//custom phone mask validator
+    'rule'                => 'accepted',                     //checkboxes acception
+    'randNum'             => 'between:1, 100',               //value between
+    'ip'                  => 'ip',                           //ipv4 or ipv6
+    'password'            => 'required|min:6',               //required fields
+    'password_repeat'     => 'same:password',                //same validator
+    'json'                => 'json',                         //json format
+    'site'                => 'url',                          //url format
+    'cash10, cash25'      => 'in:1, 2, 5, 10, 20, 50',       //in array
+    'elevatorFloor'       => 'notIn:13'                      //not in array
 ], [
-   'email.required'      => 'Email is required',
-   'email.email'         => 'Email has bad format',
+   'email.required'      => 'Field :field: is required',     //Add custom messages
+   'email.email'         => 'Email has bad format :value:',  //Support :field: and :value: params
    'email.unique'        => 'Email is not unique',
    'elevatorFloor.notIn' => 'Oops',
 ]);
@@ -60,11 +63,11 @@ Coming soon on composer :)
 ### Advanced Usage
 ----
 
-#### Connect with PDO or use build in Data Providers **just for unique rule**
+#### Connect with PDO or use build in Data Providers (just for unique rule)
 
 ```php
 
-** Connect once - use everywhere **
+**Connect once - use everywhere**
 
 use Progsmile\Validator\DbProviders\PhalconORM; //Phalcon
 use Progsmile\Validator\DbProviders\Wpdb;       //Wordpress
@@ -131,4 +134,6 @@ echo $validator->format(MarkdownFormatter::class);
 
 ----
 
-Project is just started and it is not stable yet, we love to have your fork requests.
+### Dear contributors
+
+Project is just started and it is not stable yet, we love to have your fork requests
