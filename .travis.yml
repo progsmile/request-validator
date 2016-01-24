@@ -23,6 +23,7 @@ before_script:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
   - php --ri phalcon
+  - mysql -e 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;'
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml

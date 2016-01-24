@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)
 
 ## Usage
+
 ```php
 // Add namespace
 use \Progsmile\Validator\Validator as V;
@@ -59,11 +60,20 @@ $validator = V::make($_POST, [
 
 
 ## Install
+
 Coming soon on composer :)
+
+A MySQL database is also required for several tests. Follow these instructions to create the database:
+
+```sh
+echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
+```
+
+For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
 
 
 ### Advanced Usage
-----
+
 
 #### Connect with PDO or use build in Data Providers (just for unique rule)
 
@@ -135,8 +145,6 @@ $validator = V::make(
 
 echo $validator->format(MarkdownFormatter::class);
 ```
-
-----
 
 ### Dear contributors
 

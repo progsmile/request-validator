@@ -1,7 +1,9 @@
 <?php
 
+use Phalcon\Loader;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 
 ini_set('display_errors',1);
 error_reporting(E_ALL);
@@ -15,22 +17,21 @@ set_include_path(ROOT_PATH . PATH_SEPARATOR . get_include_path());
 
 include __DIR__ . "/../vendor/autoload.php";
 
-$loader = new \Phalcon\Loader();
+$loader = new Loader();
 
-$loader->registerDirs([ROOT_PATH]);
-
-$loader->register();
+$loader
+    ->registerDirs([ROOT_PATH])
+    ->register();
 
 $di = new FactoryDefault();
 
 Di::reset();
 
 $di->set('db', function(){
-
-    return new Phalcon\Db\Adapter\Pdo\Mysql([
+    return new Mysql([
             "host"     => "localhost",
             "username" => "root",
-            "password" => "123",
+            "password" => "",
             "dbname"   => "valid",
         ]
     );
