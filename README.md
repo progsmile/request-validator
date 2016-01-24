@@ -18,9 +18,10 @@ Coming soon on composer :)
 - [x]  max
 - [x]  min
 - [x]  numeric
+- [x]  phoneMask
 - [x]  required
 - [x]  same
-- [x]  unique (db connection required)
+- [x]  unique (db provider required)
 - [x]  url
 
 ### Examples
@@ -33,6 +34,7 @@ $validator = Validator::make($_POST, [
     'email'               => 'email|unique:users', //table in db
     'age'                 => 'min:16|numeric',
     'date'                => 'dateFormat:(m-Y.d H:i)', //any format you set
+    'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',
     'rule'                => 'accepted',
     'randNum'             => 'between:1, 100',
     'ip'                  => 'ip',

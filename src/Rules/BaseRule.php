@@ -41,7 +41,7 @@ abstract class BaseRule
      * @param string $type | 'var' or 'file'
      * @return bool
      */
-    protected function isNotRequired($type = 'var')
+    protected function isNotRequiredAndEmpty($type = 'var')
     {
         $condition = false;
 

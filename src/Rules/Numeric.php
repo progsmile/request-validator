@@ -5,7 +5,7 @@ class Numeric extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequired()) {
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 

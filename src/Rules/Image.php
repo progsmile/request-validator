@@ -11,7 +11,7 @@ class Image extends BaseRule
         }
 
         //file not required and not uploaded
-        if( $this->isNotRequired('file') ){
+        if( $this->isNotRequiredAndEmpty('file') ){
             return true;
         }
 
