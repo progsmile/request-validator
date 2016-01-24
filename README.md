@@ -2,11 +2,11 @@
 
 ## Usage
 ```php
-# Add namespace
+// Add namespace
 use \Progsmile\Validator\Validator as V;
 
-# Create new Validator, pass data, define rules and custom messages
-# Also has errors messages by default
+// Create new Validator, pass data, define rules and custom messages
+// Also has errors messages by default
 $validator = V::make($_POST, [
 
     //group validation fields
@@ -67,15 +67,18 @@ Coming soon on composer :)
 
 ```php
 
-**Connect once - use everywhere**
+// Connect once - use everywhere
 
+use Progsmile\Validator\Validator as V;
 use Progsmile\Validator\DbProviders\PhalconORM; //Phalcon
 use Progsmile\Validator\DbProviders\Wpdb;       //Wordpress
 
 V::setDataProvider(PhalconORM::class);
 
 //or
+V::setDataProvider(Wpdb::class);
 
+//or
 V::setupPDO('mysql:host=localhost;dbname=valid', 'root', '123');
 
 //or
@@ -92,7 +95,6 @@ $validator = V::make($this->request->getPost(), [
 ]);
 
 ```
-
 
 #### Formatting - the best way to auto-reformat the returned array into your own style
 
@@ -126,7 +128,7 @@ Then in to use this call, you must do this way:
 
 ```php
 $validator = V::make(
-    # ... some code here...
+    // ... some code here...
 );
 
 echo $validator->format(MarkdownFormatter::class);
