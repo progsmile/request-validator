@@ -11,8 +11,8 @@ class Required extends BaseRule
 
         $value = trim($this->params[1]);
 
-        return (bool)$value or $value == '0' || $this->hasRule('image') && isset($_FILES[$this->params[0]])
-                                        && $_FILES[$this->params[0]]['name'];
+
+        return (bool)$value || $value == '0' || !empty($_FILES) && $_FILES[$this->params[0]]['name'];
     }
 
     public function getMessage()

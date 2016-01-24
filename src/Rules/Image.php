@@ -5,21 +5,22 @@ class Image extends BaseRule
 {
     public function isValid()
     {
-        //server errors while uploading
-        if(!isset($_FILES[$this->params[0]]) || !empty($_FILES) && $_FILES[$this->params[0]]['error'] != 4){
-            return false;
-        }
-
-        //file not required and not uploaded
-        if( $this->isNotRequiredAndEmpty('file') ){
+        //file not required and not send by user
+        if ($this->isNotRequiredAndEmpty('file')){
             return true;
         }
 
-        $uploadedFile = $_FILES[$this->params[0]];
+        $fileField = $this->params[0];
+
+        //uploading error: file is too big, or permissions, etc..
+        if ( !isset($_FILES[$fileField])){
+            return false;
+        }
 
         //if file is image
-        return is_array(@getimagesize($uploadedFile['tmp_name']));
+        return is_array(@getimagesize($_FILES[$fileField]['tmp_name']));
     }
+
 
     public function getMessage()
     {

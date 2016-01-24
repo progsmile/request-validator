@@ -8,26 +8,56 @@ final class Validator
 {
     private static $validatorInstance = null;
 
+    private static $pdoInstance = null;
+
     private static $errorMessages = [];
 
     private static $config = [
         'orm' => \Progsmile\Validator\DbProviders\PhalconORM::class,
     ];
 
-    private function __construct()
+
+    /**
+     * Initialize PDO connection
+     *
+     * @param string $connectionString - ex. (mysql:host=localhost;dbname=test)
+     * @param string $user - db username
+     * @param string $password - db password
+     */
+    public static function setupPDO($connectionString, $user, $password)
     {
+        try {
+            self::$pdoInstance = new \PDO($connectionString, $user, $password);
+
+        } catch (\PDOException $e) {
+            trigger_error($e->getMessage(), E_USER_ERROR);
+        }
     }
 
-    private function __clone()
+    /**
+     * Setup PDO instance
+     * @param \PDO $pdoInstance
+     */
+    public static function setPDO(\PDO $pdoInstance)
     {
+        self::$pdoInstance = $pdoInstance;
     }
 
-    private function __wakeup()
+    /**
+     * Get PDO object for unique validators
+     *
+     * @return mixed
+     */
+    public static function getPDO()
     {
+        return self::$pdoInstance ?: null;
     }
 
-
-    public static function setDbProvider($orm)
+    /**
+     * Setup database service from available
+     * @param $orm
+     */
+    public static function setDataProvider($orm)
     {
         self::$config[BaseRule::CONFIG_ORM] = $orm;
     }
@@ -46,19 +76,6 @@ final class Validator
             self::$validatorInstance = new Validator();
         }
 
-        return self::$validatorInstance->validate($data, $rules, $userMessages);
-    }
-
-    /**
-     * Validation process
-     *
-     * @param $data
-     * @param $rules
-     * @param array $userMessages
-     * @return $this
-     */
-    private function validate($data, $rules, $userMessages = [])
-    {
         self::$errorMessages = [];
 
         foreach ($rules as $groupedFieldNames => $fieldRules) {
@@ -88,7 +105,7 @@ final class Validator
                     if (count($ruleNameParam) >= 2){
                         $ruleValue = implode(':', array_slice($ruleNameParam, 1));
 
-                    //for other params
+                        //for other params
                     } else {
                         $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
                     }
@@ -128,7 +145,7 @@ final class Validator
             }
         }
 
-        return $this;
+        return self::$validatorInstance;
     }
 
     public function isValid()
@@ -161,5 +178,19 @@ final class Validator
     public function format($class = FormatHTML::class)
     {
         return (new $class)->reformat(self::$errorMessages);
+    }
+
+
+    //singleton
+    private function __construct()
+    {
+    }
+
+    private function __clone()
+    {
+    }
+
+    private function __wakeup()
+    {
     }
 }

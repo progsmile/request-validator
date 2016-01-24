@@ -1,6 +1,6 @@
 <?php
 
-use \Progsmile\Validator\Validator;
+use \Progsmile\Validator\Validator as V;
 
 
 include __DIR__ . '/../vendor/autoload.php';
@@ -20,6 +20,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+//        V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '123');
+
         $this->postData = [
             'firstname'       => 'Denis',
             'lastname'        => 'Klimenko',
@@ -41,7 +43,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testValidationOK()
     {
-        $validationResult = Validator::make($this->postData, [
+        $validationResult = V::make($this->postData, [
             'firstname, lastname' => 'required|alpha|min:2',
             'lastname'            => 'max:18',
             'email'               => 'email|unique:users',
@@ -64,11 +66,13 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testNonUniqueError()
     {
-        $validationResult = Validator::make(['email' => $this->nonUniqueEmail], [
+        $validationResult = V::make(['email' => $this->nonUniqueEmail], [
             'email' => 'unique:users',
         ], [
             'email.unique' => 'nonunique',
         ]);
+
+        dd($validationResult->getMessages());
 
         $this->assertFalse($validationResult->isValid());
 
@@ -80,7 +84,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testNumeric()
     {
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'n1' => '100',
             'n2' => '1asdasd',
             'n3' => 'sd1asdasd',
@@ -99,7 +103,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testGroupedRules()
     {
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'n1'        => '111',
             'n2'        => '333',
             'n3'        => '7s7s7',
@@ -121,7 +125,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testRequiredRule()
     {
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'fieldZero'  => '0',
             'fieldSpace' => ' ',   //false
             'fieldEmpty' => '',    //false
@@ -139,7 +143,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testAccepted()
     {
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'license'   => '1',
             'agreement' => 'yes',
             'terms'     => 'on',
@@ -156,7 +160,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testInNotInValidator()
     {
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'cash10'        => '10',
             'cash25'        => '25',   //false
             'shop'          => 'Metro',
@@ -181,7 +185,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function testPhoneMask()
     {
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'phone1' => '+38(097)123-45-67',
             'phone2' => '1-234-567-8901',
             'phone3' => '(020) 4420 7123',
@@ -196,12 +200,13 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     }
 
 
+
     /** @test */
     public function testPDOClass()
     {
-        Validator::setDbProvider(\Progsmile\Validator\DbProviders\DefaultPDO::class);
+        V::setupPDO('mysql:host=localhost;dbname=valid', 'root', '123');
 
-        $validationResult = Validator::make([
+        $validationResult = V::make([
             'email' => $this->nonUniqueEmail,
         ], [
             'email' => 'required|email|unique:users',
@@ -209,7 +214,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         dd($validationResult->getMessages());
 
-        $this->assertTrue($validationResult->isValid());
+        $this->assertFalse($validationResult->isValid());
     }
 
 

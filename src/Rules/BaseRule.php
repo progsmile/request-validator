@@ -50,8 +50,10 @@ abstract class BaseRule
 
         } elseif ($type == 'file') {
 
-            //when file field is not required, but we send it
-            $condition = isset($_FILES[$this->params[0]]['size']) && $_FILES[$this->params[0]]['size'] == 0;
+            $fieldsName = $this->params[0];
+
+            //when file field is not required and empty
+            $condition = isset($_FILES[$fieldsName]['name']) && $_FILES[$fieldsName]['name'] == '';
         }
 
         return !$this->hasRule('required') && $condition;
