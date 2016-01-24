@@ -1,14 +1,30 @@
 {
     "name": "progsmile/phalcon-validator",
-    "autoload": {
+    "description": "Simple PHP Request Validator ",
+    "keywords": [
+        "validation"
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.1"
+    },
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Denis K",
+            "email": "denis.klimenko.dx@gmail.com"
+        }
+    ],
+    "autoload-dev": {
         "classmap": [
-            "."
+            "tests/"
         ]
     },
-    "required-dev" :{
-
-    },
-    "require": {
-        "phpunit/phpunit": "^5.1"
+    "autoload": {
+        "psr-4": {
+            "Progsmile\\Validator\\": "src/"
+        }
     }
 }

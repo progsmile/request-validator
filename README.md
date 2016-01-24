@@ -1,5 +1,7 @@
 # PHP Request Validator
 
+[![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)
+
 ## Usage
 ```php
 // Add namespace
