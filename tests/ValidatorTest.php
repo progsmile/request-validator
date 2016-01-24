@@ -2,17 +2,6 @@
 
 use \Progsmile\Validator\Validator as V;
 
-
-include __DIR__ . '/../vendor/autoload.php';
-
-
-//little test helper
-function dd($var)
-{
-    var_dump($var);
-    ob_flush();
-}
-
 class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     private $postData;
@@ -20,7 +9,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-//        V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '123');
+        V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
 
         $this->postData = [
             'firstname'       => 'Denis',
@@ -40,7 +29,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->nonUniqueEmail = 'dd@dd.dd';
     }
 
-    /** @test */
     public function testValidationOK()
     {
         $validationResult = V::make($this->postData, [
@@ -63,7 +51,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($validationResult->getMessages());
     }
 
-    /** @test */
     public function testNonUniqueError()
     {
         $validationResult = V::make(['email' => $this->nonUniqueEmail], [
@@ -81,7 +68,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('nonunique', reset($errorMessage));
     }
 
-    /** @test */
     public function testNumeric()
     {
         $validationResult = V::make([
@@ -99,8 +85,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $validationResult->getMessages());
     }
 
-
-    /** @test */
     public function testGroupedRules()
     {
         $validationResult = V::make([
@@ -122,7 +106,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $validationResult->getMessages());
     }
 
-    /** @test */
     public function testRequiredRule()
     {
         $validationResult = V::make([
@@ -140,7 +123,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(3, $validationResult->getMessages());
     }
 
-    /** @test */
     public function testAccepted()
     {
         $validationResult = V::make([
@@ -157,7 +139,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $validationResult->getMessages());
     }
 
-    /** @test */
     public function testInNotInValidator()
     {
         $validationResult = V::make([
@@ -181,8 +162,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $validationResult->getMessages());
     }
 
-
-    /** @test */
     public function testPhoneMask()
     {
         $validationResult = V::make([
@@ -199,12 +178,9 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validationResult->isValid());
     }
 
-
-
-    /** @test */
     public function testPDOClass()
     {
-        V::setupPDO('mysql:host=localhost;dbname=valid', 'root', '123');
+        V::setupPDO('mysql:host=localhost;dbname=valid', 'root', '');
 
         $validationResult = V::make([
             'email' => $this->nonUniqueEmail,
@@ -216,6 +192,4 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($validationResult->isValid());
     }
-
-
 }
