@@ -38,3 +38,10 @@ $di->set('db', function(){
 });
 
 Di::setDefault($di);
+
+if (!function_exists('dd')) {
+    function dd($var) {
+        var_dump($var);
+        ob_flush();
+    }
+}
