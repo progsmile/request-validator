@@ -13,7 +13,7 @@ final class Validator
     private static $errorMessages = [];
 
     private static $config = [
-        'orm' => \Progsmile\Validator\DbProviders\PhalconORM::class,
+        'orm' => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
 
 
