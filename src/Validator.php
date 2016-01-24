@@ -155,7 +155,7 @@ final class Validator
 
     public function getFirstMessage($field = '')
     {
-        return isset(self::$errorMessages[$field]) ? array_pop(self::$errorMessages[$field]) : '';
+        return isset(self::$errorMessages[$field]) ? reset(self::$errorMessages[$field]) : '';
     }
 
     public function format($class = FormatHTML::class)

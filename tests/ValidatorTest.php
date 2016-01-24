@@ -157,23 +157,24 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testInNotInValidator()
     {
         $validationResult = Validator::make([
-            'cash10'       => '10',
-            'cash25'       => '25',   //false
-            'cash1000'     => '1000', //false
-            'shop'         => 'Metro',
-            'dominoValue1' => '1',    //false
-            'dominoValue2' => '5',
+            'cash10'        => '10',
+            'cash25'        => '25',   //false
+            'shop'          => 'Metro',
+            'elevatorFloor' => '13',    //false
         ], [
-            'cash10, cash25, cash1000'   => 'in:1, 2, 5, 10, 20, 50, 100, 200, 500',
-            'dominoValue1, dominoValue2' => 'notIn:1,6',
+            'cash10, cash25' => 'in:1, 2, 5, 10, 20, 50, 100, 200, 500',
+            'shop'           => 'in:ATB, Billa, Metro',
+            'elevatorFloor'  => 'notIn:13',
 
-            'shop' => 'in:ATB, Billa, Metro',
-
+        ], [
+            'elevatorFloor.notIn' => 'Oops',
         ]);
 
-        dd($validationResult->getMessages());
+        dd($validationResult->getFirstMessage('elevatorFloor'));
 
-        $this->assertCount(3, $validationResult->getMessages());
+        $this->assertEquals('Oops', $validationResult->getFirstMessage('elevatorFloor'));
+
+        $this->assertCount(2, $validationResult->getMessages());
     }
 
 
