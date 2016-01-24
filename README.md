@@ -20,7 +20,7 @@ Coming soon on composer :)
 - [x]  numeric
 - [x]  required
 - [x]  same
-- [x]  unique (db connection needed)
+- [x]  unique (db connection required)
 - [x]  url
 
 ### Examples

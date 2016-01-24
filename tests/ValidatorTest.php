@@ -56,7 +56,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'site'                => 'url',
         ]);
 
-
         dd($validationResult->getMessages());
 
         $this->assertEmpty($validationResult->getMessages());
@@ -119,12 +118,32 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $validationResult->getMessages());
     }
 
+
+    /** @test */
+    public function testPhoneMask()
+    {
+        $validationResult = Validator::make([
+            'phone1' => '+38(097)123-45-67',
+            'phone2' => '1-234-567-8901',
+            'phone3' => '(020) 4420 7123',
+        ], [
+            'phone1' => 'phoneMask:(+38(###)###-##-##)',
+            'phone2' => 'phoneMask:(#-###-###-####)',
+            'phone3' => 'phoneMask:((020) xxxx xxxx)',
+        ]);
+
+        dd($validationResult->getMessages());
+        $this->assertTrue($validationResult->isValid());
+    }
+
+
+    /** @test */
     public function testPDOClass()
     {
         Validator::setDbProvider(\Progsmile\Validator\DbProviders\DefaultPDO::class);
 
         $validationResult = Validator::make([
-            'email'  => $this->nonUniqueEmail,
+            'email' => $this->nonUniqueEmail,
         ], [
             'email' => 'required|email|unique:users',
         ]);
@@ -133,4 +152,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($validationResult->isValid());
     }
+
+
 }
