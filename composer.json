@@ -1,8 +1,8 @@
 {
-    "name": "progsmile/phalcon-validator",
-    "description": "Simple PHP Request Validator ",
+    "name": "progsmile/request-validator",
+    "description": "Simple PHP Request Validator",
     "keywords": [
-        "validation"
+        "PHP", "validation"
     ],
     "require": {
         "php": ">=5.4"
