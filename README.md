@@ -1,6 +1,5 @@
 # PHP Request Validator
-
-[![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)
+[![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator) [![Monthly Downloads](https://poser.pugx.org/progsmile/request-validator/d/monthly)](https://packagist.org/packages/progsmile/request-validator)
 
 ## Usage
 
