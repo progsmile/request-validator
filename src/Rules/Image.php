@@ -17,8 +17,14 @@ class Image extends BaseRule
             return false;
         }
 
-        //if file is image
-        return is_array(@getimagesize($_FILES[$fileField]['tmp_name']));
+        if($_FILES[$fileField]['tmp_name']){
+
+            //if file is image
+            return is_array(getimagesize($_FILES[$fileField]['tmp_name']));
+        }
+
+        return false;
+
     }
 
 

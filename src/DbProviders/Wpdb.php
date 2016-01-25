@@ -11,20 +11,20 @@ class Wpdb implements OrmInterface
 
     public function __construct($attribute, $value, $table)
     {
-        global $wpdb;
-
         $this->field = trim($attribute);
         $this->value = trim($value);
-        $this->table = $wpdb->prefix . $table;
+        $this->table = $table;
     }
 
     public function isUnique()
     {
         global $wpdb;
 
+        $table = $wpdb->prefix . $this->table;
+
         $recordsCount = $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT COUNT(*) FROM $this->table WHERE $this->field = %s",  $this->value
+                "SELECT COUNT(*) FROM $table WHERE $this->field = %s",  $this->value
             )
         );
 

@@ -69,7 +69,7 @@ final class Validator
      */
     public static function make(array $data, array $rules, array $userMessages = [])
     {
-        if (self::$validatorInstance == null){
+        if (self::$validatorInstance === null){
             self::$validatorInstance = new Validator();
         }
 
