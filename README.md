@@ -38,10 +38,29 @@ $validator = V::make($_POST, [
 
 ## Installation
 
-**With Composer**
+### Installing via Composer
 
-```composer require progsmile/request-validator=dev-master```
+Install [Composer](http://getcomposer.org) in a common location or in your project:
 
+```sh
+$ curl -s http://getcomposer.org/installer | php
+```
+
+Create the `composer.json` file as follows:
+
+```json
+{
+    "require": {
+        "progsmile/request-validator": "@dev"
+    }
+}
+```
+
+Run the Composer installer:
+
+```sh
+$ php composer.phar install
+```
 
 ## Available rules
 - [x]  accepted
@@ -137,7 +156,7 @@ echo $validator->format(MarkdownFormatter::class);
 ```
 
 
-### Dear contributors
+## Dear contributors
 
 Project is just started and it is not stable yet, we love to have your fork requests
 
@@ -152,3 +171,8 @@ cat tests/schema.sql | mysql valid -u root
 ```
 
 For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
+
+## License
+
+PHP Request Validator is open-sourced software licensed under the [GNU GPL](LICENSE).
+© 2016 Denis K
