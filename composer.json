@@ -2,7 +2,7 @@
     "name": "progsmile/request-validator",
     "description": "Simple PHP Request Validator",
     "keywords": [
-        "PHP", "validation"
+        "validation", "PHP"
     ],
     "require": {
         "php": ">=5.4"
