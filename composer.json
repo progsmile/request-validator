@@ -4,6 +4,7 @@
     "keywords": [
         "validation", "PHP"
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4"
     },
@@ -17,7 +18,6 @@
             "email": "denis.klimenko.dx@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload-dev": {
         "classmap": [
             "tests/"
