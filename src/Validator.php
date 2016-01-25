@@ -1,7 +1,6 @@
 <?php
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Format\HTML as FormatHTML;
 use Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
@@ -13,9 +12,8 @@ final class Validator
     private static $errorMessages = [];
 
     private static $config = [
-        'orm' => \Progsmile\Validator\DbProviders\PhalconORM::class,
+        'orm' => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
-
 
     /**
      * Initialize PDO connection
@@ -28,7 +26,6 @@ final class Validator
     {
         try {
             self::$pdoInstance = new \PDO($connectionString, $user, $password);
-
         } catch (\PDOException $e) {
             trigger_error($e->getMessage(), E_USER_ERROR);
         }
@@ -175,11 +172,10 @@ final class Validator
         return isset(self::$errorMessages[$field]) ? reset(self::$errorMessages[$field]) : '';
     }
 
-    public function format($class = FormatHTML::class)
+    public function format($class = 'Progsmile\Validator\Format\HTML')
     {
         return (new $class)->reformat(self::$errorMessages);
     }
-
 
     //singleton
     private function __construct()
