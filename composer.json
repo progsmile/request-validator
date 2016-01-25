@@ -17,6 +17,7 @@
             "email": "denis.klimenko.dx@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "autoload-dev": {
         "classmap": [
             "tests/"
