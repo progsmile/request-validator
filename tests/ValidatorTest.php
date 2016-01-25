@@ -46,7 +46,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'site'                => 'url',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertEmpty($validationResult->getMessages());
     }
@@ -59,7 +59,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email.unique' => 'nonunique',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertFalse($validationResult->isValid());
 
@@ -80,7 +80,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3' => 'numeric',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertCount(2, $validationResult->getMessages());
     }
@@ -101,7 +101,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3.numeric'      => 'N3 is not a number',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertCount(2, $validationResult->getMessages());
     }
@@ -118,7 +118,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'fieldZero, fieldSpace, fieldEmpty, fieldFalse, fieldNull' => 'required',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertCount(3, $validationResult->getMessages());
     }
@@ -134,7 +134,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'license,agreement, terms, subscribe' => 'accepted',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertCount(1, $validationResult->getMessages());
     }
@@ -155,7 +155,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'elevatorFloor.notIn' => 'Oops',
         ]);
 
-        dd($validationResult->getFirstMessage('elevatorFloor'));
+        // dd($validationResult->getFirstMessage('elevatorFloor'));
 
         $this->assertEquals('Oops', $validationResult->getFirstMessage('elevatorFloor'));
 
@@ -174,7 +174,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'phone3' => 'phoneMask:((020) xxxx xxxx)',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
         $this->assertTrue($validationResult->isValid());
     }
 
@@ -188,7 +188,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email' => 'required|email|unique:users',
         ]);
 
-        dd($validationResult->getMessages());
+        // dd($validationResult->getMessages());
 
         $this->assertFalse($validationResult->isValid());
     }

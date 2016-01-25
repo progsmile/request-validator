@@ -67,6 +67,8 @@ A MySQL database is also required for several tests. Follow these instructions t
 
 ```sh
 echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
+cat tests/schema.sql | mysql valid -u root
+
 ```
 
 For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
