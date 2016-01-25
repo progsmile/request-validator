@@ -59,27 +59,14 @@ $validator = V::make($_POST, [
 - [x]  url
 
 
-## Install
+### Installation
 
-Coming soon on composer :)
+**With Composer**
 
-
-**for contributors**
-A MySQL database is also required for several tests. Follow these instructions to create the database:
-
-```sh
-echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
-cat tests/schema.sql | mysql valid -u root
-
-```
-
-For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
+```composer require progsmile/request-validator=dev-master```
 
 
-### Advanced Usage
-
-
-#### Connect with PDO or use build in Data Providers (just for unique rule)
+### Connect with PDO or use built-in Data Providers (just for unique rule)
 
 ```php
 // Connect once - use everywhere
@@ -149,6 +136,20 @@ $validator = V::make(
 echo $validator->format(MarkdownFormatter::class);
 ```
 
+
 ### Dear contributors
 
 Project is just started and it is not stable yet, we love to have your fork requests
+
+**For testing**
+
+A MySQL database is also required for several tests. Follow these instructions to create the database:
+
+```sh
+echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
+cat tests/schema.sql | mysql valid -u root
+
+```
+
+For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
+
