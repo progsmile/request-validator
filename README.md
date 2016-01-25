@@ -37,6 +37,13 @@ $validator = V::make($_POST, [
 ]);
 ```
 
+## Installation
+
+**With Composer**
+
+```composer require progsmile/request-validator=dev-master```
+
+
 ## Available rules
 - [x]  accepted
 - [x]  alpha
@@ -58,12 +65,6 @@ $validator = V::make($_POST, [
 - [x]  unique (db provider required)
 - [x]  url
 
-
-### Installation
-
-**With Composer**
-
-```composer require progsmile/request-validator=dev-master```
 
 
 ### Connect with PDO or use built-in Data Providers (just for unique rule)
