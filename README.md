@@ -63,6 +63,8 @@ $validator = V::make($_POST, [
 
 Coming soon on composer :)
 
+
+**for contributors**
 A MySQL database is also required for several tests. Follow these instructions to create the database:
 
 ```sh
@@ -80,7 +82,6 @@ For these tests we use the user `root` without a password. You may need to chang
 #### Connect with PDO or use build in Data Providers (just for unique rule)
 
 ```php
-
 // Connect once - use everywhere
 
 use Progsmile\Validator\Validator as V;
