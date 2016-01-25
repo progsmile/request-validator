@@ -152,4 +152,3 @@ cat tests/schema.sql | mysql valid -u root
 ```
 
 For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
-
