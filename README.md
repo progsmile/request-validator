@@ -192,4 +192,4 @@ For additional information see [PHPUnit The Command-Line Test Runner](http://php
 ## License
 
 PHP Request Validator is open-sourced software licensed under the [GNU GPL](LICENSE).
-© 2016 Denis K
+© 2016 Denis Klimenko
