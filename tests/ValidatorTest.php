@@ -189,10 +189,10 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email' => 'required|email|exists:users',
             'id'    => 'required|numeric|exists:users',  //false
         ], [
-            'id.exists' => $errorMessageIdExists
+            'id.exists' => $errorMessageIdExists,
         ]);
 
-        dd($validationResult->getMessages());
+//        dd($validationResult->getMessages());
 
         $this->assertFalse($validationResult->isValid());
 

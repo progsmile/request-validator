@@ -14,7 +14,8 @@ $validator = V::make($_POST, [
     //group validation fields
     'firstname, lastname' => 'required|alpha|min:2',         //alphabetic support
     'lastname'            => 'max:18',                       //string max length
-    'email'               => 'email|unique:users',           //email uniqueness
+    'email'               => 'email|unique:users',           //email uniqueness in table users
+    'id'                  => 'numeric|exists:users',         //such ID exists in table users
     'age'                 => 'min:16|numeric',               //numeric min
     'date'                => 'dateFormat:(m-Y.d H:i)',       //custom date time format
     'profileImg'          => 'image',                        //image
@@ -69,6 +70,7 @@ $ php composer.phar install
 - [x]  boolean
 - [x]  dateFormat
 - [x]  email
+- [x]  exists
 - [x]  json
 - [x]  in
 - [x]  image
@@ -85,7 +87,7 @@ $ php composer.phar install
 
 
 
-### Connect with PDO or use built-in Data Providers (just for unique rule)
+### Connect with PDO or use built-in Data Providers (just for unique and exists rules)
 
 ```php
 // Connect once - use everywhere
