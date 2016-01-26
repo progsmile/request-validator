@@ -23,14 +23,15 @@ class PhalconORM implements OrmInterface
 
     public function isUnique()
     {
-        if(!$this->value){
-            return true;
-        }
-
         $recordsCount = $this->db->fetchColumn(
             "SELECT COUNT(*) FROM $this->table WHERE $this->field = ?", [$this->value]
         );
 
         return $recordsCount == 0;
+    }
+
+    public function isExist()
+    {
+        return !$this->isUnique();
     }
 }

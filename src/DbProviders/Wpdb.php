@@ -30,4 +30,9 @@ class Wpdb implements OrmInterface
 
         return $recordsCount == 0;
     }
+
+    public function isExist()
+    {
+        return !$this->isUnique();
+    }
 }

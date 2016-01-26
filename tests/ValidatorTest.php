@@ -178,18 +178,24 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validationResult->isValid());
     }
 
-    public function testPDOClass()
+    public function testExists()
     {
-        V::setupPDO('mysql:host=localhost;dbname=valid', 'root', '');
+        $errorMessageIdExists = 'Such ID is not exist!';
 
         $validationResult = V::make([
             'email' => $this->nonUniqueEmail,
+            'id'    => '9999999999999999',
         ], [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|exists:users',
+            'id'    => 'required|numeric|exists:users',  //false
+        ], [
+            'id.exists' => $errorMessageIdExists
         ]);
 
-        // dd($validationResult->getMessages());
+        dd($validationResult->getMessages());
 
         $this->assertFalse($validationResult->isValid());
+
+        $this->assertEquals($errorMessageIdExists, $validationResult->getFirstMessage('id'));
     }
 }

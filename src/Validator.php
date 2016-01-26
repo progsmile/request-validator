@@ -2,6 +2,7 @@
 namespace Progsmile\Validator;
 
 use Progsmile\Validator\Rules\BaseRule;
+use Progsmile\Validator\Helpers\ErrorBag;
 
 final class Validator
 {
@@ -69,6 +70,7 @@ final class Validator
      */
     public static function make(array $data, array $rules, array $userMessages = [])
     {
+
         if (self::$validatorInstance === null){
             self::$validatorInstance = new Validator();
         }
@@ -177,7 +179,6 @@ final class Validator
         return (new $class)->reformat(self::$errorMessages);
     }
 
-    //singleton
     private function __construct()
     {
     }

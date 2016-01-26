@@ -11,4 +11,12 @@ interface OrmInterface
      * @return boolean
      */
     public function isUnique();
+
+
+    /**
+     * Check if the the value exists based on the table's field
+     *
+     * @return boolean
+     */
+    public function isExist();
 }
