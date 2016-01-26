@@ -193,13 +193,19 @@ final class Validator
     }
 
     /**
-     * Returns first error message from concrete field
+     * Returns first error message from concrete field or from validation stack
      * @param string $field
      * @return mixed|string
      */
     public function getFirstMessage($field = '')
     {
-        return isset(self::$errorMessages[$field]) ? reset(self::$errorMessages[$field]) : '';
+        if(isset(self::$errorMessages[$field])){
+            $message = reset(self::$errorMessages[$field]);
+        } else {
+            $message = reset($this->getFirstMessages());
+        }
+
+        return $message;
     }
 
     /**

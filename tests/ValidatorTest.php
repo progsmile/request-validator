@@ -219,6 +219,23 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $messages);
         $this->assertContains('email format', $messages);
         $this->assertContains('min 10', $messages);
-
     }
+
+    public function getFirstMessageMethod()
+    {
+        $validationResult = V::make([], [
+            'email' => 'email|required',   //email
+            'age'   => 'numeric|required', //numeric
+        ], [
+            'email.email' => 'notEmail',
+            'age.email'   => 'notNumber',
+        ]);
+
+        dd($validationResult->getFirstMessage());
+
+        $this->assertEquals('notEmail', $validationResult->getFirstMessage());
+        $this->assertEquals('notNumber', $validationResult->getFirstMessage('age'));
+    }
+
+
 }
