@@ -2,7 +2,6 @@
 namespace Progsmile\Validator;
 
 use Progsmile\Validator\Rules\BaseRule;
-use Progsmile\Validator\Helpers\ErrorBag;
 
 final class Validator
 {
@@ -109,6 +108,7 @@ final class Validator
                         $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
                     }
 
+
                     $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
                     self::$config[BaseRule::CONFIG_DATA]        = $data;
@@ -147,11 +147,20 @@ final class Validator
         return self::$validatorInstance;
     }
 
+    /**
+     * Checks request is valid
+     * @return bool
+     */
     public function isValid()
     {
         return count(self::$errorMessages) == 0;
     }
 
+    /**
+     * Returns all error messages | Or all error messages from concrete field
+     * @param string $field
+     * @return array
+     */
     public function getMessages($field = '')
     {
         //get messages for specific field
@@ -159,7 +168,6 @@ final class Validator
             return isset(self::$errorMessages[$field]) ? self::$errorMessages[$field] : [];
         }
 
-        //return plain messages array
         $messages = [];
 
         array_walk_recursive(self::$errorMessages, function ($message) use (&$messages) {
@@ -169,15 +177,41 @@ final class Validator
         return $messages;
     }
 
+    /**
+     * Returns first error message from each fields
+     */
+    public function getFirstMessages()
+    {
+        $messages = [];
+        foreach (self::$errorMessages as $fieldsMessages) {
+            foreach ($fieldsMessages as $fieldMessage) {
+                $messages[] = $fieldMessage;
+                break;
+            }
+        }
+        return $messages;
+    }
+
+    /**
+     * Returns first error message from concrete field
+     * @param string $field
+     * @return mixed|string
+     */
     public function getFirstMessage($field = '')
     {
         return isset(self::$errorMessages[$field]) ? reset(self::$errorMessages[$field]) : '';
     }
 
+    /**
+     * Reformat messages provided by HTML, JSON or custom FormatInterface classes
+     * @param string $class
+     * @return mixed
+     */
     public function format($class = 'Progsmile\Validator\Format\HTML')
     {
         return (new $class)->reformat(self::$errorMessages);
     }
+
 
     private function __construct()
     {
