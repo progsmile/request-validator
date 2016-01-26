@@ -8,23 +8,23 @@ error_reporting(-1);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-include_once __DIR__ . "/../vendor/autoload.php";
+if (extension_loaded('phalcon')) {
+    $di = new FactoryDefault();
 
-$di = new FactoryDefault();
+    Di::reset();
 
-Di::reset();
+    $di->set('db', function(){
+        return new Mysql([
+                "host"     => "localhost",
+                "username" => "root",
+                "password" => "",
+                "dbname"   => "valid",
+            ]
+        );
+    });
 
-$di->set('db', function(){
-    return new Mysql([
-            "host"     => "localhost",
-            "username" => "root",
-            "password" => "",
-            "dbname"   => "valid",
-        ]
-    );
-});
-
-Di::setDefault($di);
+    Di::setDefault($di);
+}
 
 if (!function_exists('dd')) {
     function dd($var) {

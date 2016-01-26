@@ -13,9 +13,17 @@ class PhalconORM implements OrmInterface
 
     public function __construct($attribute, $value, $table)
     {
+        if (!extension_loaded('phalcon')) {
+            throw new \RuntimeException('The phalcon extension is not loaded');
+        }
+
         $di = DI::getDefault();
 
-        $this->db    = $di->get('db');
+        if (!$di->has('db')) {
+            throw new \RuntimeException('The db service is required for ' . __CLASS__);
+        }
+
+        $this->db    = $di->getShared('db');
         $this->field = $attribute;
         $this->value = $value;
         $this->table = $table;

@@ -9,7 +9,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
+        try {
+            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
+        } catch (\Exception $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
 
         $this->postData = [
             'firstname'       => 'Denis',
@@ -46,8 +50,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'site'                => 'url',
         ]);
 
-        // dd($validationResult->getMessages());
-
         $this->assertEmpty($validationResult->getMessages());
     }
 
@@ -58,8 +60,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ], [
             'email.unique' => 'nonunique',
         ]);
-
-        // dd($validationResult->getMessages());
 
         $this->assertFalse($validationResult->isValid());
 
@@ -80,8 +80,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3' => 'numeric',
         ]);
 
-        // dd($validationResult->getMessages());
-
         $this->assertCount(2, $validationResult->getMessages());
     }
 
@@ -101,8 +99,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3.numeric'      => 'N3 is not a number',
         ]);
 
-        // dd($validationResult->getMessages());
-
         $this->assertCount(2, $validationResult->getMessages());
     }
 
@@ -118,8 +114,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'fieldZero, fieldSpace, fieldEmpty, fieldFalse, fieldNull' => 'required',
         ]);
 
-        // dd($validationResult->getMessages());
-
         $this->assertCount(3, $validationResult->getMessages());
     }
 
@@ -133,8 +127,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ], [
             'license,agreement, terms, subscribe' => 'accepted',
         ]);
-
-        // dd($validationResult->getMessages());
 
         $this->assertCount(1, $validationResult->getMessages());
     }
@@ -155,10 +147,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'elevatorFloor.notIn' => 'Oops',
         ]);
 
-        // dd($validationResult->getFirstMessage('elevatorFloor'));
-
         $this->assertEquals('Oops', $validationResult->getFirstMessage('elevatorFloor'));
-
         $this->assertCount(2, $validationResult->getMessages());
     }
 
@@ -174,7 +163,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'phone3' => 'phoneMask:((020) xxxx xxxx)',
         ]);
 
-        // dd($validationResult->getMessages());
         $this->assertTrue($validationResult->isValid());
     }
 
@@ -192,10 +180,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'id.exists' => $errorMessageIdExists,
         ]);
 
-//        dd($validationResult->getMessages());
-
         $this->assertFalse($validationResult->isValid());
-
         $this->assertEquals($errorMessageIdExists, $validationResult->getFirstMessage('id'));
     }
 
@@ -211,8 +196,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email.required' => 'email required',
             'email.email'    => 'email format',  //expected
         ]);
-
-//        dd($validationResult->getFirstMessages());
 
         $messages = $validationResult->getFirstMessages();
 
@@ -231,11 +214,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'age.email'   => 'notNumber',
         ]);
 
-        dd($validationResult->getFirstMessage());
-
         $this->assertEquals('notEmail', $validationResult->getFirstMessage());
         $this->assertEquals('notNumber', $validationResult->getFirstMessage('age'));
     }
-
-
 }

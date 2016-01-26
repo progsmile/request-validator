@@ -63,7 +63,9 @@ Run the Composer installer:
 $ php composer.phar install
 ```
 
-## Available rules
+## Getting Started
+
+### Available rules
 - [x]  accepted
 - [x]  alpha
 - [x]  between
@@ -84,8 +86,6 @@ $ php composer.phar install
 - [x]  same
 - [x]  unique (db provider required)
 - [x]  url
-
-
 
 ### Connect with PDO or use built-in Data Providers (just for unique and exists rules)
 
@@ -119,7 +119,7 @@ $validator = V::make($this->request->getPost(), [
 
 ```
 
-#### Formatting - the best way to auto-reformat the returned array into your own style
+### Formatting - the best way to auto-reformat the returned array into your own style
 
 The `$validator->format()`, by default, the messages will be formatted to html `<ul><li></li>...</ul>` element.
 
@@ -157,24 +157,39 @@ $validator = V::make(
 echo $validator->format(MarkdownFormatter::class);
 ```
 
+## Contributing
 
-## Dear contributors
+Dear contributors, the project is just started and it is not stable yet, we love to have your fork requests.
 
-Project is just started and it is not stable yet, we love to have your fork requests
+## Testing
 
-**For testing**
+This testing suite uses [Travis CI](https://travis-ci.org/) for each run. Every commit pushed to this repository will queue a build into the continuous integration service and will run all tests to ensure that everything is going well and the project is stable.
+
+The testing suite can be run on your own machine. The main dependency is [PHPUnit](https://github.com/sebastianbergmann/phpunit) which can be installed using [Composer](http://getcomposer.org):
+
+```sh
+# run this command from project root
+$ composer install --dev --prefer-source
+```
 
 A MySQL database is also required for several tests. Follow these instructions to create the database:
 
 ```sh
 echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
 cat tests/schema.sql | mysql valid -u root
-
 ```
 
 For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
 
+Once the database is created, run the tests on a terminal:
+
+```sh
+vendor/bin/phpunit --configuration phpunit.xml --coverage-text
+```
+
+For additional information see [PHPUnit The Command-Line Test Runner](http://phpunit.de/manual/current/en/textui.html).
+
 ## License
 
 PHP Request Validator is open-sourced software licensed under the [GNU GPL](LICENSE).
-© 2016 Denis K
+© 2016 Denis Klimenko
