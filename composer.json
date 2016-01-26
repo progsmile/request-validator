@@ -2,9 +2,13 @@
     "name": "progsmile/request-validator",
     "description": "Simple PHP Request Validator",
     "keywords": [
-        "validation", "PHP"
+        "validation",
+        "PHP",
+        "security",
+        "form",
+        "sanitization",
+        "modeling"
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
         "progsmile/request-validator": "dev-master"
