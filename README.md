@@ -1,6 +1,12 @@
 # PHP Request Validator
 [![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator) [![Monthly Downloads](https://poser.pugx.org/progsmile/request-validator/d/monthly)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
 
+## Getting Started
+
+* [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
+* [Rules description](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
+* [Installation](https://github.com/progsmile/request-validator#installation)
+
 ## Usage
 
 ```php
@@ -61,10 +67,6 @@ Run the Composer installer:
 ```sh
 $ php composer.phar install
 ```
-
-## Getting Started
-
-* [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
 
 ### Available rules
 - [x]  alpha
