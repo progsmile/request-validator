@@ -64,6 +64,8 @@ $ php composer.phar install
 
 ## Getting Started
 
+* [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
+
 ### Available rules
 - [x]  alpha
 - [x]  between

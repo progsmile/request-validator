@@ -52,7 +52,6 @@ $v = V::make($_POST,[
    'phone'    => 'required|phoneMask:(+38(###)###-##-##)'
    'email'    => 'required|email|unique:users',
    'age'      => 'numeric|required|min:16',
-   ''         => 'between:1, 6'
    'homepage' => 'url',
 ]);
 
