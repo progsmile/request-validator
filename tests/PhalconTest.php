@@ -28,6 +28,21 @@ class PhalconTest extends PHPUnit_Framework_TestCase
 
         $errorMessage = $validationResult->getMessages('email');
 
+        $this->assertTrue(is_array($errorMessage));
+        $this->assertArraySubset(['nonunique'], $errorMessage);
         $this->assertEquals('nonunique', reset($errorMessage));
+    }
+
+    public function testIsUniqueEmail()
+    {
+        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
+        $validationResult = V::make(
+            ['email' => 'some.unique.email@to.check'],
+            ['email' => 'unique:users'],
+            ['email.unique' => 'nonunique']
+        );
+
+        $this->assertTrue($validationResult->isValid());
+        $this->assertEmpty($validationResult->getMessages('email'));
     }
 }
