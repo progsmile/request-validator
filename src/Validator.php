@@ -11,9 +11,44 @@ final class Validator
 
     private static $errorMessages = [];
 
+    private static $customDefaultMessages = [];
+
+    private static $templatedErrorMessages = [];
+
     private static $config = [
         BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
+
+
+    /**
+     * Setup custom error messages
+     *
+     * @param $rule
+     * @param $message
+     */
+    public static function setDefaultMessage($rule, $message)
+    {
+        self::$customDefaultMessages[ucfirst($rule)] = $message;
+    }
+
+
+    /**
+     * Returns custom message by rule
+     * @param $ruleClassName
+     * @return mixed
+     */
+    public static function getDefaultMessage($ruleClassName)
+    {
+        if (isset(self::$customDefaultMessages[$ruleClassName])){
+            return self::$customDefaultMessages[$ruleClassName];
+
+        } elseif (isset(self::$templatedErrorMessages[$ruleClassName])) {
+            return self::$templatedErrorMessages[$ruleClassName];
+        }
+
+        return null;
+    }
+
 
     /**
      * Initialize PDO connection
@@ -70,6 +105,9 @@ final class Validator
     public static function make(array $data, array $rules, array $userMessages = [])
     {
         if (self::$validatorInstance === null){
+
+            self::$templatedErrorMessages = require __DIR__ . '/../data/userMessages.php';
+
             self::$validatorInstance = new Validator();
         }
 
@@ -244,7 +282,7 @@ final class Validator
             $message = reset(self::$errorMessages[$field]);
         } else {
             $firstMessages = $this->getFirstMessages();
-            $message = reset($firstMessages);
+            $message       = reset($firstMessages);
         }
 
         return $message;

@@ -11,9 +11,4 @@ class Same extends BaseRule
 
         return isset($userData[$comparedFieldName]) && $fieldValue == $userData[$comparedFieldName];
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: should have same value with :value: field';
-    }
 }

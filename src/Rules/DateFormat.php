@@ -16,9 +16,4 @@ class DateFormat extends BaseRule
 
         return $d && $d->format($dateFormat) == $dateTime;
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: has bad date format';
-    }
 }

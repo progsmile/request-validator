@@ -10,7 +10,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         try {
-            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '123');
+            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
@@ -214,15 +214,26 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testDocsExamples()
+    public function testUrl()
     {
         $v = V::make([
-            'password_r' => 'duv.com-sk.com',
+            'site' => 'duv.com-sk.com',
         ], [
-            'password_r' => 'url',
+            'site' => 'url',
+        ]);
+        $this->assertTrue($v->isValid());
+    }
+
+    public function testCustomMessages()
+    {
+        V::setDefaultMessage('email', 'email SHOULD BE REQUIRED');
+
+        $v = V::make([
+            'email' => ''
+        ], [
+            'email' => 'email|required',
         ]);
 
-        $this->assertTrue($v->isValid());
-
+        $this->assertEquals('email SHOULD BE REQUIRED', $v->getFirstMessage('email'));
     }
 }

@@ -34,9 +34,4 @@ class Unique extends BaseRule
 
         return $instance->isUnique();
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: must be unique.';
-    }
 }

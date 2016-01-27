@@ -1,6 +1,8 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
+use Progsmile\Validator\Validator as V;
+
 abstract class BaseRule
 {
     const CONFIG_ALL         = 'all';
@@ -60,6 +62,11 @@ abstract class BaseRule
         return !$this->hasRule('required') && $condition;
     }
 
+    /**
+     * Set params to validator
+     * @param $params
+     * @return $this
+     */
     public function setParams($params)
     {
         $this->params = $params;
@@ -75,10 +82,16 @@ abstract class BaseRule
     public abstract function isValid();
 
     /**
-     * Get the message if error occured
+     * Get the message if error happened
      *
      * @return string
      */
-    public abstract function getMessage();
+    public function getMessage()
+    {
+        $classPath = explode('\\', static::class);
+        $ruleClass = array_pop($classPath);
+
+        return V::getDefaultMessage($ruleClass);
+    }
 
 }

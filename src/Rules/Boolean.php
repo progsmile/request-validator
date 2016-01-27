@@ -13,9 +13,4 @@ class Boolean extends BaseRule
 
         return in_array($userValue, ['true', 'false']);
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: is not a boolean.';
-    }
 }

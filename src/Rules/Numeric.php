@@ -11,9 +11,4 @@ class Numeric extends BaseRule
 
         return is_numeric($this->params[1]);
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: is not a number.';
-    }
 }

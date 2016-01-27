@@ -29,9 +29,4 @@ class PhoneMask extends BaseRule
 
         return true;
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: has bad phone format.';
-    }
 }

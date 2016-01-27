@@ -9,7 +9,6 @@ class Between extends BaseRule
     public function isValid()
     {
         if ($this->isNotRequiredAndEmpty()){
-            var_dump('here');
             return true;
         }
 
@@ -20,10 +19,5 @@ class Between extends BaseRule
         $userValue  = trim($this->params[1]);
 
         return is_numeric($userValue) && $this->val1 <= $userValue && $userValue <= $this->val2;
-    }
-
-    public function getMessage()
-    {
-        return 'Field :field: is not between ' . $this->val1 . ' and ' . $this->val2;
     }
 }

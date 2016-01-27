@@ -19,9 +19,4 @@ class NotIn extends BaseRule
 
         return true;
     }
-
-    public function getMessage()
-    {
-        return 'Field :field: has wrong values';
-    }
 }
