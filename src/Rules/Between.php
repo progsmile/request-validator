@@ -23,6 +23,6 @@ class Between extends BaseRule
 
     public function getMessage()
     {
-        return 'Field :field:\'s value is not between ' . $this->val1 . ' and ' . $this->val2;
+        return 'Field :field: is not between ' . $this->val1 . ' and ' . $this->val2;
     }
 }

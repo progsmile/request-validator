@@ -32,3 +32,5 @@ if (!function_exists('dd')) {
         ob_flush();
     }
 }
+
+require __DIR__ . "/../vendor/autoload.php";

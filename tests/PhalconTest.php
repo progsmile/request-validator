@@ -1,6 +1,6 @@
 <?php
 
-use Progsmile\Validator\Validator as V;
+use \Progsmile\Validator\Validator as V;
 
 class PhalconTest extends PHPUnit_Framework_TestCase
 {

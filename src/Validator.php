@@ -69,15 +69,17 @@ final class Validator
      */
     public static function make(array $data, array $rules, array $userMessages = [])
     {
-
         if (self::$validatorInstance === null){
             self::$validatorInstance = new Validator();
         }
 
+        $rules = self::prepareRules($rules);
+
         self::$errorMessages = [];
 
-        foreach ($rules as $groupedFieldNames => $fieldRules) {
+        foreach ($rules as $fieldName => $fieldRules) {
 
+            $fieldName  = trim($fieldName);
             $fieldRules = trim($fieldRules);
 
             if ( !$fieldRules){
@@ -85,66 +87,103 @@ final class Validator
                 continue;
             }
 
-            //for fields separated with comma
-            $fieldNames = explode(',', $groupedFieldNames);
+            $groupedRules = explode('|', $fieldRules);
 
-            foreach ($fieldNames as $fieldName) {
+            foreach ($groupedRules as $concreteRule) {
 
-                $fieldName = trim($fieldName);
+                $ruleNameParam = explode(':', $concreteRule);
+                $ruleName      = $ruleNameParam[0];
 
-                $groupedRules = explode('|', $fieldRules);
+                //for date/time validators
+                if (count($ruleNameParam) >= 2){
+                    $ruleValue = implode(':', array_slice($ruleNameParam, 1));
 
-                foreach ($groupedRules as $concreteRule) {
+                    //for other params
+                } else {
+                    $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
+                }
 
-                    $ruleNameParam = explode(':', $concreteRule);
-                    $ruleName      = $ruleNameParam[0];
 
-                    //for date/time validators
-                    if (count($ruleNameParam) >= 2){
-                        $ruleValue = implode(':', array_slice($ruleNameParam, 1));
+                $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
-                        //for other params
+                self::$config[BaseRule::CONFIG_DATA]        = $data;
+                self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
+
+                /** @var BaseRule $instance */
+                $instance = new $class(self::$config);
+
+                $instance->setParams([
+                    $fieldName,                                        // The field name
+                    isset($data[$fieldName]) ? $data[$fieldName] : '', // The provided value
+                    $ruleValue,                                        // The rule's value
+                ]);
+
+                if ( !$instance->isValid()){
+
+                    $ruleErrorFormat = $fieldName . '.' . $ruleName;
+
+                    if (isset($userMessages[$ruleErrorFormat])){
+
+                        self::$errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
+
                     } else {
-                        $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
-                    }
 
-
-                    $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
-
-                    self::$config[BaseRule::CONFIG_DATA]        = $data;
-                    self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
-
-                    /** @var BaseRule $instance */
-                    $instance = new $class(self::$config);
-
-                    $instance->setParams([
-                        $fieldName,                                        // The field name
-                        isset($data[$fieldName]) ? $data[$fieldName] : '', // The provided value
-                        $ruleValue,                                        // The rule's value
-                    ]);
-
-                    if ( !$instance->isValid()){
-
-                        $ruleErrorFormat = $fieldName . '.' . $ruleName;
-
-                        if (isset($userMessages[$ruleErrorFormat])){
-
-                            self::$errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
-
-                        } else {
-
-                            self::$errorMessages[$fieldName][] = strtr($instance->getMessage(), [
-                                    ':field:' => $fieldName,
-                                    ':value:' => $ruleValue,
-                                ]
-                            );
-                        }
+                        self::$errorMessages[$fieldName][] = strtr($instance->getMessage(), [
+                                ':field:' => $fieldName,
+                                ':value:' => $ruleValue,
+                            ]
+                        );
                     }
                 }
             }
         }
 
         return self::$validatorInstance;
+    }
+
+    /**
+     * Merges all field's rules into one
+     * if you have elegant implementation, you are welcome
+     * @param array $rules
+     * @return array
+     */
+    private static function prepareRules(array $rules)
+    {
+        $mergedRules = [];
+
+        foreach ($rules as $ruleFields => $ruleConditions) {
+
+            //if set of fields like 'firstname, lastname...'
+            if (strpos($ruleFields, ',') !== false){
+
+                foreach (explode(',', $ruleFields) as $fieldName) {
+                    $fieldName = trim($fieldName);
+
+                    if ( !isset($mergedRules[$fieldName])){
+                        $mergedRules[$fieldName] = $ruleConditions;
+                    } else {
+                        $mergedRules[$fieldName] .= '|' . $ruleConditions;
+                    }
+                }
+
+            } else {
+
+                if ( !isset($mergedRules[$ruleFields])){
+                    $mergedRules[$ruleFields] = $ruleConditions;
+                } else {
+                    $mergedRules[$ruleFields] .= '|' . $ruleConditions;
+                }
+            }
+        }
+
+        $finalRules = [];
+
+        //remove duplicated rules, like 'required|alpha|required'
+        foreach ($mergedRules as $newRule => $rule) {
+            $finalRules[$newRule] = implode('|', array_unique(explode('|', $rule)));
+        }
+
+        return $finalRules;
     }
 
     /**
@@ -189,6 +228,7 @@ final class Validator
                 break;
             }
         }
+
         return $messages;
     }
 
@@ -199,7 +239,7 @@ final class Validator
      */
     public function getFirstMessage($field = '')
     {
-        if(isset(self::$errorMessages[$field])){
+        if (isset(self::$errorMessages[$field])){
             $message = reset(self::$errorMessages[$field]);
         } else {
             $message = reset($this->getFirstMessages());
