@@ -9,7 +9,9 @@ class Boolean extends BaseRule
             return true;
         }
 
-        return is_bool($this->params[1]);
+        $userValue = trim($this->params[1]);
+
+        return in_array($userValue, ['true', 'false']);
     }
 
     public function getMessage()

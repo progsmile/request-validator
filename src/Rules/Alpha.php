@@ -9,7 +9,9 @@ class Alpha extends BaseRule
             return true;
         }
 
-        return is_string($this->params[1]) && preg_match('/^[\pL\pM]+$/u', $this->params[1]);
+        $value = trim($this->params[1]);
+
+        return is_string($value) && preg_match('/^[\pL\pM]+$/u', $value);
     }
 
     public function getMessage()

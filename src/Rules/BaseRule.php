@@ -26,12 +26,13 @@ abstract class BaseRule
         return isset($this->config[$type]) ? $this->config[$type] : [];
     }
 
+    /**
+     * If field has specific rule
+     * @param $rule
+     * @return bool
+     */
     protected function hasRule($rule)
     {
-        if(!$rule){
-            return false;
-        }
-
         return strpos($this->getConfig(self::CONFIG_FIELD_RULES), $rule) !== false;
     }
 
@@ -46,7 +47,7 @@ abstract class BaseRule
         $condition = false;
 
         if ($type == 'var'){
-            $condition = !$this->params[1];
+            $condition = strlen($this->params[1]) == 0;
 
         } elseif ($type == 'file') {
 

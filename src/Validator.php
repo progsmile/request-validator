@@ -12,7 +12,7 @@ final class Validator
     private static $errorMessages = [];
 
     private static $config = [
-        'orm' => '\Progsmile\Validator\DbProviders\PhalconORM',
+        BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
 
     /**
@@ -218,6 +218,7 @@ final class Validator
 
     /**
      * Returns first error message from each fields
+     * @return array
      */
     public function getFirstMessages()
     {
@@ -242,7 +243,8 @@ final class Validator
         if (isset(self::$errorMessages[$field])){
             $message = reset(self::$errorMessages[$field]);
         } else {
-            $message = reset($this->getFirstMessages());
+            $firstMessages = $this->getFirstMessages();
+            $message = reset($firstMessages);
         }
 
         return $message;

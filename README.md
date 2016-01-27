@@ -20,7 +20,6 @@ $validator = V::make($_POST, [
     'date'                => 'dateFormat:(m-Y.d H:i)',       //custom date time format
     'profileImg'          => 'image',                        //image
     'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',//custom phone mask validator
-    'rule'                => 'accepted',                     //checkboxes acception
     'randNum'             => 'between:1, 100',               //value between
     'ip'                  => 'ip',                           //ipv4 or ipv6
     'password'            => 'required|min:6',               //required fields
@@ -66,7 +65,6 @@ $ php composer.phar install
 ## Getting Started
 
 ### Available rules
-- [x]  accepted
 - [x]  alpha
 - [x]  between
 - [x]  boolean
@@ -84,7 +82,7 @@ $ php composer.phar install
 - [x]  phoneMask
 - [x]  required
 - [x]  same
-- [x]  unique (db provider required)
+- [x]  unique
 - [x]  url
 
 ### Connect with PDO or use built-in Data Providers (just for unique and exists rules)

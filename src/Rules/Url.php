@@ -5,11 +5,19 @@ class Url extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()) {
+        if ($this->isNotRequiredAndEmpty()){
             return true;
         }
 
-        return filter_var($this->params[1], FILTER_VALIDATE_URL) !== false;
+        $url = trim($this->params[1]);
+
+        if ($parts = parse_url($url)){
+            if ( !isset($parts['scheme'])){
+                $url = 'http://' . $url;
+            }
+        }
+
+        return substr_count($url, '.') >= 1 && filter_var($url, FILTER_VALIDATE_URL) !== false;
     }
 
     public function getMessage()

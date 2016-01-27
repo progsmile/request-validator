@@ -9,7 +9,7 @@ class Email extends BaseRule
             return true;
         }
 
-        return (bool) filter_var($this->params[1], FILTER_VALIDATE_EMAIL);
+        return filter_var($this->params[1], FILTER_VALIDATE_EMAIL);
     }
 
     public function getMessage()

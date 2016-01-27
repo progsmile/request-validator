@@ -10,7 +10,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         try {
-            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
+            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '123');
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
@@ -41,7 +41,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email'               => 'email|unique:users',
             'age'                 => 'min:16|numeric',
             'date'                => 'dateFormat:(m-Y.d H:i)',
-            'rule'                => 'accepted',
             'randNum'             => 'between:1, 100',
             'ip'                  => 'ip',
             'password'            => 'required|min:6',
@@ -117,18 +116,20 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(3, $validationResult->getMessages());
     }
 
-    public function testAccepted()
+    public function testEquals()
     {
-        $validationResult = V::make([
-            'license'   => '1',
-            'agreement' => 'yes',
-            'terms'     => 'on',
-            'subscribe' => null,  //false
+        $v = V::make([
+            'greetings' => 'hello',
+            'pinCode'   => '1111',
+            'buy'       => '@!#@!',
         ], [
-            'license,agreement, terms, subscribe' => 'accepted',
+            'greetings' => 'equals:hello',
+            'pinCode'   => 'equals:1111',
+            'buy'       => 'equals:buy',
         ]);
 
-        $this->assertCount(1, $validationResult->getMessages());
+        $this->assertFalse($v->isValid());
+        $this->assertCount(1, $v->getMessages());
     }
 
     public function testInNotInValidator()
@@ -160,7 +161,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ], [
             'phone1' => 'phoneMask:(+38(###)###-##-##)',
             'phone2' => 'phoneMask:(#-###-###-####)',
-            'phone3' => 'phoneMask:((020) xxxx xxxx)',
+            'phone3' => 'phoneMask:((020) #### ####)',
         ]);
 
         $this->assertTrue($validationResult->isValid());
@@ -184,37 +185,44 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($errorMessageIdExists, $validationResult->getFirstMessage('id'));
     }
 
-    public function testFirstMessages()
+    public function testAllMessagesMethods()
     {
-        $validationResult = V::make([
-        ], [
-            'age'   => 'min:10|numeric|required',
-            'email' => 'email|required',
+        $v = V::make([], [
+            'age'     => 'min:16|required',
+            'date'    => 'dateFormat:(d-m-Y)|required',
+            'randNum' => 'between:1, 100|required',
+            'ip'      => 'ip|required',
+            'email'   => 'email|required',
         ], [
             'age.required'   => 'age required',
-            'age.min'        => 'min 10', //expected
+            'age.min'        => 'min 10',
             'email.required' => 'email required',
-            'email.email'    => 'email format',  //expected
+            'email.email'    => 'bad email',
         ]);
 
-        $messages = $validationResult->getFirstMessages();
+        $this->assertFalse($v->isValid());
 
-        $this->assertCount(2, $messages);
-        $this->assertContains('email format', $messages);
-        $this->assertContains('min 10', $messages);
+        $this->assertEquals('min 10', $v->getFirstMessage());
+
+        $this->assertEquals('bad email', $v->getFirstMessage('email'));
+
+        $this->assertCount(5, $v->getFirstMessages());
+
+        $this->assertCount(2, $v->getMessages('randNum'));
+
+        $this->assertCount(10, $v->getMessages());
     }
 
-    public function getFirstMessageMethod()
+
+    public function testDocsExamples()
     {
-        $validationResult = V::make([], [
-            'email' => 'email|required',   //email
-            'age'   => 'numeric|required', //numeric
+        $v = V::make([
+            'password_r' => 'duv.com-sk.com',
         ], [
-            'email.email' => 'notEmail',
-            'age.email'   => 'notNumber',
+            'password_r' => 'url',
         ]);
 
-        $this->assertEquals('notEmail', $validationResult->getFirstMessage());
-        $this->assertEquals('notNumber', $validationResult->getFirstMessage('age'));
+        $this->assertTrue($v->isValid());
+
     }
 }

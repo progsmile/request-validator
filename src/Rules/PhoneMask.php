@@ -17,7 +17,12 @@ class PhoneMask extends BaseRule
         }
 
         foreach (str_split($phoneMask) as $index => $maskChar) {
-            if ($maskChar == '#' && !is_numeric($phone[$index])){
+
+            if($maskChar != '#' && $maskChar != $phone[$index]){
+                return false;
+            }
+
+            if ( $maskChar == '#' && !is_numeric($phone[$index])){
                 return false;
             }
         }

@@ -9,16 +9,17 @@ class Between extends BaseRule
     public function isValid()
     {
         if ($this->isNotRequiredAndEmpty()){
+            var_dump('here');
             return true;
         }
 
         $validatorValues = explode(',', $this->params[2]);
-        $userValue       = $this->params[1];
 
-        $this->val1 = (isset($validatorValues[0]) && is_numeric($validatorValues[0])) ? floatval($validatorValues[0]) : 0;
-        $this->val2 = (isset($validatorValues[1]) && is_numeric($validatorValues[1])) ? floatval($validatorValues[1]) : 0;
+        $this->val1 = trim($validatorValues[0]);
+        $this->val2 = trim($validatorValues[1]);
+        $userValue  = trim($this->params[1]);
 
-        return $this->val1 <= $userValue && $userValue <= $this->val2;
+        return is_numeric($userValue) && $this->val1 <= $userValue && $userValue <= $this->val2;
     }
 
     public function getMessage()
