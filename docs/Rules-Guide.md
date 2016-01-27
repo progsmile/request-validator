@@ -1,16 +1,23 @@
 ## Rules list
-
-|------------|:--------:|-----|
-| alpha      | ip       | url |
-| between    | max      | |
-| boolean    | min      | |
-| dateFormat | notIn    | |
-| email      | numeric  | |
-| exists     | phoneMask| |
-| json       | required | |
-| in         | same     | |
-| image      | unique   | |
-
+ * Alpha               
+ * Between            
+ * Boolean            
+ * Date and Time Format       
+ * Email          
+ * Exists       
+ * Json          
+ * In                
+ * Image           
+ * Ip 
+ * Max 
+ * Min 
+ * Not in 
+ * Numeric 
+ * Phone Mask 
+ * Required 
+ * Same 
+ * Unique 
+ * Url
 
 ### Alpha
 Checks if current string contains only letters
