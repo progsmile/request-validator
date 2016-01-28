@@ -1,9 +1,6 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
-use Progsmile\Validator\Helpers\ErrorBag;
-use Progsmile\Validator\Validator as V;
-
 abstract class BaseRule
 {
     const CONFIG_ALL         = 'all';
@@ -34,7 +31,7 @@ abstract class BaseRule
      * @param $rule
      * @return bool
      */
-    protected function hasRule($rule)
+    public function hasRule($rule)
     {
         return strpos($this->getConfig(self::CONFIG_FIELD_RULES), $rule) !== false;
     }
@@ -81,18 +78,4 @@ abstract class BaseRule
      * @return boolean Return the result if valid or not
      */
     public abstract function isValid();
-
-    /**
-     * Get the message if error happened
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        $classPath = explode('\\', get_class($this));
-        $ruleClass = array_pop($classPath);
-
-        return V::getDefaultMessage($ruleClass);
-    }
-
 }

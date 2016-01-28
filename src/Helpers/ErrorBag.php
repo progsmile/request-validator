@@ -26,6 +26,7 @@ class ErrorBag
     public function getDefaultMessage($ruleClassName)
     {
         if (isset($this->customDefaultMessages[$ruleClassName])){
+
             return $this->customDefaultMessages[$ruleClassName];
 
         } elseif (isset($this->templateErrorMessages[$ruleClassName])) {
@@ -56,6 +57,11 @@ class ErrorBag
     }
 
 
+    /**
+     * Add new message
+     * @param $fieldName
+     * @param $message
+     */
     public function addMessage($fieldName, $message)
     {
         $this->errorMessages[$fieldName][] = $message;
@@ -104,6 +110,11 @@ class ErrorBag
     }
 
 
+    /**
+     * Returns first message from $field or error messages array
+     * @param string $field
+     * @return mixed
+     */
     public function getFirstMessage($field = '')
     {
         if (isset($this->errorMessages[$field])){
@@ -115,5 +126,16 @@ class ErrorBag
         }
 
         return $message;
+    }
+
+    /**
+     * Mass setting default messages
+     * @param $rulesMessages
+     */
+    public function setDefaultMessages($rulesMessages)
+    {
+        foreach ($rulesMessages as $rule => $message) {
+            $this->setDefaultMessage($rule, $message);
+        }
     }
 }

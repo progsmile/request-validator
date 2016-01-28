@@ -134,7 +134,15 @@ final class Validator
                         $message = $userMessages[$ruleErrorFormat];
 
                     } else {
-                        $message = strtr($instance->getMessage(), [
+
+                        $ruleMessages = self::$errorBag->getDefaultMessage(ucfirst($ruleName));
+
+                        //for min or max rule messages
+                        if (is_array($ruleMessages)){
+                            $ruleMessages = $instance->hasRule('numeric') ? reset($ruleMessages) : array_pop($ruleMessages);
+                        }
+
+                        $message = strtr($ruleMessages, [
                                 ':field:' => $fieldName,
                                 ':value:' => $ruleValue,
                             ]
@@ -242,6 +250,11 @@ final class Validator
     public static function setDefaultMessage($rule, $message)
     {
         self::$errorBag->setDefaultMessage($rule, $message);
+    }
+
+    public static function setDefaultMessages(array $rulesMessages)
+    {
+        self::$errorBag->setDefaultMessages($rulesMessages);
     }
 
     /**
