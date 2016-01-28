@@ -89,7 +89,7 @@ abstract class BaseRule
      */
     public function getMessage()
     {
-        $classPath = explode('\\', static::class);
+        $classPath = explode('\\', get_class($this));
         $ruleClass = array_pop($classPath);
 
         return V::getDefaultMessage($ruleClass);
