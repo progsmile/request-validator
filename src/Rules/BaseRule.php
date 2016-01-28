@@ -1,6 +1,7 @@
 <?php
 namespace Progsmile\Validator\Rules;
 
+use Progsmile\Validator\Helpers\ErrorBag;
 use Progsmile\Validator\Validator as V;
 
 abstract class BaseRule

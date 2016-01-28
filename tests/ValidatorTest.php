@@ -226,14 +226,14 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testCustomMessages()
     {
-        V::setDefaultMessage('email', 'email SHOULD BE REQUIRED');
+        V::setDefaultMessage('email', 'Should be Email');
 
         $v = V::make([
-            'email' => ''
+            'email' => '123'
         ], [
-            'email' => 'email|required',
+            'email' => 'email',
         ]);
 
-        $this->assertEquals('email SHOULD BE REQUIRED', $v->getFirstMessage('email'));
+        $this->assertEquals('Should be Email', $v->getFirstMessage('email'));
     }
 }

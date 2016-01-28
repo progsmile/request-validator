@@ -1,53 +1,22 @@
 <?php
 namespace Progsmile\Validator;
 
+use Progsmile\Validator\Helpers\ErrorBag;
 use Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
 {
+    /** @var Validator */
     private static $validatorInstance = null;
 
+    /** @var ErrorBag */
+    private static $errorBag = null;
+
     private static $pdoInstance = null;
-
-    private static $errorMessages = [];
-
-    private static $customDefaultMessages = [];
-
-    private static $templatedErrorMessages = [];
 
     private static $config = [
         BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
-
-
-    /**
-     * Setup custom error messages
-     *
-     * @param $rule
-     * @param $message
-     */
-    public static function setDefaultMessage($rule, $message)
-    {
-        self::$customDefaultMessages[ucfirst($rule)] = $message;
-    }
-
-
-    /**
-     * Returns custom message by rule
-     * @param $ruleClassName
-     * @return mixed
-     */
-    public static function getDefaultMessage($ruleClassName)
-    {
-        if (isset(self::$customDefaultMessages[$ruleClassName])){
-            return self::$customDefaultMessages[$ruleClassName];
-
-        } elseif (isset(self::$templatedErrorMessages[$ruleClassName])) {
-            return self::$templatedErrorMessages[$ruleClassName];
-        }
-
-        return null;
-    }
 
 
     /**
@@ -106,14 +75,15 @@ final class Validator
     {
         if (self::$validatorInstance === null){
 
-            self::$templatedErrorMessages = require __DIR__ . '/../data/userMessages.php';
+            self::$errorBag = new ErrorBag();
 
             self::$validatorInstance = new Validator();
         }
 
+
         $rules = self::prepareRules($rules);
 
-        self::$errorMessages = [];
+        self::$errorBag->clear();
 
         foreach ($rules as $fieldName => $fieldRules) {
 
@@ -161,17 +131,17 @@ final class Validator
                     $ruleErrorFormat = $fieldName . '.' . $ruleName;
 
                     if (isset($userMessages[$ruleErrorFormat])){
-
-                        self::$errorMessages[$fieldName][] = $userMessages[$ruleErrorFormat];
+                        $message = $userMessages[$ruleErrorFormat];
 
                     } else {
-
-                        self::$errorMessages[$fieldName][] = strtr($instance->getMessage(), [
+                        $message = strtr($instance->getMessage(), [
                                 ':field:' => $fieldName,
                                 ':value:' => $ruleValue,
                             ]
                         );
                     }
+
+                    self::$errorBag->addMessage($fieldName, $message);
                 }
             }
         }
@@ -230,7 +200,7 @@ final class Validator
      */
     public function isValid()
     {
-        return count(self::$errorMessages) == 0;
+        return self::$errorBag->getMessagesCount() === 0;
     }
 
     /**
@@ -240,19 +210,9 @@ final class Validator
      */
     public function getMessages($field = '')
     {
-        //get messages for specific field
-        if ($field){
-            return isset(self::$errorMessages[$field]) ? self::$errorMessages[$field] : [];
-        }
-
-        $messages = [];
-
-        array_walk_recursive(self::$errorMessages, function ($message) use (&$messages) {
-            $messages[] = $message;
-        });
-
-        return $messages;
+        return self::$errorBag->getMessages($field);
     }
+
 
     /**
      * Returns first error message from each fields
@@ -260,15 +220,7 @@ final class Validator
      */
     public function getFirstMessages()
     {
-        $messages = [];
-        foreach (self::$errorMessages as $fieldsMessages) {
-            foreach ($fieldsMessages as $fieldMessage) {
-                $messages[] = $fieldMessage;
-                break;
-            }
-        }
-
-        return $messages;
+        return self::$errorBag->getFirstMessages();
     }
 
     /**
@@ -278,14 +230,28 @@ final class Validator
      */
     public function getFirstMessage($field = '')
     {
-        if (isset(self::$errorMessages[$field])){
-            $message = reset(self::$errorMessages[$field]);
-        } else {
-            $firstMessages = $this->getFirstMessages();
-            $message       = reset($firstMessages);
-        }
+        return self::$errorBag->getFirstMessage($field);
+    }
 
-        return $message;
+    /**
+     * Setup custom error messages
+     *
+     * @param $rule
+     * @param $message
+     */
+    public static function setDefaultMessage($rule, $message)
+    {
+        self::$errorBag->setDefaultMessage($rule, $message);
+    }
+
+    /**
+     * Returns custom message by rule
+     * @param $ruleClassName
+     * @return mixed
+     */
+    public static function getDefaultMessage($ruleClassName)
+    {
+        return self::$errorBag->getDefaultMessage($ruleClassName);
     }
 
     /**
@@ -295,7 +261,7 @@ final class Validator
      */
     public function format($class = 'Progsmile\Validator\Format\HTML')
     {
-        return (new $class)->reformat(self::$errorMessages);
+        return (new $class)->reformat(self::$errorBag->getRawMessages());
     }
 
 
