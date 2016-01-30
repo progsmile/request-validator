@@ -73,11 +73,15 @@ $ php composer.phar install
 ```
 
 ### Available rules
+
+##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
+
 - [x]  alpha
 - [x]  between
 - [x]  boolean
 - [x]  dateFormat
 - [x]  email
+- [x]  equals
 - [x]  exists
 - [x]  json
 - [x]  in
