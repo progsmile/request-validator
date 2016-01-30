@@ -47,8 +47,8 @@ $validator = V::make($_POST, [
 ### Installing via Composer
 
 If you already have composer:
-```require progsmile/request-validator=dev-master```
-
+```composer require progsmile/request-validator=dev-master```
+___
 
 Install [Composer](http://getcomposer.org) in a common location or in your project:
 
