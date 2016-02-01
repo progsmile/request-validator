@@ -241,4 +241,21 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Should be Email', $v->getMessages());
         $this->assertContains('Should be Required', $v->getMessages());
     }
+
+
+    public function testMessagesFieldValue()
+    {
+        V::setDefaultMessages([
+            'email' => ':field: Should be Email :value:',
+        ]);
+
+        $v = V::make([
+           'myEmail' => 'bobbob.ru'
+        ], [
+            'myEmail' => 'email'
+        ]);
+        $message = $v->getFirstMessage('email');
+
+        $this->assertEquals('myEmail Should be Email bobbob.ru', $message);
+    }
 }

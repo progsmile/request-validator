@@ -12,11 +12,20 @@ abstract class BaseRule
 
     protected $params;
 
+    /**
+     * BaseRule constructor.
+     * @param $config
+     */
     public function __construct($config)
     {
         $this->config = $config;
     }
 
+    /**
+     * Returns all config array, or specific one
+     * @param string $type
+     * @return array
+     */
     protected function getConfig($type = self::CONFIG_ALL)
     {
         if ($type == self::CONFIG_ALL){
@@ -70,6 +79,27 @@ abstract class BaseRule
         $this->params = $params;
 
         return $this;
+    }
+
+    /**
+     * Returns params
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+
+    /**
+     * Returns pure class name
+     * @return string
+     */
+    public function getRuleName()
+    {
+        $classPath = explode('\\', get_class($this));
+
+        return array_pop($classPath);
     }
 
     /**

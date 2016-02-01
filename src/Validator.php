@@ -1,67 +1,23 @@
 <?php
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Helpers\ErrorBag;
-use Progsmile\Validator\Rules\BaseRule;
+use Progsmile\Validator\Helpers\ErrorBag,
+    Progsmile\Validator\Helpers\MessagesTrait,
+    Progsmile\Validator\Helpers\PdoTrait,
+    Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
 {
+    use PdoTrait, MessagesTrait;
+
     /** @var Validator */
     private static $validatorInstance = null;
 
-    /** @var ErrorBag */
-    private static $errorBag = null;
-
-    private static $pdoInstance = null;
 
     private static $config = [
         BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
 
-
-    /**
-     * Initialize PDO connection
-     *
-     * @param string $connectionString - ex. (mysql:host=localhost;dbname=test)
-     * @param string $user - db username
-     * @param string $password - db password
-     */
-    public static function setupPDO($connectionString, $user, $password)
-    {
-        try {
-            self::$pdoInstance = new \PDO($connectionString, $user, $password);
-        } catch (\PDOException $e) {
-            trigger_error($e->getMessage(), E_USER_ERROR);
-        }
-    }
-
-    /**
-     * Setup PDO instance
-     * @param \PDO $pdoInstance
-     */
-    public static function setPDO(\PDO $pdoInstance)
-    {
-        self::$pdoInstance = $pdoInstance;
-    }
-
-    /**
-     * Get PDO object for unique validators
-     *
-     * @return mixed
-     */
-    public static function getPDO()
-    {
-        return self::$pdoInstance ?: null;
-    }
-
-    /**
-     * Setup database service from available
-     * @param $orm
-     */
-    public static function setDataProvider($orm)
-    {
-        self::$config[BaseRule::CONFIG_ORM] = $orm;
-    }
 
     /**
      * Make validation
@@ -84,6 +40,8 @@ final class Validator
         $rules = self::prepareRules($rules);
 
         self::$errorBag->clear();
+        self::$errorBag->setUserMessages($userMessages);
+
 
         foreach ($rules as $fieldName => $fieldRules) {
 
@@ -109,9 +67,9 @@ final class Validator
                     //for other params
                 } else {
                     $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
-                }
+               }
 
-
+                //@todo: Factory responses for this
                 $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
 
                 self::$config[BaseRule::CONFIG_DATA]        = $data;
@@ -130,26 +88,7 @@ final class Validator
 
                     $ruleErrorFormat = $fieldName . '.' . $ruleName;
 
-                    if (isset($userMessages[$ruleErrorFormat])){
-                        $message = $userMessages[$ruleErrorFormat];
-
-                    } else {
-
-                        $ruleMessages = self::$errorBag->getDefaultMessage(ucfirst($ruleName));
-
-                        //for min or max rule messages
-                        if (is_array($ruleMessages)){
-                            $ruleMessages = $instance->hasRule('numeric') ? reset($ruleMessages) : array_pop($ruleMessages);
-                        }
-
-                        $message = strtr($ruleMessages, [
-                                ':field:' => $fieldName,
-                                ':value:' => $ruleValue,
-                            ]
-                        );
-                    }
-
-                    self::$errorBag->addMessage($fieldName, $message);
+                    self::$errorBag->chooseErrorMessage($instance, $ruleErrorFormat);
                 }
             }
         }
@@ -209,72 +148,6 @@ final class Validator
     public function isValid()
     {
         return self::$errorBag->getMessagesCount() === 0;
-    }
-
-    /**
-     * Returns all error messages | Or all error messages from concrete field
-     * @param string $field
-     * @return array
-     */
-    public function getMessages($field = '')
-    {
-        return self::$errorBag->getMessages($field);
-    }
-
-
-    /**
-     * Returns first error message from each fields
-     * @return array
-     */
-    public function getFirstMessages()
-    {
-        return self::$errorBag->getFirstMessages();
-    }
-
-    /**
-     * Returns first error message from concrete field or from validation stack
-     * @param string $field
-     * @return mixed|string
-     */
-    public function getFirstMessage($field = '')
-    {
-        return self::$errorBag->getFirstMessage($field);
-    }
-
-    /**
-     * Setup custom error messages
-     *
-     * @param $rule
-     * @param $message
-     */
-    public static function setDefaultMessage($rule, $message)
-    {
-        self::$errorBag->setDefaultMessage($rule, $message);
-    }
-
-    public static function setDefaultMessages(array $rulesMessages)
-    {
-        self::$errorBag->setDefaultMessages($rulesMessages);
-    }
-
-    /**
-     * Returns custom message by rule
-     * @param $ruleClassName
-     * @return mixed
-     */
-    public static function getDefaultMessage($ruleClassName)
-    {
-        return self::$errorBag->getDefaultMessage($ruleClassName);
-    }
-
-    /**
-     * Reformat messages provided by HTML, JSON or custom FormatInterface classes
-     * @param string $class
-     * @return mixed
-     */
-    public function format($class = 'Progsmile\Validator\Format\HTML')
-    {
-        return (new $class)->reformat(self::$errorBag->getRawMessages());
     }
 
 

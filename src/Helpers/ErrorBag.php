@@ -1,8 +1,12 @@
 <?php
 namespace Progsmile\Validator\Helpers;
 
+use Progsmile\Validator\Rules\BaseRule;
+
 class ErrorBag
 {
+    private $userMessages = [];
+
     private $errorMessages = [];
 
     private $customDefaultMessages = [];
@@ -13,7 +17,7 @@ class ErrorBag
     public function __construct()
     {
         if (empty($this->templateErrorMessages)){
-            $this->templateErrorMessages = require __DIR__ . '/../data/defaultMessages.php';
+            $this->templateErrorMessages = require __DIR__ . '/../Data/defaultMessages.php';
         }
     }
 
@@ -26,7 +30,6 @@ class ErrorBag
     public function getDefaultMessage($ruleClassName)
     {
         if (isset($this->customDefaultMessages[$ruleClassName])){
-
             return $this->customDefaultMessages[$ruleClassName];
 
         } elseif (isset($this->templateErrorMessages[$ruleClassName])) {
@@ -74,6 +77,11 @@ class ErrorBag
     }
 
 
+    /**
+     * Get flat messages array, or all messages from field
+     * @param string $field
+     * @return array
+     */
     public function getMessages($field = '')
     {
         if ($field){
@@ -90,12 +98,20 @@ class ErrorBag
     }
 
 
+    /**
+     * Get 2d array with fields and messages
+     * @return array
+     */
     public function getRawMessages()
     {
         return $this->errorMessages;
     }
 
 
+    /**
+     * For each rule get it's first message
+     * @return array
+     */
     public function getFirstMessages()
     {
         $messages = [];
@@ -137,5 +153,48 @@ class ErrorBag
         foreach ($rulesMessages as $rule => $message) {
             $this->setDefaultMessage($rule, $message);
         }
+    }
+
+
+    /**
+     * Choosing error message: custom or default
+     * @param $instance
+     * @param $ruleErrorFormat
+     */
+    public function chooseErrorMessage(BaseRule $instance, $ruleErrorFormat)
+    {
+        list($fieldName, $ruleValue) = $instance->getParams();
+
+        $ruleName = $instance->getRuleName();
+
+        if (isset($this->userMessages[$ruleErrorFormat])){
+            $message = $this->userMessages[$ruleErrorFormat];
+
+        } else {
+
+            $ruleMessages = $this->getDefaultMessage($ruleName);
+
+            //for min or max rule messages
+            if (is_array($ruleMessages)){
+                $ruleMessages = $instance->hasRule('numeric') ? reset($ruleMessages) : array_pop($ruleMessages);
+            }
+
+            $message = strtr($ruleMessages, [
+                    ':field:' => $fieldName,
+                    ':value:' => $ruleValue,
+                ]
+            );
+        }
+
+        $this->addMessage($fieldName, $message);
+    }
+
+    /**
+     * Setting up user messages
+     * @param $userMessages
+     */
+    public function setUserMessages($userMessages)
+    {
+        $this->userMessages = $userMessages;
     }
 }
