@@ -46,6 +46,10 @@ $validator = V::make($_POST, [
 
 ### Installing via Composer
 
+If you already have composer:
+```composer require progsmile/request-validator=dev-master```
+___
+
 Install [Composer](http://getcomposer.org) in a common location or in your project:
 
 ```sh
@@ -69,11 +73,15 @@ $ php composer.phar install
 ```
 
 ### Available rules
+
+##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
+
 - [x]  alpha
 - [x]  between
 - [x]  boolean
 - [x]  dateFormat
 - [x]  email
+- [x]  equals
 - [x]  exists
 - [x]  json
 - [x]  in

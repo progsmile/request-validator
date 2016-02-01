@@ -3,7 +3,8 @@
  * Between            
  * Boolean            
  * Date and Time Format       
- * Email          
+ * Email   
+ * Equals  
  * Exists       
  * Json          
  * In                
@@ -70,6 +71,14 @@ Matches email address
 
 'email' => 'test@email.com'      //true
 'email' => 'test-failed @su.re'  //false
+```
+### Equals
+The field equals to value
+```php
+'secretCode' => 'equals:mmx' // in rules
+
+'secretCode' => 'mmx'  //true
+'secretCode' => 'lol'  //false
 ```
 
 
