@@ -159,13 +159,14 @@ class ErrorBag
     /**
      * Choosing error message: custom or default
      * @param $instance
-     * @param $ruleErrorFormat
      */
-    public function chooseErrorMessage(BaseRule $instance, $ruleErrorFormat)
+    public function chooseErrorMessage(BaseRule $instance)
     {
         list($fieldName, $ruleValue) = $instance->getParams();
 
         $ruleName = $instance->getRuleName();
+
+        $ruleErrorFormat = $fieldName . '.' . lcfirst($instance->getRuleName());
 
         if (isset($this->userMessages[$ruleErrorFormat])){
             $message = $this->userMessages[$ruleErrorFormat];

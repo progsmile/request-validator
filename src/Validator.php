@@ -4,6 +4,7 @@ namespace Progsmile\Validator;
 use Progsmile\Validator\Helpers\ErrorBag,
     Progsmile\Validator\Helpers\MessagesTrait,
     Progsmile\Validator\Helpers\PdoTrait,
+    Progsmile\Validator\Helpers\RulesFactory,
     Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
@@ -69,26 +70,18 @@ final class Validator
                     $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
                }
 
-                //@todo: Factory responses for this
-                $class = __NAMESPACE__ . '\\Rules\\' . ucfirst($ruleName);
-
                 self::$config[BaseRule::CONFIG_DATA]        = $data;
                 self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
 
-                /** @var BaseRule $instance */
-                $instance = new $class(self::$config);
-
-                $instance->setParams([
+                $ruleInstance = RulesFactory::createRule($ruleName, self::$config, [
                     $fieldName,                                        // The field name
                     isset($data[$fieldName]) ? $data[$fieldName] : '', // The provided value
                     $ruleValue,                                        // The rule's value
                 ]);
 
-                if ( !$instance->isValid()){
+                if ( !$ruleInstance->isValid()){
 
-                    $ruleErrorFormat = $fieldName . '.' . $ruleName;
-
-                    self::$errorBag->chooseErrorMessage($instance, $ruleErrorFormat);
+                    self::$errorBag->chooseErrorMessage($ruleInstance);
                 }
             }
         }
@@ -151,6 +144,9 @@ final class Validator
     }
 
 
+    /**
+     * Singleton implementation
+     */
     private function __construct()
     {
     }
