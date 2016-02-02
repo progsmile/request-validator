@@ -10,7 +10,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         try {
-            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
+            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '123');
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }

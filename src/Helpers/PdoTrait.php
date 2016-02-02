@@ -1,6 +1,8 @@
 <?php
 namespace Progsmile\Validator\Helpers;
 
+use Progsmile\Validator\Rules\BaseRule;
+
 trait PdoTrait
 {
     private static $pdoInstance = null;
