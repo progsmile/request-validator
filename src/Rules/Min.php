@@ -25,9 +25,9 @@ class Min extends BaseRule
     public function getMessage()
     {
         if($this->isNumeric){
-            return 'Field :field: should be grater than :value:';
+            return 'Field :field: should be grater than :param:';
         }
 
-        return 'Field :field: should be at least :value: characters';
+        return 'Field :field: should be at least :param: characters';
     }
 }

@@ -235,6 +235,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'mmx'     => '',
             'login'   => 'admin',
             'age'     => '17',
+            'age2'    => '20',
 
         ], [
             'myEmail' => 'email|required|min:5',
@@ -243,6 +244,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'mmx'     => 'required',
             'login'   => 'min:8|required',
             'age'     => 'min:18|numeric|required',
+            'age2'    => 'max:18|numeric|required',
         ], [
             'mmx.required' => 'mmx is required',
             'login.min'    => 'minimum 8',
@@ -251,13 +253,15 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('min 18, sorry', $v->getFirstMessage('age'));
 
-
         $this->assertEquals('minimum 8', $v->getFirstMessage('login'));
-
 
         $this->assertEquals('mmx is required', $v->getFirstMessage('mmx'));
 
-        //from default message
+
+        dd($v->getMessages('age2'));
+        //from default messages
+        $this->assertEquals('Field age2 must be less than or equal to 18', $v->getFirstMessage('age2'));
+
         $this->assertEquals('Field php has wrong value', $v->getFirstMessage('php'));
     }
 

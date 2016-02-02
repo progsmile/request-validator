@@ -24,8 +24,9 @@ class Max extends BaseRule
     public function getMessage()
     {
         if($this->isNumeric){
-            return 'Field :field: must be less than or equal to :value:';
+            return 'Field :field: must be less than or equal to :param:';
         }
-        return 'Field :field: should be maximum of :value: characters';
+
+        return 'Field :field: should be maximum of :param: characters';
     }
 }

@@ -116,7 +116,7 @@ class ErrorBag
      */
     public function chooseErrorMessage(BaseRule $instance)
     {
-        list($fieldName, $ruleValue) = $instance->getParams();
+        list($fieldName, $ruleValue, $ruleParams) = $instance->getParams();
 
         $ruleErrorFormat = $fieldName . '.' . lcfirst($instance->getRuleName());
 
@@ -130,6 +130,7 @@ class ErrorBag
         $this->addMessage($fieldName, strtr($ruleErrorMessage, [
                 ':field:' => $fieldName,
                 ':value:' => $ruleValue,
+                ':param:' => $ruleParams
             ]
         ));
     }

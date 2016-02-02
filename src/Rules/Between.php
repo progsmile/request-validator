@@ -28,6 +28,6 @@ class Between extends BaseRule
      */
     public function getMessage()
     {
-        return 'Field :field: is not between value needed';
+        return 'Field :field: should be between in :param:';
     }
 }
