@@ -19,4 +19,9 @@ class In extends BaseRule
 
         return false;
     }
+
+    public function getMessage()
+    {
+        return 'Field :field: has wrong values';
+    }
 }

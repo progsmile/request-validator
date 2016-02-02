@@ -14,4 +14,9 @@ class Required extends BaseRule
         return (bool)$value || $value == '0'
             || !empty($_FILES) && isset($_FILES[$this->params[0]]) && $_FILES[$this->params[0]]['name'];
     }
+
+    public function getMessage()
+    {
+       return 'Field :field: is required';
+    }
 }

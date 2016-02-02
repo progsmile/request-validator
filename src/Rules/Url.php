@@ -19,4 +19,9 @@ class Url extends BaseRule
 
         return substr_count($url, '.') >= 1 && filter_var($url, FILTER_VALIDATE_URL) !== false;
     }
+
+    public function getMessage()
+    {
+        return 'Field :field: is not URL';
+    }
 }

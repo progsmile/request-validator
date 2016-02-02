@@ -20,4 +20,12 @@ class Max extends BaseRule
 
         return is_string($this->params[1]) && strlen($this->params[1]) <= $this->params[2];
     }
+
+    public function getMessage()
+    {
+        if($this->isNumeric){
+            return 'Field :field: must be less than or equal to :value:';
+        }
+        return 'Field :field: should be maximum of :value: characters';
+    }
 }

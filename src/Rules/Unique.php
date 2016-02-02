@@ -21,7 +21,7 @@ class Unique extends BaseRule
         /** @var \PDO $db */
         if ($db = Validator::getPDO()){
 
-            $sql = "SELECT COUNT(*) FROM `$table` WHERE $field =:v";
+            $sql  = "SELECT COUNT(*) FROM `$table` WHERE $field =:v";
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':v', $value, \PDO::PARAM_STR);
             $stmt->execute();
@@ -33,5 +33,10 @@ class Unique extends BaseRule
         $instance = new $config[BaseRule::CONFIG_ORM]($field, $value, $table);
 
         return $instance->isUnique();
+    }
+
+    public function getMessage()
+    {
+        return 'Field :field: must be unique';
     }
 }

@@ -15,10 +15,10 @@ if (extension_loaded('phalcon')) {
 
     $di->set('db', function(){
         return new Mysql([
-                "host"     => "localhost",
-                "username" => "root",
-                "password" => "",
-                "dbname"   => "valid",
+                'host'     => 'localhost',
+                'username' => 'root',
+                'password' => '',
+                'dbname'   => 'valid',
             ]
         );
     });
@@ -33,4 +33,4 @@ if (!function_exists('dd')) {
     }
 }
 
-require __DIR__ . "/../vendor/autoload.php";
+require __DIR__ . '/../vendor/autoload.php';

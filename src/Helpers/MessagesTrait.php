@@ -58,19 +58,6 @@ trait MessagesTrait
 
 
     /**
-     * Sets file with default messages
-     * @param $filePath
-     */
-    public static function setDefaultFileMessages($filePath)
-    {
-        if ( !file_exists($filePath)){
-            trigger_error('Messages file doen\'t exist: ' . $filePath, E_USER_ERROR);
-        }
-        self::$errorBag->setMessagesFile($filePath);
-    }
-
-
-    /**
      * Get 2d array with fields and messages
      * @return array
      */

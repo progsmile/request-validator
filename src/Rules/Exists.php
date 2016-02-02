@@ -34,4 +34,14 @@ class Exists extends BaseRule
 
         return $instance->isExist();
     }
+
+    /**
+     * Returns error message from rule
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return 'Field :field: doesn\'t exist in table';
+    }
 }

@@ -20,4 +20,14 @@ class Between extends BaseRule
 
         return is_numeric($userValue) && $this->val1 <= $userValue && $userValue <= $this->val2;
     }
+
+    /**
+     * Returns error message from rule
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return 'Field :field: is not between value needed';
+    }
 }

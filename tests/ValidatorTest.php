@@ -228,26 +228,32 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testAllTypesOfErrorMessages()
     {
         //default message from file
-        V::setDefaultFileMessages(__DIR__ . '/rulesMessages.php');
-
         $v = V::make([
             'myEmail' => '',
             'name'    => '',
             'php'     => '5.6',
-            'mmx'     => ''
+            'mmx'     => '',
+            'login'   => 'admin',
+            'age'     => '17',
+
         ], [
             'myEmail' => 'email|required|min:5',
             'name'    => 'alpha|required',
             'php'     => 'equals:7',
-            'mmx'     => 'required'
+            'mmx'     => 'required',
+            'login'   => 'min:8|required',
+            'age'     => 'min:18|numeric|required',
         ], [
-            'mmx.required' => 'mmx is required'
+            'mmx.required' => 'mmx is required',
+            'login.min'    => 'minimum 8',
+            'age.min'      => 'min 18, sorry'
         ]);
 
-        dd($v->getFirstMessage('name'), $v->getMessages('myEmail'));
+        $this->assertEquals('min 18, sorry', $v->getFirstMessage('age'));
 
-        $this->assertEquals('Only letters please', $v->getFirstMessage('name'));
-        $this->assertEquals('This field is not Email!!', $v->getFirstMessage('myEmail'));
+
+        $this->assertEquals('minimum 8', $v->getFirstMessage('login'));
+
 
         $this->assertEquals('mmx is required', $v->getFirstMessage('mmx'));
 

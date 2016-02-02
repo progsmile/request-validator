@@ -11,45 +11,6 @@ class ErrorBag
     /** @var array out error messages */
     private $errorMessages = [];
 
-    /** @var array - messages from user file */
-    private $customDefaultMessages = [];
-
-    /** @var array - messages from file Data/defaultMessages */
-    private $templateErrorMessages = [];
-
-
-    /**
-     * ErrorBag constructor
-     */
-    public function __construct()
-    {
-        if (empty($this->templateErrorMessages)){
-            $this->templateErrorMessages = require __DIR__ . '/../Data/defaultMessages.php';
-        }
-    }
-
-
-    /**
-     * Get default or overridden message
-     * @param $ruleClassName
-     * @return null
-     */
-    public function getDefaultMessage($ruleClassName)
-    {
-        $ruleClassName = lcfirst($ruleClassName);
-
-        //read errors from user file
-        if (isset($this->customDefaultMessages[$ruleClassName])){
-            return $this->customDefaultMessages[$ruleClassName];
-
-        //read errors from default file
-        } elseif (isset($this->templateErrorMessages[$ruleClassName])) {
-            return $this->templateErrorMessages[$ruleClassName];
-        }
-
-        return null;
-    }
-
 
     /**
      * Erase all error messages
@@ -157,32 +118,20 @@ class ErrorBag
     {
         list($fieldName, $ruleValue) = $instance->getParams();
 
-        $ruleName = $instance->getRuleName();
-
         $ruleErrorFormat = $fieldName . '.' . lcfirst($instance->getRuleName());
 
         if (isset($this->userMessages[$ruleErrorFormat])){
-            $ruleMessages = $this->userMessages[$ruleErrorFormat];
+            $ruleErrorMessage = $this->userMessages[$ruleErrorFormat];
 
         } else {
-
-            $ruleMessages = $this->getDefaultMessage($ruleName);
-
-            //for min or max rule messages
-            if (is_array($ruleMessages)){
-                $ruleMessages = $instance->hasRule('numeric') ? reset($ruleMessages) : array_pop($ruleMessages);
-            }
+            $ruleErrorMessage = $instance->getMessage();
         }
 
-        $message = strtr($ruleMessages, [
+        $this->addMessage($fieldName, strtr($ruleErrorMessage, [
                 ':field:' => $fieldName,
                 ':value:' => $ruleValue,
             ]
-        );
-
-        ob_flush();
-
-        $this->addMessage($fieldName, $message);
+        ));
     }
 
     /**
@@ -193,15 +142,5 @@ class ErrorBag
     public function setUserMessages($userMessages)
     {
         $this->userMessages = $userMessages;
-    }
-
-    /**
-     * Sets file with default messages
-     * @param $filePath
-     * @return void
-     */
-    public function setMessagesFile($filePath)
-    {
-        $this->customDefaultMessages = require $filePath;
     }
 }

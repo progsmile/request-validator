@@ -11,4 +11,9 @@ class Equals extends BaseRule
 
         return trim($this->params[1]) == trim($this->params[2]);
     }
+
+    public function getMessage()
+    {
+        return 'Field :field: has wrong value';
+    }
 }

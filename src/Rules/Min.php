@@ -21,4 +21,13 @@ class Min extends BaseRule
 
         return is_string($this->params[1]) && strlen($this->params[1]) >= $this->params[2];
     }
+
+    public function getMessage()
+    {
+        if($this->isNumeric){
+            return 'Field :field: should be grater than :value:';
+        }
+
+        return 'Field :field: should be at least :value: characters';
+    }
 }

@@ -25,4 +25,9 @@ class Image extends BaseRule
 
         return false;
     }
+
+    public function getMessage()
+    {
+        return 'Field :field: is not image or there are upload troubles';
+    }
 }

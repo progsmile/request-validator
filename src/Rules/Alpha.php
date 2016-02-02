@@ -13,4 +13,14 @@ class Alpha extends BaseRule
 
         return is_string($value) && preg_match('/^[\pL\pM]+$/u', $value);
     }
+
+    /**
+     * Returns error message from rule
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return 'Field :field: may only contain letters';
+    }
 }

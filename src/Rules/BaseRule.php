@@ -55,8 +55,9 @@ abstract class BaseRule
     {
         $condition = false;
 
+
         if ($type == 'var'){
-            $condition = strlen($this->params[1]) == 0;
+            $condition = strlen($this->params[1]) == 0 ;
 
         } elseif ($type == 'file') {
 
@@ -90,7 +91,6 @@ abstract class BaseRule
         return $this->params;
     }
 
-
     /**
      * Returns pure class name
      * @return string
@@ -103,8 +103,13 @@ abstract class BaseRule
     }
 
     /**
+     * Returns error message from rule
+     * @return string
+     */
+    public abstract function getMessage();
+
+    /**
      * Will the process to check if it is valid or not
-     *
      * @return boolean Return the result if valid or not
      */
     public abstract function isValid();
