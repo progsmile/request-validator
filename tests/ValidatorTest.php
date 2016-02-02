@@ -221,39 +221,50 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ], [
             'site' => 'url',
         ]);
+
         $this->assertTrue($v->isValid());
     }
 
-    public function testCustomMessages()
+    public function testAllTypesOfErrorMessages()
     {
-        V::setDefaultMessages([
-            'email' => 'Should be Email',
-        ]);
-
-        V::setDefaultMessage('required', 'Should be Required');
+        //default message from file
+        V::setDefaultFileMessages(__DIR__ . '/rulesMessages.php');
 
         $v = V::make([
-            'myEmail' => ''
+            'myEmail' => '',
+            'name'    => '',
+            'php'     => '5.6',
+            'mmx'     => ''
         ], [
             'myEmail' => 'email|required|min:5',
+            'name'    => 'alpha|required',
+            'php'     => 'equals:7',
+            'mmx'     => 'required'
+        ], [
+            'mmx.required' => 'mmx is required'
         ]);
 
-        $this->assertContains('Should be Email', $v->getMessages());
-        $this->assertContains('Should be Required', $v->getMessages());
-    }
+        dd($v->getFirstMessage('name'), $v->getMessages('myEmail'));
 
+        $this->assertEquals('Only letters please', $v->getFirstMessage('name'));
+        $this->assertEquals('This field is not Email!!', $v->getFirstMessage('myEmail'));
+
+        $this->assertEquals('mmx is required', $v->getFirstMessage('mmx'));
+
+        //from default message
+        $this->assertEquals('Field php has wrong value', $v->getFirstMessage('php'));
+    }
 
     public function testMessagesFieldValue()
     {
-        V::setDefaultMessages([
-            'email' => ':field: Should be Email :value:',
+        $v = V::make([
+            'myEmail' => 'bobbob.ru',
+        ], [
+            'myEmail' => 'email',
+        ], [
+            'myEmail.email' => ':field: Should be Email :value:',
         ]);
 
-        $v = V::make([
-           'myEmail' => 'bobbob.ru'
-        ], [
-            'myEmail' => 'email'
-        ]);
         $message = $v->getFirstMessage('email');
 
         $this->assertEquals('myEmail Should be Email bobbob.ru', $message);

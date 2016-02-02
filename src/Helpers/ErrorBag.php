@@ -5,15 +5,22 @@ use Progsmile\Validator\Rules\BaseRule;
 
 class ErrorBag
 {
+    /** @var array messages passed to validator (highest priority) */
     private $userMessages = [];
 
+    /** @var array out error messages */
     private $errorMessages = [];
 
+    /** @var array - messages from user file */
     private $customDefaultMessages = [];
 
+    /** @var array - messages from file Data/defaultMessages */
     private $templateErrorMessages = [];
 
 
+    /**
+     * ErrorBag constructor
+     */
     public function __construct()
     {
         if (empty($this->templateErrorMessages)){
@@ -29,25 +36,18 @@ class ErrorBag
      */
     public function getDefaultMessage($ruleClassName)
     {
+        $ruleClassName = lcfirst($ruleClassName);
+
+        //read errors from user file
         if (isset($this->customDefaultMessages[$ruleClassName])){
             return $this->customDefaultMessages[$ruleClassName];
 
+        //read errors from default file
         } elseif (isset($this->templateErrorMessages[$ruleClassName])) {
             return $this->templateErrorMessages[$ruleClassName];
         }
 
         return null;
-    }
-
-
-    /**
-     * Setup default message for rule
-     * @param $rule
-     * @param $message
-     */
-    public function setDefaultMessage($rule, $message)
-    {
-        $this->customDefaultMessages[ucfirst($rule)] = $message;
     }
 
 
@@ -71,6 +71,10 @@ class ErrorBag
     }
 
 
+    /**
+     * Returns messages count
+     * @return int
+     */
     public function getMessagesCount()
     {
         return count($this->errorMessages);
@@ -144,17 +148,6 @@ class ErrorBag
         return $message;
     }
 
-    /**
-     * Mass setting default messages
-     * @param $rulesMessages
-     */
-    public function setDefaultMessages($rulesMessages)
-    {
-        foreach ($rulesMessages as $rule => $message) {
-            $this->setDefaultMessage($rule, $message);
-        }
-    }
-
 
     /**
      * Choosing error message: custom or default
@@ -169,7 +162,7 @@ class ErrorBag
         $ruleErrorFormat = $fieldName . '.' . lcfirst($instance->getRuleName());
 
         if (isset($this->userMessages[$ruleErrorFormat])){
-            $message = $this->userMessages[$ruleErrorFormat];
+            $ruleMessages = $this->userMessages[$ruleErrorFormat];
 
         } else {
 
@@ -179,13 +172,15 @@ class ErrorBag
             if (is_array($ruleMessages)){
                 $ruleMessages = $instance->hasRule('numeric') ? reset($ruleMessages) : array_pop($ruleMessages);
             }
-
-            $message = strtr($ruleMessages, [
-                    ':field:' => $fieldName,
-                    ':value:' => $ruleValue,
-                ]
-            );
         }
+
+        $message = strtr($ruleMessages, [
+                ':field:' => $fieldName,
+                ':value:' => $ruleValue,
+            ]
+        );
+
+        ob_flush();
 
         $this->addMessage($fieldName, $message);
     }
@@ -193,9 +188,20 @@ class ErrorBag
     /**
      * Setting up user messages
      * @param $userMessages
+     * @return void
      */
     public function setUserMessages($userMessages)
     {
         $this->userMessages = $userMessages;
+    }
+
+    /**
+     * Sets file with default messages
+     * @param $filePath
+     * @return void
+     */
+    public function setMessagesFile($filePath)
+    {
+        $this->customDefaultMessages = require $filePath;
     }
 }

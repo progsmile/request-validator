@@ -27,8 +27,8 @@ if (extension_loaded('phalcon')) {
 }
 
 if (!function_exists('dd')) {
-    function dd($var) {
-        var_dump($var);
+    function dd() {
+        var_dump(func_get_args());
         ob_flush();
     }
 }

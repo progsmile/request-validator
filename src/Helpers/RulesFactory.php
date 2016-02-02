@@ -20,10 +20,10 @@ class RulesFactory
 
         $class = 'Progsmile\\Validator\\Rules\\' . $ruleName;
 
-        $instance = new $class($config);
+        $ruleInstance = new $class($config);
 
-        $instance->setParams($params);
+        $ruleInstance->setParams($params);
 
-        return $instance;
+        return $ruleInstance;
     }
 }

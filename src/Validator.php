@@ -68,7 +68,7 @@ final class Validator
                     //for other params
                 } else {
                     $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
-               }
+                }
 
                 self::$config[BaseRule::CONFIG_DATA]        = $data;
                 self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;

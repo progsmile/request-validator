@@ -37,26 +37,6 @@ trait MessagesTrait
     }
 
     /**
-     * Setup custom error messages
-     *
-     * @param $rule
-     * @param $message
-     */
-    public static function setDefaultMessage($rule, $message)
-    {
-        self::$errorBag->setDefaultMessage($rule, $message);
-    }
-
-    /**
-     * Mass setup of default message
-     * @param array $rulesMessages
-     */
-    public static function setDefaultMessages(array $rulesMessages)
-    {
-        self::$errorBag->setDefaultMessages($rulesMessages);
-    }
-
-    /**
      * Returns custom message by rule
      * @param $ruleClassName
      * @return mixed
@@ -74,6 +54,29 @@ trait MessagesTrait
     public function format($class = 'Progsmile\Validator\Format\HTML')
     {
         return (new $class)->reformat(self::$errorBag->getRawMessages());
+    }
+
+
+    /**
+     * Sets file with default messages
+     * @param $filePath
+     */
+    public static function setDefaultFileMessages($filePath)
+    {
+        if ( !file_exists($filePath)){
+            trigger_error('Messages file doen\'t exist: ' . $filePath, E_USER_ERROR);
+        }
+        self::$errorBag->setMessagesFile($filePath);
+    }
+
+
+    /**
+     * Get 2d array with fields and messages
+     * @return array
+     */
+    public function getRawMessages()
+    {
+        return self::$errorBag->getRawMessages();
     }
 
 }
