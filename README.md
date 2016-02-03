@@ -36,7 +36,7 @@ $validator = V::make($_POST, [
     'elevatorFloor'       => 'notIn:13'                      //not in array
 ], [
    'email.required'      => 'Field :field: is required',     //Add custom messages
-   'email.email'         => 'Email has bad format :value:',  //Support :field: and :value: params
+   'email.email'         => 'Email has bad format :value:',  //Support :field:, :value: and :param: params
    'email.unique'        => 'Email is not unique',
    'elevatorFloor.notIn' => 'Oops',
 ]);
