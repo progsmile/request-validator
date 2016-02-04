@@ -5,6 +5,22 @@
 use Progsmile\Validator\Validator as V;
 ```
 
+## Array validation support
+Simple as usual variables
+```php
+$v = V::make([
+    'info'      => ['phone' => '+380987365432', 'country' => 'Albania'],
+    'test'      => [10, 20, 30, 'fail' => 40],
+], [
+    'info[phone]'               => 'required|phoneMask:(+380#########)',
+    'info[country]'             => 'required|alpha',
+    'roll[0], roll[1], roll[2]' => 'numeric|between:1, 100',
+    'test[fail]'                => 'required|equals:41'
+], [
+    'test[fail].equals' => '40 need'
+]);
+```
+
 ## Grouping fields rules
 Just put comma after each field
 ```php

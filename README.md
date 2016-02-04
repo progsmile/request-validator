@@ -1,11 +1,16 @@
-# PHP Request Validator
+# PHP Request Validator :muscle:
 [![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)  [![Total Downloads](https://poser.pugx.org/progsmile/request-validator/d/total)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
 
 ## Getting Started
 
-* [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
-* [Rules description](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
-* [Installation](https://github.com/progsmile/request-validator#installation)
+Please read Feature Guide, you will probably like it :heart:
+:small_orange_diamond: [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
+
+All rules descriptions HERE
+:small_orange_diamond: [Rules description](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
+
+Easy installation
+:small_orange_diamond: [Installation](https://github.com/progsmile/request-validator#installation)
 
 ## Usage
 
@@ -23,10 +28,12 @@ $validator = V::make($_POST, [
     'email'               => 'email|unique:users',           //email uniqueness in table users
     'id'                  => 'numeric|exists:users',         //such ID exists in table users
     'age'                 => 'min:16|numeric',               //numeric min
+    'info[country]'       => 'required|alpha',               //even array validation :boom:
+    'roll[0], roll[1]'    => 'numeric|between:1, 100',       //groupping arrays
     'date'                => 'dateFormat:(m-Y.d H:i)',       //custom date time format
     'profileImg'          => 'image',                        //image
     'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',//custom phone mask validator
-    'randNum'             => 'between:1, 100',               //value between
+    'randNum'             => 'between:1, 10',                //value between
     'ip'                  => 'ip',                           //ipv4 or ipv6
     'password'            => 'required|min:6',               //required fields
     'password_repeat'     => 'same:password',                //same validator
@@ -35,6 +42,7 @@ $validator = V::make($_POST, [
     'cash10, cash25'      => 'in:1, 2, 5, 10, 20, 50',       //in array
     'elevatorFloor'       => 'notIn:13'                      //not in array
 ], [
+   'info[country].alpha' => 'Only letters please',           //Add message to array
    'email.required'      => 'Field :field: is required',     //Add custom messages
    'email.email'         => 'Email has bad format',          //Support :field:, :value: and :param: params
    'email.unique'        => 'This email :value: is not unique',
@@ -76,26 +84,26 @@ $ php composer.phar install
 
 ##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
 
-- [x]  alpha
-- [x]  between
-- [x]  boolean
-- [x]  dateFormat
-- [x]  email
-- [x]  equals
-- [x]  exists
-- [x]  json
-- [x]  in
-- [x]  image
-- [x]  ip
-- [x]  max
-- [x]  min
-- [x]  notIn
-- [x]  numeric
-- [x]  phoneMask
-- [x]  required
-- [x]  same
-- [x]  unique
-- [x]  url
+:white_check_mark:  alpha
+:white_check_mark:  between
+:white_check_mark:  boolean
+:white_check_mark:  dateFormat
+:white_check_mark:  email
+:white_check_mark:  equals
+:white_check_mark:  exists
+:white_check_mark:  json
+:white_check_mark:  in
+:white_check_mark:  image
+:white_check_mark:  ip
+:white_check_mark:  max
+:white_check_mark:  min
+:white_check_mark:  notIn
+:white_check_mark:  numeric
+:white_check_mark:  phoneMask
+:white_check_mark:  required
+:white_check_mark:  same
+:white_check_mark:  unique
+:white_check_mark:  url
 
 ### Connect with PDO or use built-in Data Providers (just for unique and exists rules)
 
@@ -167,9 +175,9 @@ $validator = V::make(
 echo $validator->format(MarkdownFormatter::class);
 ```
 
-## Contributing
+## Contributing :octocat:
 
-Dear contributors, the project is just started and it is not stable yet, we love to have your fork requests.
+Dear contributors , the project is just started and it is not stable yet, we love to have your fork requests.
 
 ## Testing
 

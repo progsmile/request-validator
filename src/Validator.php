@@ -37,7 +37,7 @@ final class Validator
             self::$validatorInstance = new Validator();
         }
 
-
+        $data  = self::prepareData($data);
         $rules = self::prepareRules($rules);
 
         self::$errorBag->clear();
@@ -87,6 +87,33 @@ final class Validator
         }
 
         return self::$validatorInstance;
+    }
+
+
+    /**
+     * Prepare user data for validator
+     * @param array $data
+     * @return array
+     */
+    private static function prepareData(array $data)
+    {
+        $newData = [];
+
+        foreach ($data as $paramName => $paramValue) {
+
+            if (is_array($paramValue)){
+
+                foreach ($paramValue as $newKey => $newValue) {
+                    $newData[$paramName . '[' . $newKey . ']'] = $newValue;
+                }
+
+            } else {
+
+                $newData[$paramName] = $paramValue;
+            }
+        }
+
+        return $newData;
     }
 
     /**

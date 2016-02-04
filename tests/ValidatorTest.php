@@ -248,7 +248,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ], [
             'mmx.required' => 'mmx is required',
             'login.min'    => 'minimum 8',
-            'age.min'      => 'min 18, sorry'
+            'age.min'      => 'min 18, sorry',
         ]);
 
         $this->assertEquals('min 18, sorry', $v->getFirstMessage('age'));
@@ -278,5 +278,31 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $message = $v->getFirstMessage('email');
 
         $this->assertEquals('myEmail Should be Email bobbob.ru', $message);
+    }
+
+    public function testArray()
+    {
+        $v = V::make([
+            'firstname' => 'Den',
+            'lastname'  => 'K',
+            'info'      => ['phone' => '+380987365432', 'country' => 'Albania'],
+            'email'     => 'ddx@mmx.uk',
+            'test'      => [10, 20, 30, 'fail' => 40],
+        ], [
+            'firstname, lastname'       => 'required|alpha',
+            'info[phone]'               => 'required|phoneMask:(+380#########)',
+            'info[country]'             => 'required|alpha',
+            'email'                     => 'required|email',
+            'roll[0], roll[1], roll[2]' => 'numeric|between:1, 100',
+            'test[fail]'                => 'required|equals:41'
+        ], [
+            'test[fail].equals' => '40 need'
+        ]);
+
+        $this->assertEquals('40 need', $v->getFirstMessage('test["fail"]'));
+
+        $this->assertCount(1, $v->getMessages());
+
+        $this->assertFalse($v->isValid());
     }
 }
