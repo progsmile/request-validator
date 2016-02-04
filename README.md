@@ -1,5 +1,5 @@
 # PHP Request Validator
-[![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator) [![Monthly Downloads](https://poser.pugx.org/progsmile/request-validator/d/monthly)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
+[![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)  [![Total Downloads](https://poser.pugx.org/progsmile/request-validator/d/total)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
 
 ## Getting Started
 
@@ -36,8 +36,8 @@ $validator = V::make($_POST, [
     'elevatorFloor'       => 'notIn:13'                      //not in array
 ], [
    'email.required'      => 'Field :field: is required',     //Add custom messages
-   'email.email'         => 'Email has bad format :value:',  //Support :field: and :value: params
-   'email.unique'        => 'Email is not unique',
+   'email.email'         => 'Email has bad format',          //Support :field:, :value: and :param: params
+   'email.unique'        => 'This email :value: is not unique',
    'elevatorFloor.notIn' => 'Oops',
 ]);
 ```
