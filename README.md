@@ -4,12 +4,15 @@
 ## Getting Started
 
 Please read Feature Guide, you will probably like it :heart:
+
 :small_orange_diamond: [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
 
-All rules descriptions HERE
+All rules descriptions here:
+
 :small_orange_diamond: [Rules description](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
 
 Easy installation
+
 :small_orange_diamond: [Installation](https://github.com/progsmile/request-validator#installation)
 
 ## Usage
@@ -85,8 +88,14 @@ $ php composer.phar install
 ##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
 
 :white_check_mark:  alpha
+
+
 :white_check_mark:  between
+
+
 :white_check_mark:  boolean
+
+
 :white_check_mark:  dateFormat
 :white_check_mark:  email
 :white_check_mark:  equals
