@@ -1,7 +1,7 @@
 {
     "name": "progsmile/request-validator",
     "description": "Simple PHP Request Validator",
-
+    "version" : "1.0.0",
     "keywords": [
         "validation",
         "PHP",
