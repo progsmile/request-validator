@@ -3,17 +3,13 @@
 
 ## Getting Started
 
-Please read Feature Guide, you will probably like it :heart:
+:small_orange_diamond: [Please read our Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  you will probably like it :heart:
 
-:small_orange_diamond: [Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  
 
-All rules descriptions here:
+:small_orange_diamond: [All rules descriptions here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
 
-:small_orange_diamond: [Rules description](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
 
-Easy installation
-
-:small_orange_diamond: [Installation](https://github.com/progsmile/request-validator#installation)
+:small_orange_diamond: [Easy installation](https://github.com/progsmile/request-validator#installation)
 
 ## Usage
 
@@ -97,22 +93,56 @@ $ php composer.phar install
 
 
 :white_check_mark:  dateFormat
+
+
 :white_check_mark:  email
+
+
 :white_check_mark:  equals
+
+
 :white_check_mark:  exists
+
+
 :white_check_mark:  json
+
+
 :white_check_mark:  in
+
+
 :white_check_mark:  image
+
+
 :white_check_mark:  ip
+
+
 :white_check_mark:  max
+
+
 :white_check_mark:  min
+
+
 :white_check_mark:  notIn
+
+
 :white_check_mark:  numeric
+
+
 :white_check_mark:  phoneMask
+
+
 :white_check_mark:  required
+
+
 :white_check_mark:  same
+
+
 :white_check_mark:  unique
+
+
 :white_check_mark:  url
+
+
 
 ### Connect with PDO or use built-in Data Providers (just for unique and exists rules)
 
