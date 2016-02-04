@@ -17,6 +17,7 @@
  * Phone Mask 
  * Required 
  * Same 
+ * Size 
  * Unique 
  * Url
 
@@ -211,6 +212,15 @@ Check if one field has same value with other
 
 'password'        => '321'  
 'password_repeat' => ''    //false
+```
+
+### Size
+Check if string is the same size
+```php
+'keyCode' => 'required|size:3'
+
+'keyCode' => 'yes' //true
+'keyCode' => 'no'  //false
 ```
 
 ### Unique
