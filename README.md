@@ -81,66 +81,8 @@ $ php composer.phar install
 
 ### Available rules
 
-##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
 
-:white_check_mark:  alpha
-
-
-:white_check_mark:  between
-
-
-:white_check_mark:  boolean
-
-
-:white_check_mark:  dateFormat
-
-
-:white_check_mark:  email
-
-
-:white_check_mark:  equals
-
-
-:white_check_mark:  exists
-
-
-:white_check_mark:  json
-
-
-:white_check_mark:  in
-
-
-:white_check_mark:  image
-
-
-:white_check_mark:  ip
-
-
-:white_check_mark:  max
-
-
-:white_check_mark:  min
-
-
-:white_check_mark:  notIn
-
-
-:white_check_mark:  numeric
-
-
-:white_check_mark:  phoneMask
-
-
-:white_check_mark:  required
-
-
-:white_check_mark:  same
-
-
-:white_check_mark:  unique
-
-
-:white_check_mark:  url
+##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md) :100:
 
 
 
