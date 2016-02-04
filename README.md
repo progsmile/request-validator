@@ -27,7 +27,7 @@ $validator = V::make($_POST, [
     'email'               => 'email|unique:users',           //email uniqueness in table users
     'id'                  => 'numeric|exists:users',         //such ID exists in table users
     'age'                 => 'min:16|numeric',               //numeric min
-    'info[country]'       => 'required|alpha',               //even array validation``` :boom: ```php
+    'info[country]'       => 'required|alpha',               //EVEN ARRAY VALIDATION! Extremly crazy)
     'roll[0], roll[1]'    => 'numeric|between:1, 100',       //groupping arrays
     'date'                => 'dateFormat:(m-Y.d H:i)',       //custom date time format
     'profileImg'          => 'image',                        //image
@@ -43,7 +43,7 @@ $validator = V::make($_POST, [
 ], [
    'info[country].alpha' => 'Only letters please',           //Add message to array
    'email.required'      => 'Field :field: is required',     //Add custom messages
-   'email.email'         => 'Email has bad format',          //Support :field:, :value: and :param: params
+   'email.email'         => 'Email has bad format',          //:field:, :value:, :param: placeholders
    'email.unique'        => 'This email :value: is not unique',
    'elevatorFloor.notIn' => 'Oops',
 ]);
