@@ -104,12 +104,12 @@ final class Validator
             if (is_array($paramValue)){
 
                 foreach ($paramValue as $newKey => $newValue) {
-                    $newData[$paramName . '[' . $newKey . ']'] = $newValue;
+                    $newData[trim($paramName) . '[' . trim($newKey) . ']'] = trim($newValue);
                 }
 
             } else {
 
-                $newData[$paramName] = $paramValue;
+                $newData[trim($paramName)] = trim($paramValue);
             }
         }
 

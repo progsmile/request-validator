@@ -294,9 +294,9 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'info[country]'             => 'required|alpha',
             'email'                     => 'required|email',
             'roll[0], roll[1], roll[2]' => 'numeric|between:1, 100',
-            'test[fail]'                => 'required|equals:41'
+            'test[fail]'                => 'required|equals:41',
         ], [
-            'test[fail].equals' => '40 need'
+            'test[fail].equals' => '40 need',
         ]);
 
         $this->assertEquals('40 need', $v->getFirstMessage('test["fail"]'));
@@ -304,5 +304,22 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $v->getMessages());
 
         $this->assertFalse($v->isValid());
+    }
+
+    public function testSizeRule()
+    {
+        $v = V::make([
+            'testSize' => 'sizeof',
+            'failSize' => 'max_int'
+        ], [
+            'testSize' => 'required|size:6',
+            'failSize' => 'required|size:6',
+        ]);
+
+        $this->assertFalse($v->isValid());
+
+        $this->assertCount(1, $v->getMessages());
+
+        $this->assertCount(1, $v->getMessages('failSize'));
     }
 }
