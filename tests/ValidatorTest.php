@@ -331,9 +331,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'name'     => 'Umar al-Khayyām',
             'fullname' => 'Armin van Buuren',
         ], [
-            'age'            => 'numeric|between:30, 40',
-            'name, fullname' => 'between:2, 20',
+            'age'            => 'required|numeric|between:30, 40',
+            'name, fullname' => 'required|between:2, 20',
         ]);
+
+        dd($v->getMessages());
 
         $this->assertEmpty($v->getMessages());
     }

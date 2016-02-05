@@ -34,13 +34,18 @@ Checks if current string contains only letters
 ```
 
 ### Between
-Checks if value is between set
+Checks if value is between for string length and number value
 ```php
-'randNum'   => 'between:1,50' // in rules
+'randNum'   => 'between:1,50|numeric' // for numeric range
+'name'      => 'between:3,18'         // for string length
 
 'randNum' => '1'  //true
 'randNum' => '50' //true
 'randNum' => '51' //false
+
+'name' => 'Den' //true
+'name' => 'DK'  //false
+
 
 ```
 

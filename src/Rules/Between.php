@@ -41,9 +41,9 @@ class Between extends BaseRule
     {
         if($this->isNumeric){
 
-            return 'Field :field: should be between in :param:';
+            return 'Field :field: should be between in :param: values';
         }
 
-        return 'Field :field: should be between :param: characters';
+        return 'Field :field: length should be between :param: characters';
     }
 }
