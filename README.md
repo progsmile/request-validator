@@ -11,7 +11,7 @@
 
 :small_orange_diamond: [Easy installation](https://github.com/progsmile/request-validator#installation)
 
-## Usage
+## Example
 
 ```php
 // Add namespace
@@ -19,7 +19,7 @@ use \Progsmile\Validator\Validator as V;
 
 // Create new Validator, pass data, define rules and custom messages
 // Also has errors messages by default
-$validator = V::make($_POST, [
+$v = V::make($_POST, [
 
     //group validation fields
     'firstname, lastname' => 'required|alpha|min:2',         //alphabetic support
@@ -47,6 +47,8 @@ $validator = V::make($_POST, [
    'email.unique'        => 'This email :value: is not unique',
    'elevatorFloor.notIn' => 'Oops',
 ]);
+
+$v->isValid(); //check it 
 ```
 
 ## Installation

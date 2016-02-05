@@ -309,10 +309,10 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testSizeRule()
     {
         $v = V::make([
-            'testSize' => 'sizeof',
+            'testSize' => '123456',
             'failSize' => 'max_int'
         ], [
-            'testSize' => 'required|size:6',
+            'testSize' => 'required|numeric|size:6',
             'failSize' => 'required|size:6',
         ]);
 
