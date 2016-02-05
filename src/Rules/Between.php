@@ -5,6 +5,7 @@ class Between extends BaseRule
 {
     private $val1;
     private $val2;
+    private $isNumeric = false;
 
     public function isValid()
     {
@@ -16,9 +17,19 @@ class Between extends BaseRule
 
         $this->val1 = trim($validatorValues[0]);
         $this->val2 = trim($validatorValues[1]);
-        $userValue  = trim($this->params[1]);
+        $input      = trim($this->params[1]);
 
-        return is_numeric($userValue) && $this->val1 <= $userValue && $userValue <= $this->val2;
+
+        if ($this->hasRule('numeric') !== false){
+
+            $this->isNumeric = true;
+
+            return $this->val1 <= $input && $input <= $this->val2;
+        }
+
+        $input = mb_strlen($input);
+
+        return $this->val1 <= $input && $input <= $this->val2;
     }
 
     /**
@@ -28,6 +39,11 @@ class Between extends BaseRule
      */
     public function getMessage()
     {
-        return 'Field :field: should be between in :param:';
+        if($this->isNumeric){
+
+            return 'Field :field: should be between in :param:';
+        }
+
+        return 'Field :field: should be between :param: characters';
     }
 }

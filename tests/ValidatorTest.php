@@ -310,7 +310,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     {
         $v = V::make([
             'testSize' => '123456',
-            'failSize' => 'max_int'
+            'failSize' => 'max_int',
         ], [
             'testSize' => 'required|numeric|size:6',
             'failSize' => 'required|size:6',
@@ -321,5 +321,20 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $v->getMessages());
 
         $this->assertCount(1, $v->getMessages('failSize'));
+    }
+
+
+    public function testBetweenNumberAndString()
+    {
+        $v = V::make([
+            'age'      => '33',
+            'name'     => 'Umar al-Khayyām',
+            'fullname' => 'Armin van Buuren',
+        ], [
+            'age'            => 'numeric|between:30, 40',
+            'name, fullname' => 'between:2, 20',
+        ]);
+
+        $this->assertEmpty($v->getMessages());
     }
 }
