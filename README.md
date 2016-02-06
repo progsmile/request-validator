@@ -48,7 +48,22 @@ $v = V::make($_POST, [
    'elevatorFloor.notIn' => 'Oops',
 ]);
 
-$v->isValid(); //check it 
+$v->passes() or $v->fails() //check validation result
+
+$v->first() or $v->first('lastname') //get first error message (with param for concrete field)
+
+$v->firsts() //return first error message from each field
+
+$v->messages() or $v->messages('password') //get all messages (with param for concrete field)
+
+$v->raw() //get 2d array with fields and messages
+
+$v->firstname->first() or $v->firstname->first('alpha') //get first error for `firstname` (with param for rule)
+
+$v->password->messages(); //get all `password` messages
+
+$v->lastname->fails() or $v->lastname->passes() //check field validness
+
 ```
 
 ## Installation

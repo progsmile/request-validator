@@ -382,6 +382,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
 
         $this->assertTrue($v->lastName->fails());
+        $this->assertFalse($v->lastName->passes());
         $this->assertEmpty($v->bob->messages());
 
         $this->assertEquals('', $v->bob->first());
