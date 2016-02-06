@@ -49,7 +49,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'site'                => 'url',
         ]);
 
-        $this->assertEmpty($validationResult->getMessages());
+        $this->assertEmpty($validationResult->messages());
     }
 
     public function testNonUniqueError()
@@ -60,9 +60,9 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email.unique' => 'nonunique',
         ]);
 
-        $this->assertFalse($validationResult->isValid());
+        $this->assertFalse($validationResult->passes());
 
-        $errorMessage = $validationResult->getMessages('email');
+        $errorMessage = $validationResult->messages('email');
 
         $this->assertEquals('nonunique', reset($errorMessage));
     }
@@ -79,7 +79,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3' => 'numeric',
         ]);
 
-        $this->assertCount(2, $validationResult->getMessages());
+        $this->assertCount(2, $validationResult->messages());
     }
 
     public function testGroupedRules()
@@ -98,7 +98,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'n3.numeric'      => 'N3 is not a number',
         ]);
 
-        $this->assertCount(2, $validationResult->getMessages());
+        $this->assertCount(2, $validationResult->messages());
     }
 
     public function testRequiredRule()
@@ -113,7 +113,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'fieldZero, fieldSpace, fieldEmpty, fieldFalse, fieldNull' => 'required',
         ]);
 
-        $this->assertCount(3, $validationResult->getMessages());
+        $this->assertCount(3, $validationResult->messages());
     }
 
     public function testEquals()
@@ -128,8 +128,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'buy'       => 'equals:buy',
         ]);
 
-        $this->assertFalse($v->isValid());
-        $this->assertCount(1, $v->getMessages());
+        $this->assertFalse($v->passes());
+        $this->assertCount(1, $v->messages());
     }
 
     public function testInNotInValidator()
@@ -148,8 +148,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'elevatorFloor.notIn' => 'Oops',
         ]);
 
-        $this->assertEquals('Oops', $validationResult->getFirstMessage('elevatorFloor'));
-        $this->assertCount(2, $validationResult->getMessages());
+        $this->assertEquals('Oops', $validationResult->first('elevatorFloor'));
+        $this->assertCount(2, $validationResult->messages());
     }
 
     public function testPhoneMask()
@@ -164,7 +164,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'phone3' => 'phoneMask:((020) #### ####)',
         ]);
 
-        $this->assertTrue($validationResult->isValid());
+        $this->assertTrue($validationResult->passes());
     }
 
     public function testExists()
@@ -181,8 +181,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'id.exists' => $errorMessageIdExists,
         ]);
 
-        $this->assertFalse($validationResult->isValid());
-        $this->assertEquals($errorMessageIdExists, $validationResult->getFirstMessage('id'));
+        $this->assertFalse($validationResult->passes());
+        $this->assertEquals($errorMessageIdExists, $validationResult->first('id'));
     }
 
     public function testAllMessagesMethods()
@@ -200,17 +200,17 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email.email'    => 'bad email',
         ]);
 
-        $this->assertFalse($v->isValid());
+        $this->assertFalse($v->passes());
 
-        $this->assertEquals('min 10', $v->getFirstMessage());
+        $this->assertEquals('min 10', $v->first());
 
-        $this->assertEquals('bad email', $v->getFirstMessage('email'));
+        $this->assertEquals('bad email', $v->first('email'));
 
-        $this->assertCount(5, $v->getFirstMessages());
+        $this->assertCount(5, $v->firsts());
 
-        $this->assertCount(2, $v->getMessages('randNum'));
+        $this->assertCount(2, $v->messages('randNum'));
 
-        $this->assertCount(10, $v->getMessages());
+        $this->assertCount(10, $v->messages());
     }
 
 
@@ -222,7 +222,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'site' => 'url',
         ]);
 
-        $this->assertTrue($v->isValid());
+        $this->assertTrue($v->passes());
     }
 
     public function testAllTypesOfErrorMessages()
@@ -251,18 +251,16 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'age.min'      => 'min 18, sorry',
         ]);
 
-        $this->assertEquals('min 18, sorry', $v->getFirstMessage('age'));
+        $this->assertEquals('min 18, sorry', $v->first('age'));
 
-        $this->assertEquals('minimum 8', $v->getFirstMessage('login'));
+        $this->assertEquals('minimum 8', $v->first('login'));
 
-        $this->assertEquals('mmx is required', $v->getFirstMessage('mmx'));
+        $this->assertEquals('mmx is required', $v->first('mmx'));
 
-
-        dd($v->getMessages('age2'));
         //from default messages
-        $this->assertEquals('Field age2 must be less than or equal to 18', $v->getFirstMessage('age2'));
+        $this->assertEquals('Field age2 must be less than or equal to 18', $v->first('age2'));
 
-        $this->assertEquals('Field php has wrong value', $v->getFirstMessage('php'));
+        $this->assertEquals('Field php has wrong value', $v->first('php'));
     }
 
     public function testMessagesFieldValue()
@@ -275,7 +273,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'myEmail.email' => ':field: Should be Email :value:',
         ]);
 
-        $message = $v->getFirstMessage('email');
+        $message = $v->first('email');
 
         $this->assertEquals('myEmail Should be Email bobbob.ru', $message);
     }
@@ -289,21 +287,22 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email'     => 'ddx@mmx.uk',
             'test'      => [10, 20, 30, 'fail' => 40],
         ], [
-            'firstname, lastname'       => 'required|alpha',
-            'info[phone]'               => 'required|phoneMask:(+380#########)',
-            'info[country]'             => 'required|alpha',
-            'email'                     => 'required|email',
-            'roll[0], roll[1], roll[2]' => 'numeric|between:1, 100',
-            'test[fail]'                => 'required|equals:41',
+            'firstname, lastname'    => 'required|alpha',
+            'info.phone'             => 'required|phoneMask:(+380#########)',
+            'info.country'           => 'required|alpha',
+            'email'                  => 'required|email',
+            'test.0, test.1, test.2' => 'numeric|between:1, 100',
+            'test.fail'              => 'required|equals:41',
         ], [
-            'test[fail].equals' => '40 need',
+            'test.fail.equals' => '40 need',
         ]);
 
-        $this->assertEquals('40 need', $v->getFirstMessage('test["fail"]'));
 
-        $this->assertCount(1, $v->getMessages());
+        $this->assertEquals('40 need', $v->first('test.fail'));
 
-        $this->assertFalse($v->isValid());
+        $this->assertCount(1, $v->messages());
+
+        $this->assertFalse($v->passes());
     }
 
     public function testSizeRule()
@@ -316,11 +315,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'failSize' => 'required|size:6',
         ]);
 
-        $this->assertFalse($v->isValid());
+        $this->assertFalse($v->passes());
 
-        $this->assertCount(1, $v->getMessages());
+        $this->assertCount(1, $v->messages());
 
-        $this->assertCount(1, $v->getMessages('failSize'));
+        $this->assertCount(1, $v->messages('failSize'));
     }
 
 
@@ -335,8 +334,56 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'name, fullname' => 'required|between:2, 20',
         ]);
 
-        dd($v->getMessages());
+        $this->assertEmpty($v->messages());
+    }
 
-        $this->assertEmpty($v->getMessages());
+
+    public function testAllNewMessagesMethodsAndMagicFields()
+    {
+        $v = V::make([
+            'firstName' => 'Armin1',
+            'lastName'  => 'Buuren2',
+            'userEmail' => 'bob.bob.not-email.com',
+            'age'       => 'sercet!!1',
+            'valids'    => ['YES', 'Yep'],
+        ], [
+
+            'firstName, lastName' => 'alpha',
+            'userEmail'           => 'email',
+            'age'                 => 'numeric|min:16',
+            'valids.0, valids.1'  => 'required|alpha',
+        ], [
+            'firstName.alpha' => 'non-alpha-1',   // total 5 errors
+            'lastName.alpha'  => 'non-alpha-2',
+            'age.numeric'     => 'NaN',
+            'userEmail.email' => 'NaE',
+        ]);
+
+        //basic test
+        $this->assertFalse($v->passes());
+
+        $this->assertEquals($v->first(), 'non-alpha-1');
+
+        $this->assertCount(4, $v->firsts()); //firsts error messages 4
+
+        $this->assertCount(5, $v->messages()); // all count of messages 5
+
+        $this->assertCount(4, $v->raw()); //also has 4 elements for each rule
+
+        //magic test
+
+        $this->assertEquals('non-alpha-1', $v->firstName->first('alpha'));
+        $this->assertEquals('non-alpha-2', $v->lastName->first());
+        $this->assertEquals('NaN',         $v->age->first());
+        $this->assertEquals('NaE',         $v->userEmail->first());
+
+        $this->assertContains('non-alpha-2', $v->lastName->messages());
+        $this->assertContains('NaN', $v->age->messages());
+
+
+        $this->assertTrue($v->lastName->fails());
+        $this->assertEmpty($v->bob->messages());
+
+        $this->assertEquals('', $v->bob->first());
     }
 }

@@ -24,9 +24,9 @@ class PhalconTest extends PHPUnit_Framework_TestCase
             ['email.unique' => 'nonunique']
         );
 
-        $this->assertFalse($validationResult->isValid());
+        $this->assertFalse($validationResult->passes());
 
-        $errorMessage = $validationResult->getMessages('email');
+        $errorMessage = $validationResult->messages('email');
 
         $this->assertTrue(is_array($errorMessage));
         $this->assertArraySubset(['nonunique'], $errorMessage);
@@ -42,7 +42,7 @@ class PhalconTest extends PHPUnit_Framework_TestCase
             ['email.unique' => 'nonunique']
         );
 
-        $this->assertTrue($validationResult->isValid());
-        $this->assertEmpty($validationResult->getMessages('email'));
+        $this->assertTrue($validationResult->passes());
+        $this->assertEmpty($validationResult->messages('email'));
     }
 }

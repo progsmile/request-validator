@@ -15,7 +15,7 @@ class Max extends BaseRule
 
             $this->isNumeric = true;
 
-            return $this->params[1] <= $this->params[2];
+            return $this->params[1] <= $this->params[2] && is_numeric($this->params[1]);
         }
 
         return is_string($this->params[1]) && strlen($this->params[1]) <= $this->params[2];

@@ -11,6 +11,13 @@ class ErrorBag
     /** @var array out error messages */
     private $errorMessages = [];
 
+    private $fieldsErrorBag = null;
+
+    public function __construct(array $userMessages)
+    {
+        $this->fieldsErrorBag = new FieldsErrorBag($this);
+        $this->userMessages   = $userMessages;
+    }
 
     /**
      * Erase all error messages
@@ -26,7 +33,7 @@ class ErrorBag
      * @param $fieldName
      * @param $message
      */
-    public function addMessage($fieldName, $message)
+    public function add($fieldName, $message)
     {
         $this->errorMessages[$fieldName][] = $message;
     }
@@ -36,9 +43,20 @@ class ErrorBag
      * Returns messages count
      * @return int
      */
-    public function getMessagesCount()
+    public function count()
     {
         return count($this->errorMessages);
+    }
+
+
+    /**
+     * If such $field contains in
+     * @param $fieldName
+     * @return bool
+     */
+    public function has($fieldName)
+    {
+        return (bool)count($this->messages($fieldName));
     }
 
 
@@ -47,7 +65,7 @@ class ErrorBag
      * @param string $field
      * @return array
      */
-    public function getMessages($field = '')
+    public function messages($field = '')
     {
         if ($field){
             return isset($this->errorMessages[$field]) ? $this->errorMessages[$field] : [];
@@ -67,7 +85,7 @@ class ErrorBag
      * Get 2d array with fields and messages
      * @return array
      */
-    public function getRawMessages()
+    public function raw()
     {
         return $this->errorMessages;
     }
@@ -77,7 +95,7 @@ class ErrorBag
      * For each rule get it's first message
      * @return array
      */
-    public function getFirstMessages()
+    public function firsts()
     {
         $messages = [];
         foreach ($this->errorMessages as $fieldsMessages) {
@@ -96,17 +114,36 @@ class ErrorBag
      * @param string $field
      * @return mixed
      */
-    public function getFirstMessage($field = '')
+    public function first($field = '')
     {
         if (isset($this->errorMessages[$field])){
             $message = reset($this->errorMessages[$field]);
 
         } else {
-            $firstMessages = $this->getFirstMessages();
+            $firstMessages = $this->firsts();
             $message       = reset($firstMessages);
         }
 
         return $message;
+    }
+
+
+    /**
+     * Checks request is valid
+     * @return bool
+     */
+    public function passes()
+    {
+        return $this->count() === 0;
+    }
+
+    /**
+     * Check if request failed
+     * @return bool
+     */
+    public function fails()
+    {
+        return !$this->passes();
     }
 
 
@@ -127,21 +164,22 @@ class ErrorBag
             $ruleErrorMessage = $instance->getMessage();
         }
 
-        $this->addMessage($fieldName, strtr($ruleErrorMessage, [
+        $this->add($fieldName, strtr($ruleErrorMessage, [
                 ':field:' => $fieldName,
                 ':value:' => $ruleValue,
-                ':param:' => $ruleParams
+                ':param:' => $ruleParams,
             ]
         ));
     }
 
+
     /**
-     * Setting up user messages
-     * @param $userMessages
-     * @return void
+     * Get messages
+     * @param $fieldName
+     * @return FieldsErrorBag
      */
-    public function setUserMessages($userMessages)
+    public function __get($fieldName)
     {
-        $this->userMessages = $userMessages;
+        return $this->fieldsErrorBag->setField($fieldName);
     }
 }

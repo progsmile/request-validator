@@ -2,17 +2,16 @@
 namespace Progsmile\Validator;
 
 use Progsmile\Validator\Helpers\ErrorBag,
-    Progsmile\Validator\Helpers\MessagesTrait,
     Progsmile\Validator\Helpers\PdoTrait,
     Progsmile\Validator\Helpers\RulesFactory,
     Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
 {
-    use PdoTrait, MessagesTrait;
+    use PdoTrait;
 
-    /** @var Validator */
-    private static $validatorInstance = null;
+    /** @var ErrorBag */
+    private static $errorBag = null;
 
 
     private static $config = [
@@ -26,23 +25,14 @@ final class Validator
      * @param array $data user request data
      * @param array $rules validation rules
      * @param array $userMessages custom error messages
-     * @return Validator
+     * @return ErrorBag
      */
     public static function make(array $data, array $rules, array $userMessages = [])
     {
-        if (self::$validatorInstance === null){
-
-            self::$errorBag = new ErrorBag();
-
-            self::$validatorInstance = new Validator();
-        }
+        self::$errorBag = new ErrorBag($userMessages);
 
         $data  = self::prepareData($data);
         $rules = self::prepareRules($rules);
-
-        self::$errorBag->clear();
-        self::$errorBag->setUserMessages($userMessages);
-
 
         foreach ($rules as $fieldName => $fieldRules) {
 
@@ -86,7 +76,7 @@ final class Validator
             }
         }
 
-        return self::$validatorInstance;
+        return self::$errorBag;
     }
 
 
@@ -104,7 +94,7 @@ final class Validator
             if (is_array($paramValue)){
 
                 foreach ($paramValue as $newKey => $newValue) {
-                    $newData[trim($paramName) . '[' . trim($newKey) . ']'] = trim($newValue);
+                    $newData[trim($paramName) . '.' . trim($newKey)] = trim($newValue);
                 }
 
             } else {
@@ -159,15 +149,6 @@ final class Validator
         }
 
         return $finalRules;
-    }
-
-    /**
-     * Checks request is valid
-     * @return bool
-     */
-    public function isValid()
-    {
-        return self::$errorBag->getMessagesCount() === 0;
     }
 
 
