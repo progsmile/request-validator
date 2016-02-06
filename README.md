@@ -58,7 +58,7 @@ $v->messages() or $v->messages('password') //get all messages (with param for co
 
 $v->raw() //get 2d array with fields and messages
 
-$v->firstname->first() or $v->firstname->first('alpha') //get first error for `firstname` (with param for rule)
+$v->firstname->first() or $v->firstname->first('alpha') //get first error for `firstname`
 
 $v->password->messages(); //get all `password` messages
 
