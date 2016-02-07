@@ -3,7 +3,7 @@ namespace Progsmile\Validator\Helpers;
 
 use Progsmile\Validator\Rules\BaseRule;
 
-class ErrorBag
+class ValidatorFacade
 {
     /** @var array messages passed to validator (highest priority) */
     private $userMessages = [];

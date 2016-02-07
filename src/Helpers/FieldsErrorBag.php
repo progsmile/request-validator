@@ -6,14 +6,14 @@ class FieldsErrorBag
     /** @var string magic field name */
     private $fieldName = '';
 
-    /** @var ErrorBag error bag */
+    /** @var ValidatorFacade error bag */
     private $errorBag = null;
 
     /**
      * FieldsErrorBag constructor.
-     * @param ErrorBag $errorBag
+     * @param ValidatorFacade $errorBag
      */
-    public function __construct(ErrorBag $errorBag)
+    public function __construct(ValidatorFacade $errorBag)
     {
         $this->errorBag = $errorBag;
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Helpers\ErrorBag,
+use Progsmile\Validator\Helpers\ValidatorFacade,
     Progsmile\Validator\Helpers\PdoTrait,
     Progsmile\Validator\Helpers\RulesFactory,
     Progsmile\Validator\Rules\BaseRule;
@@ -10,8 +10,8 @@ final class Validator
 {
     use PdoTrait;
 
-    /** @var ErrorBag */
-    private static $errorBag = null;
+    /** @var ValidatorFacade */
+    private static $validatorFacade = null;
 
 
     private static $config = [
@@ -25,11 +25,11 @@ final class Validator
      * @param array $data user request data
      * @param array $rules validation rules
      * @param array $userMessages custom error messages
-     * @return ErrorBag
+     * @return ValidatorFacade
      */
     public static function make(array $data, array $rules, array $userMessages = [])
     {
-        self::$errorBag = new ErrorBag($userMessages);
+        self::$validatorFacade = new ValidatorFacade($userMessages);
 
         $data  = self::prepareData($data);
         $rules = self::prepareRules($rules);
@@ -71,12 +71,12 @@ final class Validator
 
                 if ( !$ruleInstance->isValid()){
 
-                    self::$errorBag->chooseErrorMessage($ruleInstance);
+                    self::$validatorFacade->chooseErrorMessage($ruleInstance);
                 }
             }
         }
 
-        return self::$errorBag;
+        return self::$validatorFacade;
     }
 
 
