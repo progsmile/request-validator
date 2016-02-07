@@ -287,14 +287,14 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'email'     => 'ddx@mmx.uk',
             'test'      => [10, 20, 30, 'fail' => 40],
         ], [
-            'firstname, lastname'    => 'required|alpha',
-            'info.phone'             => 'required|phoneMask:(+380#########)',
-            'info.country'           => 'required|alpha',
-            'email'                  => 'required|email',
-            'test.0, test.1, test.2' => 'numeric|between:1, 100',
-            'test.fail'              => 'required|equals:41',
+            'firstname, lastname'       => 'required|alpha',
+            'info[phone]'               => 'required|phoneMask:(+380#########)',
+            'info[country]'             => 'required|alpha',
+            'email'                     => 'required|email',
+            'test[0], test[1], test[2]' => 'numeric|between:1, 100',
+            'test[fail]'                => 'required|equals:41',
         ], [
-            'test.fail.equals' => '40 need',
+            'test[fail].equals' => '40 need',
         ]);
 
 
@@ -348,10 +348,10 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'valids'    => ['YES', 'Yep'],
         ], [
 
-            'firstName, lastName' => 'alpha',
-            'userEmail'           => 'email',
-            'age'                 => 'numeric|min:16',
-            'valids.0, valids.1'  => 'required|alpha',
+            'firstName, lastName'  => 'alpha',
+            'userEmail'            => 'email',
+            'age'                  => 'numeric|min:16',
+            'valids[0], valids[1]' => 'required|alpha',
         ], [
             'firstName.alpha' => 'non-alpha-1',   // total 5 errors
             'lastName.alpha'  => 'non-alpha-2',
@@ -374,8 +374,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('non-alpha-1', $v->firstName->first('alpha'));
         $this->assertEquals('non-alpha-2', $v->lastName->first());
-        $this->assertEquals('NaN',         $v->age->first());
-        $this->assertEquals('NaE',         $v->userEmail->first());
+        $this->assertEquals('NaN', $v->age->first());
+        $this->assertEquals('NaE', $v->userEmail->first());
 
         $this->assertContains('non-alpha-2', $v->lastName->messages());
         $this->assertContains('NaN', $v->age->messages());

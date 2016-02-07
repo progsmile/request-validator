@@ -5,6 +5,58 @@
 use Progsmile\Validator\Validator as V;
 ```
 
+
+## Getting messages
+```php
+$v = V::make($_POST,[
+   'phone'    => 'required|phoneMask:(+38(###)###-##-##)'
+   'email'    => 'required|email|unique:users',
+   'age'      => 'numeric|required|min:16',
+   'homepage' => 'url',
+]);
+
+
+$v->messages(); //returns all messages
+
+
+$v->messages('age'); //returns all messages for age field
+
+$v->age->messages(); //the same
+
+
+$v->firsts(); // returns one error message from each invalid rule
+
+
+$v->first(); // returns first non-valid message 
+
+$v->first('homepage'); // returns first non-valid message for specific field
+
+
+$v->phone->first(); //first error message from field `phone`
+
+$v->phone->first('phoneMask'); //get error by rule `phoneMask`
+```
+
+## Grouping fields rules
+Just put comma after each field
+```php
+$v = V::make($_POST,[
+   'firstname, lastname, email' => 'required',
+   'firstname, lastname'        => 'alpha|min:2',
+   'email'                      => 'email'
+]);
+
+```
+
+## Simple check :)
+```php
+
+$v->fails() or $v->passes()
+
+$v->firstname->fails() or $v->firstname->passes() // `firstname` is field name
+```
+
+
 ## Array validation support
 Simple as usual variables
 ```php
@@ -21,27 +73,11 @@ $v = V::make([
 ]);
 ```
 
-## Grouping fields rules
-Just put comma after each field
-```php
-$v = V::make($_POST,[
-   'firstname, lastname, email' => 'required',
-   'firstname, lastname'        => 'alpha|min:2',
-   'email'                      => 'email'
-]);
 
-```
-
-## Simple check :)
-```php
-if ($v->isValid()){
-  // . . .
-}
-```
 
 ## Adding own messages
 Pass 3rd array to Validator make method for your messages
-Available variables: **:field:**, **:value:** in messages
+Available variables: **:field:**, **:value:**, **:param:** in messages
 ```php
 $v = V::make($_POST,[
    'firstname' => 'required|alpha',
@@ -58,35 +94,10 @@ $v = V::make([],[
    'age' => 'numeric|required',
 ]);
 
-echo $validationResult->getFirstMessage(); //Field age is not a number
+echo $v->first(); //Field age is not a number
 ```
 
 
-## Getting messages
-```php
-$v = V::make($_POST,[
-   'phone'    => 'required|phoneMask:(+38(###)###-##-##)'
-   'email'    => 'required|email|unique:users',
-   'age'      => 'numeric|required|min:16',
-   'homepage' => 'url',
-]);
-
-
-$v->getMessages(); //returns all messages
-
-
-$v->getMessages('age'); //returns all messages for age field
-
-
-$v->getFirstMessages(); // returns one error message from each invalid rule
-
-
-$v->getFirstMessage(); // returns first non-valid message 
-
-
-$v->getFirstMessage('homepage'); // returns first non-valid message for specific field
-
-```
 
 ## Formatting messages
 Supports HTML and Json formats from the box

@@ -50,20 +50,23 @@ $v = V::make($_POST, [
 
 $v->passes() or $v->fails() //check validation result
 
+$v->lastname->fails() or $v->lastname->passes() //check field validness
+
+
 $v->first() or $v->first('lastname') //get first error message (with param for concrete field)
-
-$v->firsts() //return first error message from each field
-
-$v->messages() or $v->messages('password') //get all messages (with param for concrete field)
-
-$v->raw() //get 2d array with fields and messages
 
 $v->firstname->first() or $v->firstname->first('alpha') //get first error for `firstname`
 
+
+$v->firsts() //return first error message from each field
+
+
+$v->messages() or $v->messages('password') //get all messages (with param for concrete field)
+
 $v->password->messages(); //get all `password` messages
 
-$v->lastname->fails() or $v->lastname->passes() //check field validness
 
+$v->raw() //get 2d array with fields and messages
 ```
 
 ## Installation
@@ -126,7 +129,7 @@ $pdo = $this->getPdoInstance(); //should be instance of PDO class
 V::setPDO($pdo);
 
 
-$validator = V::make($this->request->getPost(), [
+$v = V::make($this->request->getPost(), [
     'email'           => 'required|email|unique:users' //users - table name
     'password'        => 'min:6',
     'password_repeat' => 'same:password',
@@ -166,11 +169,11 @@ class MarkdownFormatter implements FormatInterface
 Then in to use this call, you must do this way:
 
 ```php
-$validator = V::make(
+$v = V::make(
     // ... some code here...
 );
 
-echo $validator->format(MarkdownFormatter::class);
+echo $v->format(MarkdownFormatter::class);
 ```
 
 ## Contributing :octocat:
