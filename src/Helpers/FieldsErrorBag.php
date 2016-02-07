@@ -20,17 +20,10 @@ class FieldsErrorBag
 
     /**
      * Get first message, by query or by rule type
-     * @param string $rule
      * @return bool|string|array
      */
-    public function first($rule = '')
+    public function first()
     {
-        $allMessages = $this->errorBag->messages($this->fieldName);
-
-        if (isset($allMessages[$rule])){
-            return $allMessages[$rule];
-        }
-
         return $this->fails() ? $this->errorBag->first($this->fieldName) : false;
     }
 

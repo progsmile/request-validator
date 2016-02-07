@@ -31,10 +31,7 @@ $v->first(); // returns first non-valid message
 
 $v->first('homepage'); // returns first non-valid message for specific field
 
-
 $v->phone->first(); //first error message from field `phone`
-
-$v->phone->first('phoneMask'); //get error by rule `phoneMask`
 ```
 
 ## Grouping fields rules

@@ -1,5 +1,6 @@
-# PHP Request Validator :muscle:
+# PHP Request Validator
 [![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)  [![Total Downloads](https://poser.pugx.org/progsmile/request-validator/d/total)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
+Make your apps validation easily (inspired by Laravel validators)
 
 ## Getting Started
 
@@ -11,14 +12,13 @@
 
 :small_orange_diamond: [Easy installation](https://github.com/progsmile/request-validator#installation)
 
-## Example
+## Quick start :rocket:
 
 ```php
 // Add namespace
 use \Progsmile\Validator\Validator as V;
 
-// Create new Validator, pass data, define rules and custom messages
-// Also has errors messages by default
+// Pass data to Validator, put rules and messages (also has error messages by default)
 $v = V::make($_POST, [
 
     //group validation fields
@@ -53,9 +53,9 @@ $v->passes() or $v->fails() //check validation result
 $v->lastname->fails() or $v->lastname->passes() //check field validness
 
 
-$v->first() or $v->first('lastname') //get first error message (with param for concrete field)
+$v->first() //get first error message
 
-$v->firstname->first() or $v->firstname->first('alpha') //get first error for `firstname`
+$v->first('lastname') or $v->firstname->first() //get first error for `firstname`
 
 
 $v->firsts() //return first error message from each field
@@ -67,6 +67,9 @@ $v->password->messages(); //get all `password` messages
 
 
 $v->raw() //get 2d array with fields and messages
+
+
+$v->add('someField', 'Something is wrong with this'); //appending messages
 ```
 
 ## Installation

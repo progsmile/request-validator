@@ -372,7 +372,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         //magic test
 
-        $this->assertEquals('non-alpha-1', $v->firstName->first('alpha'));
+        $this->assertEquals('non-alpha-1', $v->firstName->first());
         $this->assertEquals('non-alpha-2', $v->lastName->first());
         $this->assertEquals('NaN', $v->age->first());
         $this->assertEquals('NaE', $v->userEmail->first());
@@ -380,11 +380,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertContains('non-alpha-2', $v->lastName->messages());
         $this->assertContains('NaN', $v->age->messages());
 
+        $v->add('bob', 'Hello!');
 
         $this->assertTrue($v->lastName->fails());
         $this->assertFalse($v->lastName->passes());
-        $this->assertEmpty($v->bob->messages());
 
-        $this->assertEquals('', $v->bob->first());
+        $this->assertEquals('Hello!', $v->bob->first());
     }
 }
