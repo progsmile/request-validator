@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 use Progsmile\Validator\Validator;
@@ -7,7 +8,7 @@ class Exists extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
@@ -19,8 +20,7 @@ class Exists extends BaseRule
 
         //if PDO is provided, make request from it
         /** @var \PDO $db */
-        if ($db = Validator::getPDO()){
-
+        if ($db = Validator::getPDO()) {
             $sql = "SELECT COUNT(*) FROM `$table` WHERE $field =:v";
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':v', $value, \PDO::PARAM_STR);
@@ -36,7 +36,7 @@ class Exists extends BaseRule
     }
 
     /**
-     * Returns error message from rule
+     * Returns error message from rule.
      *
      * @return string
      */

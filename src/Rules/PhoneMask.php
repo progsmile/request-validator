@@ -1,28 +1,28 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class PhoneMask extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
-        $phone     = trim($this->params[1]);
+        $phone = trim($this->params[1]);
         $phoneMask = substr($this->params[2], 1, -1);
 
-        if (strlen($phone) != strlen($phoneMask)){
+        if (strlen($phone) != strlen($phoneMask)) {
             return false;
         }
 
         foreach (str_split($phoneMask) as $index => $maskChar) {
-
-            if ($maskChar != '#' && $maskChar != $phone[$index]){
+            if ($maskChar != '#' && $maskChar != $phone[$index]) {
                 return false;
             }
 
-            if ($maskChar == '#' && !is_numeric($phone[$index])){
+            if ($maskChar == '#' && !is_numeric($phone[$index])) {
                 return false;
             }
         }

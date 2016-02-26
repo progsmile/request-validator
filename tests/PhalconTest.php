@@ -20,7 +20,7 @@ class PhalconTest extends PHPUnit_Framework_TestCase
         V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
         $validationResult = V::make(
             ['email' => $this->nonUniqueEmail],
-            ['email' => 'unique:users'],
+            ['email'        => 'unique:users'],
             ['email.unique' => 'nonunique']
         );
 
@@ -38,7 +38,7 @@ class PhalconTest extends PHPUnit_Framework_TestCase
         V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
         $validationResult = V::make(
             ['email' => 'some.unique.email@to.check'],
-            ['email' => 'unique:users'],
+            ['email'        => 'unique:users'],
             ['email.unique' => 'nonunique']
         );
 

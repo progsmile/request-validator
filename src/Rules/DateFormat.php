@@ -1,15 +1,16 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class DateFormat extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
-        $dateTime   = $this->params[1];
+        $dateTime = $this->params[1];
         $dateFormat = trim($this->params[2], '()');
 
         $d = \DateTime::createFromFormat($dateFormat, $dateTime);
@@ -18,7 +19,7 @@ class DateFormat extends BaseRule
     }
 
     /**
-     * Returns error message from rule
+     * Returns error message from rule.
      *
      * @return string
      */

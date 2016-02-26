@@ -1,19 +1,20 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Url extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
         $url = trim($this->params[1]);
 
-        if ($parts = parse_url($url)){
-            if ( !isset($parts['scheme'])){
-                $url = 'http://' . $url;
+        if ($parts = parse_url($url)) {
+            if (!isset($parts['scheme'])) {
+                $url = 'http://'.$url;
             }
         }
 

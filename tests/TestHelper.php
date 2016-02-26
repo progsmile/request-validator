@@ -1,8 +1,8 @@
 <?php
 
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Db\Adapter\Pdo\Mysql;
 
 error_reporting(-1);
 ini_set('display_errors', 1);
@@ -13,7 +13,7 @@ if (extension_loaded('phalcon')) {
 
     Di::reset();
 
-    $di->set('db', function(){
+    $di->set('db', function () {
         return new Mysql([
                 'host'     => 'localhost',
                 'username' => 'root',
@@ -27,10 +27,11 @@ if (extension_loaded('phalcon')) {
 }
 
 if (!function_exists('dd')) {
-    function dd() {
+    function dd()
+    {
         var_dump(func_get_args());
         ob_flush();
     }
 }
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';

@@ -213,7 +213,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(10, $v->messages());
     }
 
-
     public function testUrl()
     {
         $v = V::make([
@@ -297,7 +296,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'test[fail].equals' => '40 need',
         ]);
 
-
         $this->assertEquals('40 need', $v->first('test.fail'));
 
         $this->assertCount(1, $v->messages());
@@ -322,7 +320,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $v->messages('failSize'));
     }
 
-
     public function testBetweenNumberAndString()
     {
         $v = V::make([
@@ -336,7 +333,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEmpty($v->messages());
     }
-
 
     public function testAllNewMessagesMethodsAndMagicFields()
     {

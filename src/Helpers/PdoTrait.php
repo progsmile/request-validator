@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Helpers;
 
 use Progsmile\Validator\Rules\BaseRule;
@@ -8,11 +9,11 @@ trait PdoTrait
     private static $pdoInstance = null;
 
     /**
-     * Initialize PDO connection
+     * Initialize PDO connection.
      *
      * @param string $connectionString - ex. (mysql:host=localhost;dbname=test)
-     * @param string $user - db username
-     * @param string $password - db password
+     * @param string $user             - db username
+     * @param string $password         - db password
      */
     public static function setupPDO($connectionString, $user, $password)
     {
@@ -24,7 +25,8 @@ trait PdoTrait
     }
 
     /**
-     * Setup PDO instance
+     * Setup PDO instance.
+     *
      * @param \PDO $pdoInstance
      */
     public static function setPDO(\PDO $pdoInstance)
@@ -33,7 +35,7 @@ trait PdoTrait
     }
 
     /**
-     * Get PDO object for unique validators
+     * Get PDO object for unique validators.
      *
      * @return mixed
      */
@@ -43,12 +45,12 @@ trait PdoTrait
     }
 
     /**
-     * Setup database service from available
+     * Setup database service from available.
+     *
      * @param $orm
      */
     public static function setDataProvider($orm)
     {
         self::$config[BaseRule::CONFIG_ORM] = $orm;
     }
-
 }

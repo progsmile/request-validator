@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Max extends BaseRule
@@ -12,7 +13,6 @@ class Max extends BaseRule
         }
 
         if ($this->hasRule('numeric') !== false) {
-
             $this->isNumeric = true;
 
             return $this->params[1] <= $this->params[2] && is_numeric($this->params[1]);
@@ -23,7 +23,7 @@ class Max extends BaseRule
 
     public function getMessage()
     {
-        if($this->isNumeric){
+        if ($this->isNumeric) {
             return 'Field :field: must be less than or equal to :param:';
         }
 

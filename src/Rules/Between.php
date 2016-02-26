@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Between extends BaseRule
@@ -9,7 +10,7 @@ class Between extends BaseRule
 
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
@@ -17,11 +18,9 @@ class Between extends BaseRule
 
         $this->val1 = trim($validatorValues[0]);
         $this->val2 = trim($validatorValues[1]);
-        $input      = trim($this->params[1]);
+        $input = trim($this->params[1]);
 
-
-        if ($this->hasRule('numeric') !== false){
-
+        if ($this->hasRule('numeric') !== false) {
             $this->isNumeric = true;
 
             return $this->val1 <= $input && $input <= $this->val2;
@@ -33,14 +32,13 @@ class Between extends BaseRule
     }
 
     /**
-     * Returns error message from rule
+     * Returns error message from rule.
      *
      * @return string
      */
     public function getMessage()
     {
-        if($this->isNumeric){
-
+        if ($this->isNumeric) {
             return 'Field :field: should be between in :param: values';
         }
 
