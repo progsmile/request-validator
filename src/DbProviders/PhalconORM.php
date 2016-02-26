@@ -1,8 +1,9 @@
 <?php
+
 namespace Progsmile\Validator\DbProviders;
 
-use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
 use Phalcon\DI;
+use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
 
 class PhalconORM implements OrmInterface
 {
@@ -20,10 +21,10 @@ class PhalconORM implements OrmInterface
         $di = DI::getDefault();
 
         if (!$di->has('db')) {
-            throw new \RuntimeException('The db service is required for ' . __CLASS__);
+            throw new \RuntimeException('The db service is required for '.__CLASS__);
         }
 
-        $this->db    = $di->getShared('db');
+        $this->db = $di->getShared('db');
         $this->field = $attribute;
         $this->value = $value;
         $this->table = $table;

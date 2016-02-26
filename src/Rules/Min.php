@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Min extends BaseRule
@@ -7,15 +8,14 @@ class Min extends BaseRule
 
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
         $userValue = $this->params[1];
 
         //if `numeric` rule founds - validate as a number
-        if ($this->hasRule('numeric') !== false){
-
+        if ($this->hasRule('numeric') !== false) {
             $this->isNumeric = true;
 
             return $userValue >= $this->params[2] && is_numeric($userValue);
@@ -26,7 +26,7 @@ class Min extends BaseRule
 
     public function getMessage()
     {
-        if ($this->isNumeric){
+        if ($this->isNumeric) {
             return 'Field :field: should be grater than :param:';
         }
 

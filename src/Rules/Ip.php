@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Ip extends BaseRule

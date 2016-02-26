@@ -1,10 +1,11 @@
 <?php
+
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Helpers\ValidatorFacade,
-    Progsmile\Validator\Helpers\PdoTrait,
-    Progsmile\Validator\Helpers\RulesFactory,
-    Progsmile\Validator\Rules\BaseRule;
+use Progsmile\Validator\Helpers\PdoTrait;
+use Progsmile\Validator\Helpers\RulesFactory;
+use Progsmile\Validator\Helpers\ValidatorFacade;
+use Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
 {
@@ -13,33 +14,31 @@ final class Validator
     /** @var ValidatorFacade */
     private static $validatorFacade = null;
 
-
     private static $config = [
         BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconORM',
     ];
 
-
     /**
-     * Make validation
+     * Make validation.
      *
-     * @param array $data user request data
-     * @param array $rules validation rules
+     * @param array $data         user request data
+     * @param array $rules        validation rules
      * @param array $userMessages custom error messages
+     *
      * @return ValidatorFacade
      */
     public static function make(array $data, array $rules, array $userMessages = [])
     {
         self::$validatorFacade = new ValidatorFacade($userMessages);
 
-        $data  = self::prepareData($data);
+        $data = self::prepareData($data);
         $rules = self::prepareRules($rules);
 
         foreach ($rules as $fieldName => $fieldRules) {
-
-            $fieldName  = trim($fieldName);
+            $fieldName = trim($fieldName);
             $fieldRules = trim($fieldRules);
 
-            if ( !$fieldRules){
+            if (!$fieldRules) {
                 //no rules
                 continue;
             }
@@ -47,12 +46,11 @@ final class Validator
             $groupedRules = explode('|', $fieldRules);
 
             foreach ($groupedRules as $concreteRule) {
-
                 $ruleNameParam = explode(':', $concreteRule);
-                $ruleName      = $ruleNameParam[0];
+                $ruleName = $ruleNameParam[0];
 
                 //for date/time validators
-                if (count($ruleNameParam) >= 2){
+                if (count($ruleNameParam) >= 2) {
                     $ruleValue = implode(':', array_slice($ruleNameParam, 1));
 
                     //for other params
@@ -60,7 +58,7 @@ final class Validator
                     $ruleValue = isset($ruleNameParam[1]) ? $ruleNameParam[1] : '';
                 }
 
-                self::$config[BaseRule::CONFIG_DATA]        = $data;
+                self::$config[BaseRule::CONFIG_DATA] = $data;
                 self::$config[BaseRule::CONFIG_FIELD_RULES] = $fieldRules;
 
                 $ruleInstance = RulesFactory::createRule($ruleName, self::$config, [
@@ -69,8 +67,7 @@ final class Validator
                     $ruleValue,                                        // The rule's value
                 ]);
 
-                if ( !$ruleInstance->isValid()){
-
+                if (!$ruleInstance->isValid()) {
                     self::$validatorFacade->chooseErrorMessage($ruleInstance);
                 }
             }
@@ -79,10 +76,11 @@ final class Validator
         return self::$validatorFacade;
     }
 
-
     /**
-     * Prepare user data for validator
+     * Prepare user data for validator.
+     *
      * @param array $data
+     *
      * @return array
      */
     private static function prepareData(array $data)
@@ -90,15 +88,11 @@ final class Validator
         $newData = [];
 
         foreach ($data as $paramName => $paramValue) {
-
-            if (is_array($paramValue)){
-
+            if (is_array($paramValue)) {
                 foreach ($paramValue as $newKey => $newValue) {
-                    $newData[trim($paramName) . '[' . trim($newKey) . ']'] = trim($newValue);
+                    $newData[trim($paramName).'['.trim($newKey).']'] = trim($newValue);
                 }
-
             } else {
-
                 $newData[trim($paramName)] = trim($paramValue);
             }
         }
@@ -108,8 +102,10 @@ final class Validator
 
     /**
      * Merges all field's rules into one
-     * if you have elegant implementation, you are welcome
+     * if you have elegant implementation, you are welcome.
+     *
      * @param array $rules
+     *
      * @return array
      */
     private static function prepareRules(array $rules)
@@ -119,24 +115,21 @@ final class Validator
         foreach ($rules as $ruleFields => $ruleConditions) {
 
             //if set of fields like 'firstname, lastname...'
-            if (strpos($ruleFields, ',') !== false){
-
+            if (strpos($ruleFields, ',') !== false) {
                 foreach (explode(',', $ruleFields) as $fieldName) {
                     $fieldName = trim($fieldName);
 
-                    if ( !isset($mergedRules[$fieldName])){
+                    if (!isset($mergedRules[$fieldName])) {
                         $mergedRules[$fieldName] = $ruleConditions;
                     } else {
-                        $mergedRules[$fieldName] .= '|' . $ruleConditions;
+                        $mergedRules[$fieldName] .= '|'.$ruleConditions;
                     }
                 }
-
             } else {
-
-                if ( !isset($mergedRules[$ruleFields])){
+                if (!isset($mergedRules[$ruleFields])) {
                     $mergedRules[$ruleFields] = $ruleConditions;
                 } else {
-                    $mergedRules[$ruleFields] .= '|' . $ruleConditions;
+                    $mergedRules[$ruleFields] .= '|'.$ruleConditions;
                 }
             }
         }
@@ -151,9 +144,8 @@ final class Validator
         return $finalRules;
     }
 
-
     /**
-     * Singleton implementation
+     * Singleton implementation.
      */
     private function __construct()
     {

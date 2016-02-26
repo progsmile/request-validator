@@ -1,11 +1,12 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Equals extends BaseRule
 {
     public function isValid()
     {
-        if ($this->isNotRequiredAndEmpty()){
+        if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 

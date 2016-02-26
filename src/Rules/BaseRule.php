@@ -1,11 +1,12 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 abstract class BaseRule
 {
-    const CONFIG_ALL         = 'all';
-    const CONFIG_DATA        = 'data';
-    const CONFIG_ORM         = 'orm';
+    const CONFIG_ALL = 'all';
+    const CONFIG_DATA = 'data';
+    const CONFIG_ORM = 'orm';
     const CONFIG_FIELD_RULES = 'fieldRules';
 
     private $config;
@@ -14,6 +15,7 @@ abstract class BaseRule
 
     /**
      * BaseRule constructor.
+     *
      * @param $config
      */
     public function __construct($config)
@@ -22,13 +24,15 @@ abstract class BaseRule
     }
 
     /**
-     * Returns all config array, or specific one
+     * Returns all config array, or specific one.
+     *
      * @param string $type
+     *
      * @return array
      */
     protected function getConfig($type = self::CONFIG_ALL)
     {
-        if ($type == self::CONFIG_ALL){
+        if ($type == self::CONFIG_ALL) {
             return $this->config;
         }
 
@@ -36,8 +40,10 @@ abstract class BaseRule
     }
 
     /**
-     * If field has specific rule
+     * If field has specific rule.
+     *
      * @param $rule
+     *
      * @return bool
      */
     public function hasRule($rule)
@@ -46,21 +52,19 @@ abstract class BaseRule
     }
 
     /**
-     * Check if variable is not required - to prevent error messages from another validators
+     * Check if variable is not required - to prevent error messages from another validators.
      *
      * @param string $type | 'var' or 'file'
+     *
      * @return bool
      */
     protected function isNotRequiredAndEmpty($type = 'var')
     {
         $condition = false;
 
-
-        if ($type == 'var'){
-            $condition = strlen($this->params[1]) == 0 ;
-
+        if ($type == 'var') {
+            $condition = strlen($this->params[1]) == 0;
         } elseif ($type == 'file') {
-
             $fieldsName = $this->params[0];
 
             //when file field is not required and empty
@@ -71,8 +75,10 @@ abstract class BaseRule
     }
 
     /**
-     * Set params to validator
+     * Set params to validator.
+     *
      * @param $params
+     *
      * @return $this
      */
     public function setParams($params)
@@ -83,7 +89,8 @@ abstract class BaseRule
     }
 
     /**
-     * Returns params
+     * Returns params.
+     *
      * @return mixed
      */
     public function getParams()
@@ -92,7 +99,8 @@ abstract class BaseRule
     }
 
     /**
-     * Returns pure class name
+     * Returns pure class name.
+     *
      * @return string
      */
     public function getRuleName()
@@ -103,14 +111,16 @@ abstract class BaseRule
     }
 
     /**
-     * Returns error message from rule
+     * Returns error message from rule.
+     *
      * @return string
      */
-    public abstract function getMessage();
+    abstract public function getMessage();
 
     /**
-     * Will the process to check if it is valid or not
-     * @return boolean Return the result if valid or not
+     * Will the process to check if it is valid or not.
+     *
+     * @return bool Return the result if valid or not
      */
-    public abstract function isValid();
+    abstract public function isValid();
 }

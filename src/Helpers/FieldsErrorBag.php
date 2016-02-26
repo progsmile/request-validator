@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Helpers;
 
 class FieldsErrorBag
@@ -11,6 +12,7 @@ class FieldsErrorBag
 
     /**
      * FieldsErrorBag constructor.
+     *
      * @param ValidatorFacade $errorBag
      */
     public function __construct(ValidatorFacade $errorBag)
@@ -19,7 +21,8 @@ class FieldsErrorBag
     }
 
     /**
-     * Get first message, by query or by rule type
+     * Get first message, by query or by rule type.
+     *
      * @return bool|string|array
      */
     public function first()
@@ -28,7 +31,8 @@ class FieldsErrorBag
     }
 
     /**
-     * Get fields messages
+     * Get fields messages.
+     *
      * @return array
      */
     public function messages()
@@ -37,7 +41,8 @@ class FieldsErrorBag
     }
 
     /**
-     * If result is invalid
+     * If result is invalid.
+     *
      * @return bool
      */
     public function fails()
@@ -46,17 +51,20 @@ class FieldsErrorBag
     }
 
     /**
-     * If result is valid
+     * If result is valid.
+     *
      * @return bool
      */
     public function passes()
     {
-       return !$this->fails();
+        return !$this->fails();
     }
 
     /**
-     * Setting up magic field
+     * Setting up magic field.
+     *
      * @param $fieldName
+     *
      * @return $this
      */
     public function setField($fieldName)

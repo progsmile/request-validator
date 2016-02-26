@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Format;
 
 use Progsmile\Validator\Contracts\Format\FormatInterface;

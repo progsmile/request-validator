@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\DbProviders;
 
 use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
@@ -20,11 +21,11 @@ class Wpdb implements OrmInterface
     {
         global $wpdb;
 
-        $table = $wpdb->prefix . $this->table;
+        $table = $wpdb->prefix.$this->table;
 
         $recordsCount = $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT COUNT(*) FROM $table WHERE $this->field = %s",  $this->value
+                "SELECT COUNT(*) FROM $table WHERE $this->field = %s", $this->value
             )
         );
 

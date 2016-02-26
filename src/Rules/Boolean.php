@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Boolean extends BaseRule
@@ -15,7 +16,7 @@ class Boolean extends BaseRule
     }
 
     /**
-     * Returns error message from rule
+     * Returns error message from rule.
      *
      * @return string
      */

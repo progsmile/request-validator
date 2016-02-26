@@ -1,4 +1,5 @@
 <?php
+
 namespace Progsmile\Validator\Rules;
 
 class Alpha extends BaseRule
@@ -15,7 +16,7 @@ class Alpha extends BaseRule
     }
 
     /**
-     * Returns error message from rule
+     * Returns error message from rule.
      *
      * @return string
      */
