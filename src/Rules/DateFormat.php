@@ -2,6 +2,8 @@
 
 namespace Progsmile\Validator\Rules;
 
+use DateTime;
+
 class DateFormat extends BaseRule
 {
     public function isValid()
@@ -10,12 +12,10 @@ class DateFormat extends BaseRule
             return true;
         }
 
-        $dateTime = $this->getParams()[1];
-        $dateFormat = trim($this->getParams()[2], '()');
+        $time = $this->getParams()[1];
+        $format = trim($this->getParams()[2], '()');
 
-        $d = \DateTime::createFromFormat($dateFormat, $dateTime);
-
-        return $d && $d->format($dateFormat) == $dateTime;
+        return $this->respect('Date', [$format])->validate($time);
     }
 
     /**
