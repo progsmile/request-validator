@@ -5,8 +5,8 @@ namespace Progsmile\Validator\Rules;
 abstract class BaseRule
 {
     const CONFIG_ALL = 'all';
-    const CONFIG_DATA = 'data';
     const CONFIG_ORM = 'orm';
+    const CONFIG_DATA = 'data';
     const CONFIG_FIELD_RULES = 'fieldRules';
 
     private $config;
