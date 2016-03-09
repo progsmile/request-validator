@@ -12,13 +12,17 @@ class Max extends BaseRule
             return true;
         }
 
-        if ($this->hasRule('numeric') !== false) {
+        $input = trim($this->getParams()[1]);
+        $value = trim($this->getParams()[2]);
+
+        if ($this->hasRule('numeric') !== false && is_numeric($input)) {
             $this->isNumeric = true;
 
-            return $this->getParams()[1] <= $this->getParams()[2] && is_numeric($this->getParams()[1]);
+            return $this->respect('Max', [$value, true])->validate($input);
         }
 
-        return is_string($this->getParams()[1]) && strlen($this->getParams()[1]) <= $this->getParams()[2];
+        // there is no way respect/validator supports string for rule 'Max'
+        return is_string($input) && strlen($input) <= $value;
     }
 
     public function getMessage()

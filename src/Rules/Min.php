@@ -12,16 +12,17 @@ class Min extends BaseRule
             return true;
         }
 
-        $userValue = $this->getParams()[1];
+        $input = trim($this->getParams()[1]);
+        $value = trim($this->getParams()[2]);
 
-        //if `numeric` rule founds - validate as a number
-        if ($this->hasRule('numeric') !== false) {
+        if ($this->hasRule('numeric') !== false && is_numeric($input)) {
             $this->isNumeric = true;
 
-            return $userValue >= $this->getParams()[2] && is_numeric($userValue);
+            return $this->respect('Min', [$value, true])->validate($input);
         }
 
-        return is_string($userValue) && strlen($userValue) >= $this->getParams()[2];
+        // there is no way respect/validator supports string for rule 'Min'
+        return is_string($input) && strlen($input) >= $value;
     }
 
     public function getMessage()
