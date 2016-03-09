@@ -10,7 +10,7 @@ class Email extends BaseRule
             return true;
         }
 
-        return filter_var($this->getParams()[1], FILTER_VALIDATE_EMAIL);
+        return $this->respect('Email')->validate($this->getParams()[1]);
     }
 
     /**
