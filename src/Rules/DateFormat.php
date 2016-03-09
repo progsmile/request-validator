@@ -10,8 +10,8 @@ class DateFormat extends BaseRule
             return true;
         }
 
-        $dateTime = $this->params[1];
-        $dateFormat = trim($this->params[2], '()');
+        $dateTime = $this->getParams()[1];
+        $dateFormat = trim($this->getParams()[2], '()');
 
         $d = \DateTime::createFromFormat($dateFormat, $dateTime);
 

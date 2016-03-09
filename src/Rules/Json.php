@@ -10,7 +10,7 @@ class Json extends BaseRule
             return true;
         }
 
-        json_decode($this->params[1]);
+        json_decode($this->getParams()[1]);
 
         return json_last_error() == JSON_ERROR_NONE;
     }

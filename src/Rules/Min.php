@@ -12,16 +12,16 @@ class Min extends BaseRule
             return true;
         }
 
-        $userValue = $this->params[1];
+        $userValue = $this->getParams()[1];
 
         //if `numeric` rule founds - validate as a number
         if ($this->hasRule('numeric') !== false) {
             $this->isNumeric = true;
 
-            return $userValue >= $this->params[2] && is_numeric($userValue);
+            return $userValue >= $this->getParams()[2] && is_numeric($userValue);
         }
 
-        return is_string($userValue) && strlen($userValue) >= $this->params[2];
+        return is_string($userValue) && strlen($userValue) >= $this->getParams()[2];
     }
 
     public function getMessage()

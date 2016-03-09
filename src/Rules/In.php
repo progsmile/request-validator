@@ -10,9 +10,9 @@ class In extends BaseRule
             return true;
         }
 
-        $value = trim($this->params[1]);
+        $value = trim($this->getParams()[1]);
 
-        foreach (explode(',', $this->params[2]) as $elem) {
+        foreach (explode(',', $this->getParams()[2]) as $elem) {
             if ($value == trim($elem)) {
                 return true;
             }

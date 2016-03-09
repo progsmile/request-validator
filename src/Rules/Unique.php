@@ -14,9 +14,9 @@ class Unique extends BaseRule
 
         $config = $this->getConfig();
 
-        $field = $this->params[0];
-        $value = $this->params[1];
-        $table = $this->params[2];
+        $field = $this->getParams()[0];
+        $value = $this->getParams()[1];
+        $table = $this->getParams()[2];
 
         //if PDO is provided, make request from it
         /** @var \PDO $db */

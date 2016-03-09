@@ -10,7 +10,7 @@ class Url extends BaseRule
             return true;
         }
 
-        $url = trim($this->params[1]);
+        $url = trim($this->getParams()[1]);
 
         if ($parts = parse_url($url)) {
             if (!isset($parts['scheme'])) {

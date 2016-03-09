@@ -10,7 +10,7 @@ class Ip extends BaseRule
             return true;
         }
 
-        return filter_var($this->params[1], FILTER_VALIDATE_IP) !== false;
+        return filter_var($this->getParams()[1], FILTER_VALIDATE_IP) !== false;
     }
 
     public function getMessage()

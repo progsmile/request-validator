@@ -15,10 +15,10 @@ class Max extends BaseRule
         if ($this->hasRule('numeric') !== false) {
             $this->isNumeric = true;
 
-            return $this->params[1] <= $this->params[2] && is_numeric($this->params[1]);
+            return $this->getParams()[1] <= $this->getParams()[2] && is_numeric($this->getParams()[1]);
         }
 
-        return is_string($this->params[1]) && strlen($this->params[1]) <= $this->params[2];
+        return is_string($this->getParams()[1]) && strlen($this->getParams()[1]) <= $this->getParams()[2];
     }
 
     public function getMessage()
