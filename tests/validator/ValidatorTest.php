@@ -9,8 +9,19 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $config = require(dirname(__DIR__).'/config/database.php');
+
         try {
-            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
+            V::setupPDO(
+                "mysql:".
+                    "host={$config['host']};".
+                    "dbname={$config['dbname']};".
+                    "charset=utf8",
+
+                $config['username'],
+                $config['password']
+            );
+
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
