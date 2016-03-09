@@ -8,27 +8,34 @@ class Between extends BaseRule
     private $val2;
     private $isNumeric = false;
 
+    /**
+     * {@inheritdoc}
+     */
     public function isValid()
     {
         if ($this->isNotRequiredAndEmpty()) {
             return true;
         }
 
-        $validatorValues = explode(',', $this->params[2]);
+        $values = explode(',', $this->getParams()[2]);
 
-        $this->val1 = trim($validatorValues[0]);
-        $this->val2 = trim($validatorValues[1]);
-        $input = trim($this->params[1]);
+        $input = trim($this->getParams()[1]);
+
+        $between = $this->respect('Between', [
+            trim($values[0]), // min
+            trim($values[1]), // max
+            true              // inclusive
+        ]);
 
         if ($this->hasRule('numeric') !== false) {
             $this->isNumeric = true;
 
-            return $this->val1 <= $input && $input <= $this->val2;
+            return $between->validate($input);
         }
 
         $input = mb_strlen($input);
 
-        return $this->val1 <= $input && $input <= $this->val2;
+        return $between->validate($input);
     }
 
     /**
