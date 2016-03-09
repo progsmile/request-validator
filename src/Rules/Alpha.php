@@ -12,7 +12,7 @@ class Alpha extends BaseRule
 
         $value = trim($this->getParams()[1]);
 
-        return is_string($value) && preg_match('/^[\pL\pM]+$/u', $value);
+        return $this->respect('Alpha')->validate($value);
     }
 
     /**
