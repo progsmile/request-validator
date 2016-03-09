@@ -1,8 +1,8 @@
 <?php
 
-use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 
 error_reporting(-1);
 ini_set('display_errors', 1);
@@ -14,12 +14,8 @@ if (extension_loaded('phalcon')) {
     Di::reset();
 
     $di->set('db', function () {
-        return new Mysql([
-                'host'     => 'localhost',
-                'username' => 'root',
-                'password' => '',
-                'dbname'   => 'valid',
-            ]
+        return new Mysql(
+            require(__DIR__.'/config/database.php')
         );
     });
 
