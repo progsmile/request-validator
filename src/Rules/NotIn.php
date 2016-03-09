@@ -10,15 +10,15 @@ class NotIn extends BaseRule
             return true;
         }
 
-        $value = $this->getParams()[1];
+        $input = trim($this->getParams()[1]);
 
-        foreach (explode(',', $this->getParams()[2]) as $elem) {
-            if ($value == trim($elem)) {
-                return false;
-            }
-        }
+        $values = array_map(function($elem) {
+            return trim($elem);
+        }, explode(',', $this->getParams()[2]));
 
-        return true;
+        $in = $this->respect('In', [$values]);
+
+        return $this->respect('Not', [$in])->validate($input);
     }
 
     public function getMessage()
