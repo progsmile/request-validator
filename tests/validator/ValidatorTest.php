@@ -36,7 +36,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'ip'              => '192.168.0.0',
             'password'        => '123456789',
             'password_repeat' => '123456789',
-            'json'            => '[]',
+            'json'            => '[{"foo":"bar"}]',
             'randNum'         => rand(1, 100),
             'site'            => 'https://github.com/progsmile/request-validator',
         ];
