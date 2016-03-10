@@ -26,7 +26,7 @@ Suggested Links:
 
 <a name="quick-start"></a>
 ## Quick start :rocket:
-```
+```php
 <?php
 
 $rules = [
