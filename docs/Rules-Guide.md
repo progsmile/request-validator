@@ -1,24 +1,24 @@
 ## Rules list
- * Alpha               
- * Between            
- * Boolean            
- * Date and Time Format       
- * Email   
- * Equals  
- * Exists       
- * Json          
- * In                
- * Image           
- * Ip 
- * Max 
- * Min 
- * Not in 
- * Numeric 
- * Phone Mask 
- * Required 
- * Same 
- * Size 
- * Unique 
+ * Alpha
+ * Between
+ * Boolean
+ * Date and Time Format
+ * Email
+ * Equals
+ * Exists
+ * Json
+ * In
+ * Image
+ * Ip
+ * Max
+ * Min
+ * Not in
+ * Numeric
+ * Phone Mask
+ * Required
+ * Same
+ * Size
+ * Unique
  * Url
 
 ### Alpha
@@ -26,7 +26,7 @@ Checks if current string contains only letters
 ```php
 'firstname' => 'alpha' // in rules
 
-'firstname' => 'Denis '       //true because of auto trim 
+'firstname' => 'Denis '       //true because of auto trim
 'firstname' => 'Abra Cadabra' //false
 'firstname' => ''             //true, because not required
 'firstname' => ' '            //false, because empty value
@@ -137,7 +137,7 @@ Check ipv4 or ipv6 for validness
 
 
 ### Max
-Checking for string length or value of number less than param 
+Checking for string length or value of number less than param
 ```php
 'str' => 'max:5'         // string length
 'num' => 'max:5|numeric' // for numeric values
@@ -152,7 +152,7 @@ Checking for string length or value of number less than param
 
 
 ### Min
-Checking for string length or value of number less than param 
+Checking for string length or value of number less than param
 ```php
 'str' => 'min:2'         // string length
 'num' => 'min:2|numeric' // for numeric values
@@ -212,10 +212,10 @@ Check if one field has same value with other
 ```php
 'password_repeat' => 'same:password'  // in rules
 
-'password'        => '123'  
+'password'        => '123'
 'password_repeat' => '123' //true
 
-'password'        => '321'  
+'password'        => '321'
 'password_repeat' => ''    //false
 ```
 
