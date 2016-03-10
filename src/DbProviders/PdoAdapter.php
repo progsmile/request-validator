@@ -39,7 +39,6 @@ class PdoAdapter extends Adapter implements ExistInterface, UniqueInterface
 
     public function isExist()
     {
-
         return $this->commonQuery()->fetchColumn() != 0;
     }
 }
