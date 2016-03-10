@@ -1,30 +1,30 @@
 # PHP Request Validator
 
-
-- Getting Started
-- Installation
-- Quick Start
-- Creating your own Rule
-- Formatting Error Messages
-- Integrations
-
----
-
 Make your apps validation easily (inspired by Laravel Validation)
 
 [![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)  [![Total Downloads](https://poser.pugx.org/progsmile/request-validator/d/total)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
 
+---
+
+Page Index:
+- [Quick Start](#quick-start)
+- [Contributing](#contributing)
+- [Testing](#testing)
+- [License](#license)
+
+Suggested Links:
+- [Installation](/docs/installation.md)
+- [Feature Guide](/docs/feature-guide.md)
+- Rules
+    - [Existing Rules](/docs/rules.md)
+    - [Data Provider](/docs/rules-database.md)
+    - [Customization](/docs/rules-customization.md)
+    - [Formatting Message](/docs/formatting-message.md)
+- [Integrations](/docs/integrations.md)
+
 ----
 
-## Getting Started
-
-:small_orange_diamond: [Please read our Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  you will probably like Validator :heart:
-
-:small_orange_diamond: [All rules descriptions here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
-
-:small_orange_diamond: [Easy installation](https://github.com/progsmile/request-validator#installation)
-
-
+<a name="quick-start"></a>
 ## Quick start :rocket:
 ```
 <?php
@@ -64,22 +64,22 @@ $rules = [
     'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',
     'randNum'             => 'between:1, 10|numeric',
 
-    // the value must be an IP Format
+    # the value must be an IP Format
     'ip'                  => 'ip',
     'password'            => 'required|min:6',
 
-    // the value from a key 'password' must be equal to 'password_repeat' value
+    # the value from a key 'password' must be equal to 'password_repeat' value
     'password_repeat'     => 'same:password',
 
-    // it must be a json format
+    # it must be a json format
     'json'                => 'json',
     'site'                => 'url',
 
-    // cash10 or cash25 must only have these
-    // 1 or 2 or 5 or 10 or 20 or 50
+    # cash10 or cash25 must only have these
+    # 1 or 2 or 5 or 10 or 20 or 50
     'cash10, cash25'      => 'in:1, 2, 5, 10, 20, 50',
 
-    // the value must not have 13 or 18 or 3 or 4
+    # the value must not have 13 or 18 or 3 or 4
     'elevatorFloor'       => 'notIn:13, 18, 3, 4',
 ];
 
@@ -127,15 +127,13 @@ $v->raw();
 $v->add('someField', 'Something is wrong with this');
 ```
 
-### Available rules
-
-##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md) :100:
-
-
+<a name="contributing"></a>
 ## Contributing :octocat:
 
 Dear contributors , the project is just started and it is not stable yet, we love to have your fork requests.
 
+
+<a name="testing"></a>
 ## Testing
 
 This testing suite uses [Travis CI](https://travis-ci.org/) for each run. Every commit pushed to this repository will queue a build into the continuous integration service and will run all tests to ensure that everything is going well and the project is stable.
@@ -151,7 +149,7 @@ A MySQL database is also required for several tests. Follow these instructions t
 
 ```sh
 echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
-cat tests/schema.sql | mysql valid -u root
+cat tests/dist/schema.sql | mysql valid -u root
 ```
 
 For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
@@ -164,7 +162,8 @@ vendor/bin/phpunit --configuration phpunit.xml --coverage-text
 
 For additional information see [PHPUnit The Command-Line Test Runner](http://phpunit.de/manual/current/en/textui.html).
 
+<a name="license"></a>
 ## License
 
 PHP Request Validator is open-sourced software licensed under the [GNU GPL](LICENSE).
-© 2016 Denis Klimenko and <a href="https://github.com/progsmile/request-validator/graphs/contributors">all the contributors</a>
+© 2016 Denis Klimenko and <a href="https://github.com/progsmile/request-validator/graphs/contributors">all the contributors</a>.
