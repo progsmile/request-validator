@@ -227,12 +227,35 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testUrl()
     {
         $v = V::make([
-            'site' => 'duv.com-sk.com',
+            'http'  => 'http://duv.com-sk.com',
+            'https' => 'https://duv.com-sk.com',
+            'ldap'  => 'ldap://[::1]',
+            'mail'  => 'mailto:john.do@example.com',
+            'news'  => 'news:news.yahoo.com',
+        ], [
+            'http'  => 'url',
+            'https' => 'url',
+            'ldap'  => 'url',
+            'mail'  => 'url',
+            'news'  => 'url',
+        ]);
+        $this->assertTrue($v->passes());
+
+
+        $v = V::make([
+            'site'  => 'duv.com-sk.com',
+        ], [
+            'site'  => 'url',
+        ]);
+        $this->assertFalse($v->passes());
+
+
+        $v = V::make([
+            'site' => '/var/www/files',
         ], [
             'site' => 'url',
         ]);
-
-        $this->assertTrue($v->passes());
+        $this->assertFalse($v->passes());
     }
 
     public function testAllTypesOfErrorMessages()
