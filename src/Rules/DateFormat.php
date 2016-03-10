@@ -2,8 +2,6 @@
 
 namespace Progsmile\Validator\Rules;
 
-use DateTime;
-
 class DateFormat extends BaseRule
 {
     public function isValid()

@@ -3,9 +3,9 @@
 namespace Progsmile\Validator\DbProviders;
 
 use PDO;
-use Progsmile\Validator\Validator;
 use Progsmile\Validator\Contracts\Rules\ExistInterface;
 use Progsmile\Validator\Contracts\Rules\UniqueInterface;
+use Progsmile\Validator\Validator;
 
 class PdoAdapter extends Adapter implements ExistInterface, UniqueInterface
 {

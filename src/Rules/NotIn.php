@@ -12,7 +12,7 @@ class NotIn extends BaseRule
 
         $input = trim($this->getParams()[1]);
 
-        $values = array_map(function($elem) {
+        $values = array_map(function ($elem) {
             return trim($elem);
         }, explode(',', $this->getParams()[2]));
 

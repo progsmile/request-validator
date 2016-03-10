@@ -2,10 +2,10 @@
 
 namespace Progsmile\Validator;
 
-use Progsmile\Validator\Rules\BaseRule;
 use Progsmile\Validator\Helpers\PdoTrait;
 use Progsmile\Validator\Helpers\RulesFactory;
 use Progsmile\Validator\Helpers\ValidatorFacade;
+use Progsmile\Validator\Rules\BaseRule;
 
 final class Validator
 {

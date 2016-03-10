@@ -2,8 +2,6 @@
 
 namespace Progsmile\Validator\Rules;
 
-use Progsmile\Validator\Validator;
-
 class Exists extends BaseRule
 {
     public function isValid()

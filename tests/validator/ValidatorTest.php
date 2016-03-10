@@ -9,21 +9,20 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $config = require(dirname(__DIR__).'/config/database.php');
+        $config = require dirname(__DIR__).'/config/database.php';
 
         V::setDataProvider('Progsmile\Validator\DbProviders\PdoAdapter');
 
         try {
             V::setupPDO(
-                "mysql:".
+                'mysql:'.
                     "host={$config['host']};".
                     "dbname={$config['dbname']};".
-                    "charset=utf8",
+                    'charset=utf8',
 
                 $config['username'],
                 $config['password']
             );
-
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
@@ -243,14 +242,12 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ]);
         $this->assertTrue($v->passes());
 
-
         $v = V::make([
             'site'  => 'duv.com-sk.com',
         ], [
             'site'  => 'url',
         ]);
         $this->assertFalse($v->passes());
-
 
         $v = V::make([
             'site' => '/var/www/files',

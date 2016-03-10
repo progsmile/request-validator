@@ -1,8 +1,8 @@
 <?php
 
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Db\Adapter\Pdo\Mysql;
 
 error_reporting(-1);
 ini_set('display_errors', 1);

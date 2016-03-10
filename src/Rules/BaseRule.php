@@ -23,7 +23,7 @@ abstract class BaseRule
     public function __construct($config)
     {
         $this->config = $config;
-        $this->respect = new Factory;
+        $this->respect = new Factory();
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class BaseRule
     }
 
     /**
-     * Get the instantiated respect/validator factory
+     * Get the instantiated respect/validator factory.
      *
      * @return mixed
      */

@@ -2,8 +2,6 @@
 
 namespace Progsmile\Validator\Rules;
 
-use Progsmile\Validator\Validator;
-
 class Unique extends BaseRule
 {
     public function isValid()

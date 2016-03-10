@@ -24,7 +24,7 @@ class Between extends BaseRule
         $between = $this->respect('Between', [
             trim($values[0]), // min
             trim($values[1]), // max
-            true              // inclusive
+            true,             // inclusive
         ]);
 
         if ($this->hasRule('numeric') !== false) {
