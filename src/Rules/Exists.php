@@ -18,18 +18,6 @@ class Exists extends BaseRule
         $value = $this->getParams()[1];
         $table = $this->getParams()[2];
 
-        //if PDO is provided, make request from it
-        /** @var \PDO $db */
-        if ($db = Validator::getPDO()) {
-            $sql = "SELECT COUNT(*) FROM `$table` WHERE $field =:v";
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(':v', $value, \PDO::PARAM_STR);
-            $stmt->execute();
-
-            return $stmt->fetchColumn() != 0;
-        }
-
-        //if ORM class is provided
         $instance = new $config[BaseRule::CONFIG_ORM]($field, $value, $table);
 
         return $instance->isExist();

@@ -3,9 +3,10 @@
 namespace Progsmile\Validator\DbProviders;
 
 use Phalcon\DI;
-use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
+use Progsmile\Validator\Contracts\Rules\ExistInterface;
+use Progsmile\Validator\Contracts\Rules\UniqueInterface;
 
-class PhalconORM implements OrmInterface
+class PhalconAdapter extends Adapter implements ExistInterface, UniqueInterface
 {
     private $db;
     private $field;

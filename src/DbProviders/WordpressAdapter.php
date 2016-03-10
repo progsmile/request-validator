@@ -2,9 +2,10 @@
 
 namespace Progsmile\Validator\DbProviders;
 
-use Progsmile\Validator\Contracts\Frameworks\OrmInterface;
+use Progsmile\Validator\Contracts\Rules\ExistInterface;
+use Progsmile\Validator\Contracts\Rules\UniqueInterface;
 
-class Wpdb implements OrmInterface
+class WordpressAdapter implements ExistInterface, UniqueInterface
 {
     private $field;
     private $value;

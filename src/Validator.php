@@ -15,7 +15,7 @@ final class Validator
     private static $validatorFacade = null;
 
     private static $config = [
-        BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconORM',
+        BaseRule::CONFIG_ORM => '\Progsmile\Validator\DbProviders\PhalconAdapter',
     ];
 
     /**

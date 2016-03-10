@@ -13,12 +13,12 @@ class PhalconTest extends PHPUnit_Framework_TestCase
         }
 
         $this->nonUniqueEmail = 'dd@dd.dd';
+
+        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconAdapter');
     }
 
     public function testNonUniqueError()
     {
-        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
-
         $validator = V::make(
             ['email'        => $this->nonUniqueEmail],
             ['email'        => 'unique:users'],
@@ -36,8 +36,6 @@ class PhalconTest extends PHPUnit_Framework_TestCase
 
     public function testIsUniqueEmail()
     {
-        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
-
         $validator = V::make(
             ['email'        => 'some.unique.email@to.check'],
             ['email'        => 'unique:users'],

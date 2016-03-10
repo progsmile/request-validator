@@ -11,6 +11,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     {
         $config = require(dirname(__DIR__).'/config/database.php');
 
+        V::setDataProvider('Progsmile\Validator\DbProviders\PdoAdapter');
+
         try {
             V::setupPDO(
                 "mysql:".

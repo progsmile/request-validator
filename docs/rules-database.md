@@ -10,14 +10,16 @@ Rules who uses this:
 <?php
 
 use Progsmile\Validator\Validator as v;
-use Progsmile\Validator\DbProviders\Wpdb;       // Wordpress
-use Progsmile\Validator\DbProviders\PhalconORM; // Phalcon
+use Progsmile\Validator\DbProviders\PdoAdapter;        // PDO
+use Progsmile\Validator\DbProviders\PhalconAdapter;    // Phalcon
+use Progsmile\Validator\DbProviders\WordpressAdapter;  // Wordpress
 
 # to set the data adapter
-v::setDataProvider(PhalconORM::class);
-v::setDataProvider(Wpdb::class);
+v::setDataProvider(PdoAdapter::class);
+v::setDataProvider(PhalconAdapter::class);
+v::setDataProvider(WordpressAdapter::class);
 
-# or if the driver supports PDO
+# Note: if you're using PDO data provider, you must set it up
 v::setupPDO('mysql:host=localhost;dbname=valid', 'root', '123');
 
 # or an alternative, let as say we have an instance of PDO class
