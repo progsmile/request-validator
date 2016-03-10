@@ -263,7 +263,10 @@ Matches url pattern
 ```php
 'site' => 'url'  // in rules
 
-'site' => 'https://mmx.com' //true
-'site' => 'mmx.com'         //true
-'site' => 'mmx'             //false
+'site' => 'http://mmx.com'             //true
+'site' => 'https://mmx.com'            //true
+'site' => 'mailto:johndoe@example.com' //true
+'site' => 'news:news.yahoo.com'        //true
+'site' => 'mmx.com'                    //false
+'site' => 'mmx'                        //false
 ```
