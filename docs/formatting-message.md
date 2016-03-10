@@ -1,4 +1,4 @@
-### Formatting - the best way to auto-reformat the returned array into your own style
+# Formatting Message
 
 The `$validator->format()`, by default, the messages will be formatted to html `<ul><li></li>...</ul>` element.
 
@@ -27,11 +27,10 @@ class MarkdownFormatter implements FormatInterface
 ```
 
 Then in to use this call, you must do this way:
+Then to use your class, you may follow bellow.
 
 ```php
-$v = V::make(
-    // ... some code here...
-);
+$v = V::make([...]);
 
 echo $v->format(MarkdownFormatter::class);
 ```
