@@ -10,15 +10,13 @@ class In extends BaseRule
             return true;
         }
 
-        $value = trim($this->params[1]);
+        $input = trim($this->getParams()[1]);
 
-        foreach (explode(',', $this->params[2]) as $elem) {
-            if ($value == trim($elem)) {
-                return true;
-            }
-        }
+        $values = array_map(function($elem) {
+            return trim($elem);
+        }, explode(',', $this->getParams()[2]));
 
-        return false;
+        return $this->respect('In', [$values])->validate($input);
     }
 
     public function getMessage()

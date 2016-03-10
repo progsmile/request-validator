@@ -11,7 +11,7 @@ class Image extends BaseRule
             return true;
         }
 
-        $fileField = $this->params[0];
+        $fileField = $this->getParams()[0];
 
         //uploading error: file is too big, or permissions, etc..
         if (!isset($_FILES[$fileField])) {

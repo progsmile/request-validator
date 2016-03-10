@@ -10,9 +10,7 @@ class Json extends BaseRule
             return true;
         }
 
-        json_decode($this->params[1]);
-
-        return json_last_error() == JSON_ERROR_NONE;
+        return $this->respect('Json')->validate($this->getParams()[1]);
     }
 
     public function getMessage()

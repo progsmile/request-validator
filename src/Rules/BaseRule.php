@@ -2,16 +2,18 @@
 
 namespace Progsmile\Validator\Rules;
 
+use Respect\Validation\Factory;
+
 abstract class BaseRule
 {
     const CONFIG_ALL = 'all';
-    const CONFIG_DATA = 'data';
     const CONFIG_ORM = 'orm';
+    const CONFIG_DATA = 'data';
     const CONFIG_FIELD_RULES = 'fieldRules';
 
     private $config;
-
-    protected $params;
+    private $params;
+    private $respect;
 
     /**
      * BaseRule constructor.
@@ -21,6 +23,7 @@ abstract class BaseRule
     public function __construct($config)
     {
         $this->config = $config;
+        $this->respect = new Factory;
     }
 
     /**
@@ -30,7 +33,7 @@ abstract class BaseRule
      *
      * @return array
      */
-    protected function getConfig($type = self::CONFIG_ALL)
+    public function getConfig($type = self::CONFIG_ALL)
     {
         if ($type == self::CONFIG_ALL) {
             return $this->config;
@@ -111,6 +114,21 @@ abstract class BaseRule
     }
 
     /**
+     * Get the instantiated respect/validator factory
+     *
+     * @return mixed
+     */
+    public function getRespectValidator()
+    {
+        return $this->respect;
+    }
+
+    protected function respect($ruleName, $arguments = [])
+    {
+        return $this->respect->rule($ruleName, $arguments);
+    }
+
+    /**
      * Returns error message from rule.
      *
      * @return string
@@ -118,9 +136,10 @@ abstract class BaseRule
     abstract public function getMessage();
 
     /**
-     * Will the process to check if it is valid or not.
+     * The main function that validates the inputted value against
+     * an existing one or similar.
      *
-     * @return bool Return the result if valid or not
+     * @return bool Return a if values were valid/matched or not
      */
     abstract public function isValid();
 }

@@ -2,6 +2,8 @@
 
 namespace Progsmile\Validator\Helpers;
 
+use PDO;
+use PDOException;
 use Progsmile\Validator\Rules\BaseRule;
 
 trait PdoTrait
@@ -18,8 +20,8 @@ trait PdoTrait
     public static function setupPDO($connectionString, $user, $password)
     {
         try {
-            self::$pdoInstance = new \PDO($connectionString, $user, $password);
-        } catch (\PDOException $e) {
+            self::$pdoInstance = new PDO($connectionString, $user, $password);
+        } catch (PDOException $e) {
             trigger_error($e->getMessage(), E_USER_ERROR);
         }
     }
@@ -27,9 +29,9 @@ trait PdoTrait
     /**
      * Setup PDO instance.
      *
-     * @param \PDO $pdoInstance
+     * @param PDO $pdoInstance
      */
-    public static function setPDO(\PDO $pdoInstance)
+    public static function setPDO(PDO $pdoInstance)
     {
         self::$pdoInstance = $pdoInstance;
     }
@@ -37,7 +39,7 @@ trait PdoTrait
     /**
      * Get PDO object for unique validators.
      *
-     * @return mixed
+     * @return mixed|null
      */
     public static function getPDO()
     {

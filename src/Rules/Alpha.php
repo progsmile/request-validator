@@ -10,9 +10,9 @@ class Alpha extends BaseRule
             return true;
         }
 
-        $value = trim($this->params[1]);
+        $value = trim($this->getParams()[1]);
 
-        return is_string($value) && preg_match('/^[\pL\pM]+$/u', $value);
+        return $this->respect('Alpha')->validate($value);
     }
 
     /**

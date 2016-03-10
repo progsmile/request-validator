@@ -1,188 +1,139 @@
 # PHP Request Validator
+
+Make your apps validation easily (inspired by Laravel Validation)
+
 [![Build Status](https://travis-ci.org/progsmile/request-validator.svg?branch=master)](http://travis-ci.org/progsmile/request-validator)  [![Total Downloads](https://poser.pugx.org/progsmile/request-validator/d/total)](https://packagist.org/packages/progsmile/request-validator) [![License](https://poser.pugx.org/progsmile/request-validator/license.svg)](https://packagist.org/packages/progsmile/request-validator) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4/mini.png)](https://insight.sensiolabs.com/projects/918ec166-799d-4ac1-a2c9-13d4cb8dafd4)
-Make your apps validation easily (inspired by Laravel validators)
 
-## Getting Started
+---
 
-:small_orange_diamond: [Please read our Feature Guide](https://github.com/progsmile/request-validator/blob/master/docs/Validator%20Guide.md)  you will probably like Validator :heart:
+Page Index:
+- [Quick Start](#quick-start)
+- [Contributing](#contributing)
+- [Testing](#testing)
+- [License](#license)
 
+Suggested Links:
+- [Installation](/docs/installation.md)
+- [Feature Guide](/docs/feature-guide.md)
+- Rules
+    - [Existing Rules](/docs/rules.md)
+    - [Data Provider](/docs/rules-database.md)
+    - [Customization](/docs/rules-customization.md)
+    - [Formatting Message](/docs/formatting-message.md)
+- [Integrations](/docs/integrations.md)
 
-:small_orange_diamond: [All rules descriptions here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md)
+----
 
-
-:small_orange_diamond: [Easy installation](https://github.com/progsmile/request-validator#installation)
-
+<a name="quick-start"></a>
 ## Quick start :rocket:
+```
+<?php
 
-```php
-// Add namespace
-use \Progsmile\Validator\Validator as V;
+$rules = [
+    # firstname and lastname must exists
+    # they should be alphanumeric
+    # atleast 2 characters
+    'firstname, lastname' => 'required|alpha|min:2',
 
-// Pass data to Validator, put rules and messages (also has error messages by default)
-$v = V::make($_POST, [
+    # max until 18 characters only
+    'lastname'            => 'max:18',
 
-    //group validation fields
-    'firstname, lastname' => 'required|alpha|min:2',         //alphabetic support
-    'lastname'            => 'max:18',                       //string max length
-    'email'               => 'email|unique:users',           //email uniqueness in table users
-    'id'                  => 'numeric|exists:users',         //such ID exists in table users
-    'age'                 => 'min:16|numeric',               //numeric min
-    'info[country]'       => 'required|alpha',               //EVEN ARRAY VALIDATION! Extremly crazy)
-    'roll[0], roll[1]'    => 'numeric|between:1, 100',       //groupping arrays
-    'date'                => 'dateFormat:(m-Y.d H:i)',       //custom date time format
-    'profileImg'          => 'image',                        //image
-    'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',//custom phone mask validator
-    'randNum'             => 'between:1, 10|numeric',        //value between for strings and numbers
-    'ip'                  => 'ip',                           //ipv4 or ipv6
-    'password'            => 'required|min:6',               //required fields
-    'password_repeat'     => 'same:password',                //same validator
-    'json'                => 'json',                         //json format
-    'site'                => 'url',                          //url format
-    'cash10, cash25'      => 'in:1, 2, 5, 10, 20, 50',       //in array
-    'elevatorFloor'       => 'notIn:13'                      //not in array
-], [
-   'info[country].alpha' => 'Only letters please',           //Add message to array
-   'email.required'      => 'Field :field: is required',     //Add custom messages
-   'email.email'         => 'Email has bad format',          //:field:, :value:, :param: placeholders
+    # must be an email format
+    # must be unique under 'users' table
+    'email'               => 'email|unique:users',
+
+    # must be numeric
+    # must exists under 'users' table
+    'id'                  => 'numeric|exists:users',
+    'age'                 => 'min:16|numeric',
+    'info[country]'       => 'required|alpha',
+
+    # roll[0] or roll[1] values must be in the middle 1 to 100
+    'roll[0], roll[1]'    => 'numeric|between:1, 100',
+
+    # the format must be 'm-Y.d H:i'
+    'date'                => 'dateFormat:(m-Y.d H:i)',
+
+    # it must be an image format under $_FILES global variable
+    'profileImg'          => 'image',
+
+    # the provided phone number should follow the format
+    # correct: +38(123)456-12-34
+    # wrong: +38(123)56-123-56
+    # wrong: +39(123)456-12-34
+    'phoneMask'           => 'phoneMask:(+38(###)###-##-##)',
+    'randNum'             => 'between:1, 10|numeric',
+
+    # the value must be an IP Format
+    'ip'                  => 'ip',
+    'password'            => 'required|min:6',
+
+    # the value from a key 'password' must be equal to 'password_repeat' value
+    'password_repeat'     => 'same:password',
+
+    # it must be a json format
+    'json'                => 'json',
+    'site'                => 'url',
+
+    # cash10 or cash25 must only have these
+    # 1 or 2 or 5 or 10 or 20 or 50
+    'cash10, cash25'      => 'in:1, 2, 5, 10, 20, 50',
+
+    # the value must not have 13 or 18 or 3 or 4
+    'elevatorFloor'       => 'notIn:13, 18, 3, 4',
+];
+
+$customMessage = [
+   'info[country].alpha' => 'Only letters please',
+   'email.required'      => 'Field :field: is required',
+   'email.email'         => 'Email has bad format',
    'email.unique'        => 'This email :value: is not unique',
    'elevatorFloor.notIn' => 'Oops',
-]);
+];
 
-$v->passes() or $v->fails() //check validation result
+$v = V::make($_POST, $rules, $customMessage);
 
-$v->lastname->fails() or $v->lastname->passes() //check field validness
+# for specific field
+# you can use below code.
+$v->lastname->passes();
+$v->lastname->fails();
 
+# if you're required to check everything
+# and there must no failing validation
+$v->passes();
+$v->fails();
 
-$v->first() //get first error message
+# get first error message
+$v->first();
 
-$v->first('lastname') or $v->firstname->first() //get first error for `firstname`
+# get first error for `firstname`
+$v->first('lastname');
+$v->firstname->first();
 
+# return first error message from each field
+$v->firsts();
 
-$v->firsts() //return first error message from each field
+# get all messages (with param for concrete field)
+$v->messages();
+$v->messages('password');
 
+# get all `password` messages
+$v->password->messages();
 
-$v->messages() or $v->messages('password') //get all messages (with param for concrete field)
+# get 2d array with fields and messages
+$v->raw();
 
-$v->password->messages(); //get all `password` messages
-
-
-$v->raw() //get 2d array with fields and messages
-
-
-$v->add('someField', 'Something is wrong with this'); //appending messages
+# to append a message
+$v->add('someField', 'Something is wrong with this');
 ```
 
-## Installation
-
-### Installing via Composer
-
-If you already have composer:
-```composer require progsmile/request-validator=dev-master```
-___
-
-Install [Composer](http://getcomposer.org) in a common location or in your project:
-
-```sh
-$ curl -s http://getcomposer.org/installer | php
-```
-
-Create the `composer.json` file as follows:
-
-```json
-{
-    "require": {
-        "progsmile/request-validator": "@dev"
-    }
-}
-```
-
-Run the Composer installer:
-
-```sh
-$ php composer.phar install
-```
-
-### Available rules
-
-
-##### [See all rules here](https://github.com/progsmile/request-validator/blob/master/docs/Rules-Guide.md) :100:
-
-
-
-### Connect with PDO or use built-in Data Providers (just for unique and exists rules)
-
-```php
-// Connect once - use everywhere
-
-use Progsmile\Validator\Validator as V;
-use Progsmile\Validator\DbProviders\PhalconORM; //Phalcon
-use Progsmile\Validator\DbProviders\Wpdb;       //Wordpress
-
-V::setDataProvider(PhalconORM::class);
-
-//or
-V::setDataProvider(Wpdb::class);
-
-//or
-V::setupPDO('mysql:host=localhost;dbname=valid', 'root', '123');
-
-//or
-$pdo = $this->getPdoInstance(); //should be instance of PDO class
-
-V::setPDO($pdo);
-
-
-$v = V::make($this->request->getPost(), [
-    'email'           => 'required|email|unique:users' //users - table name
-    'password'        => 'min:6',
-    'password_repeat' => 'same:password',
-    'json'            => 'json'
-]);
-
-```
-
-### Formatting - the best way to auto-reformat the returned array into your own style
-
-The `$validator->format()`, by default, the messages will be formatted to html `<ul><li></li>...</ul>` element.
-
-You can create your own class to format the array `$validator->messages()` into a well formed result.
-
-```php
-use Progsmile\Validator\Contracts\Format\FormatInterface;
-
-class MarkdownFormatter implements FormatInterface
-{
-    public function reformat($messages)
-    {
-        $ret = '#### Error Found';
-
-        foreach ($messages as $field => $message) {
-
-            foreach ($message as $content) {
-
-                $ret .= "- [x] ".$content."**\n"
-            }
-        }
-
-        return $ret;
-    }
-}
-```
-
-Then in to use this call, you must do this way:
-
-```php
-$v = V::make(
-    // ... some code here...
-);
-
-echo $v->format(MarkdownFormatter::class);
-```
-
+<a name="contributing"></a>
 ## Contributing :octocat:
 
 Dear contributors , the project is just started and it is not stable yet, we love to have your fork requests.
 
+
+<a name="testing"></a>
 ## Testing
 
 This testing suite uses [Travis CI](https://travis-ci.org/) for each run. Every commit pushed to this repository will queue a build into the continuous integration service and will run all tests to ensure that everything is going well and the project is stable.
@@ -198,7 +149,7 @@ A MySQL database is also required for several tests. Follow these instructions t
 
 ```sh
 echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
-cat tests/schema.sql | mysql valid -u root
+cat tests/dist/schema.sql | mysql valid -u root
 ```
 
 For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
@@ -211,7 +162,8 @@ vendor/bin/phpunit --configuration phpunit.xml --coverage-text
 
 For additional information see [PHPUnit The Command-Line Test Runner](http://phpunit.de/manual/current/en/textui.html).
 
+<a name="license"></a>
 ## License
 
 PHP Request Validator is open-sourced software licensed under the [GNU GPL](LICENSE).
-© 2016 Denis Klimenko
+© 2016 Denis Klimenko and <a href="https://github.com/progsmile/request-validator/graphs/contributors">all the contributors</a>.

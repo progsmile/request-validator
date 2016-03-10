@@ -1,38 +1,40 @@
 ## Rules list
- * Alpha               
- * Between            
- * Boolean            
- * Date and Time Format       
- * Email   
- * Equals  
- * Exists       
- * Json          
- * In                
- * Image           
- * Ip 
- * Max 
- * Min 
- * Not in 
- * Numeric 
- * Phone Mask 
- * Required 
- * Same 
- * Size 
- * Unique 
- * Url
+ - [Alpha](#alpha)
+ - [Between](#between)
+ - [Boolean](#boolean)
+ - [Date and Time Format](#data-and-time-format)
+ - [Email](#email)
+ - [Equals](#equals)
+ - [Exists](#exists)
+ - [Json](#json)
+ - [In](#in)
+ - [Image](#image)
+ - [Ip](#ip)
+ - [Max](#max)
+ - [Min](#min)
+ - [Not in](#not-in)
+ - [Numeric](#numeric)
+ - [Phone Mask](#phone-mask)
+ - [Required](#required)
+ - [Same](#same)
+ - [Size](#size)
+ - [Unique](#unique)
+ - [Url](#url)
 
+<a name="alpha"></a>
 ### Alpha
 Checks if current string contains only letters
 ```php
 'firstname' => 'alpha' // in rules
 
-'firstname' => 'Denis '       //true because of auto trim 
+'firstname' => 'Denis '       //true because of auto trim
 'firstname' => 'Abra Cadabra' //false
 'firstname' => ''             //true, because not required
 'firstname' => ' '            //false, because empty value
 
 ```
 
+<a name="between"></a>
 ### Between
 Checks if value is between for string length and number value
 ```php
@@ -49,6 +51,7 @@ Checks if value is between for string length and number value
 
 ```
 
+<a name="boolean"></a>
 ### Boolean
 Applies only true or false values
 ```php
@@ -60,7 +63,8 @@ Applies only true or false values
 ```
 
 
-### Date and Time Custom Format
+<a name="date-and-time-format"></a>
+### Date and Time Format
 Applies if user value matches datetime pattern
 ```php
 'yearHours' => 'dateFormat:(Y H)' // in rules
@@ -70,6 +74,7 @@ Applies if user value matches datetime pattern
 'yearHours' => '1888 00'  //true
 ```
 
+<a name="email"></a>
 ### Email
 Matches email address
 ```php
@@ -77,7 +82,8 @@ Matches email address
 
 'email' => 'test@email.com'      //true
 'email' => 'test-failed @su.re'  //false
-```
+
+<a name="equals"></a>```
 ### Equals
 The field equals to value
 ```php
@@ -88,6 +94,7 @@ The field equals to value
 ```
 
 
+<a name="exists"></a>
 ### Exists
 Searches for record in table, true if exists
 ```php
@@ -98,6 +105,7 @@ Searches for record in table, true if exists
 'email' => 'boby@matros.com'  //false
 ```
 
+<a name="json"></a>
 ### Json
 Matches string is Json
 ```php
@@ -108,6 +116,7 @@ Matches string is Json
 'response' => '{"require": {"php": ">=5.4"} }' //true
 ```
 
+<a name="in"></a>
 ### In
 Checks if value exists in array
 ```php
@@ -118,6 +127,7 @@ Checks if value exists in array
 ```
 
 
+<a name="image"></a>
 ### Image
 If file is image, it works)
 ```php
@@ -125,6 +135,7 @@ If file is image, it works)
 ```
 
 
+<a name="ip"></a>
 ### Ip
 Check ipv4 or ipv6 for validness
 ```php
@@ -136,8 +147,9 @@ Check ipv4 or ipv6 for validness
 ```
 
 
+<a name="max"></a>
 ### Max
-Checking for string length or value of number less than param 
+Checking for string length or value of number less than param
 ```php
 'str' => 'max:5'         // string length
 'num' => 'max:5|numeric' // for numeric values
@@ -151,8 +163,9 @@ Checking for string length or value of number less than param
 ```
 
 
+<a name="min"></a>
 ### Min
-Checking for string length or value of number less than param 
+Checking for string length or value of number less than param
 ```php
 'str' => 'min:2'         // string length
 'num' => 'min:2|numeric' // for numeric values
@@ -166,6 +179,7 @@ Checking for string length or value of number less than param
 ```
 
 
+<a name="not-in"></a>
 ### Not In
 Checks if value not exists in array
 ```php
@@ -176,6 +190,7 @@ Checks if value not exists in array
 ```
 
 
+<a name="numeric"></a>
 ### Numeric
 Checks if value is number
 ```php
@@ -186,6 +201,7 @@ Checks if value is number
 ```
 
 
+<a name="phone-mask"></a>
 ### Phone Mask
 Checking if value matches phone mask
 ```php
@@ -197,6 +213,7 @@ Checking if value matches phone mask
 ```
 
 
+<a name="required"></a>
 ### Required
 Checks for field is required and not empty
 ```php
@@ -207,18 +224,20 @@ Checks for field is required and not empty
 'value' => ''    //false
 ```
 
+<a name="same"></a>
 ### Same
 Check if one field has same value with other
 ```php
 'password_repeat' => 'same:password'  // in rules
 
-'password'        => '123'  
+'password'        => '123'
 'password_repeat' => '123' //true
 
-'password'        => '321'  
+'password'        => '321'
 'password_repeat' => ''    //false
 ```
 
+<a name="size"></a>
 ### Size
 Check if string is the same size
 ```php
@@ -228,6 +247,7 @@ Check if string is the same size
 'keyCode' => 'no'  //false
 ```
 
+<a name="unique"></a>
 ### Unique
 Checks if value is unique in table
 ```php
@@ -237,12 +257,16 @@ Checks if value is unique in table
 'email' => 'bob@ubi.mmx'  //false
 ```
 
+<a name="url"></a>
 ### Url
 Matches url pattern
 ```php
 'site' => 'url'  // in rules
 
-'site' => 'https://mmx.com' //true
-'site' => 'mmx.com'         //true
-'site' => 'mmx'             //false
+'site' => 'http://mmx.com'             //true
+'site' => 'https://mmx.com'            //true
+'site' => 'mailto:johndoe@example.com' //true
+'site' => 'news:news.yahoo.com'        //true
+'site' => 'mmx.com'                    //false
+'site' => 'mmx'                        //false
 ```

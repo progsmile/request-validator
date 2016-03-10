@@ -10,9 +10,9 @@ class Boolean extends BaseRule
             return true;
         }
 
-        $userValue = trim($this->params[1]);
+        $value = trim($this->getParams()[1]);
 
-        return in_array($userValue, ['true', 'false']);
+        return $this->respect('BoolVal')->validate($value);
     }
 
     /**

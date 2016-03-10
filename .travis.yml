@@ -24,7 +24,7 @@ before_script:
   - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
   - php --ri phalcon
   - echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
-  - cat tests/schema.sql | mysql valid -u root
+  - cat tests/dist/schema.sql | mysql valid -u root
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-text

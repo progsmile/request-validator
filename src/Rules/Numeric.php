@@ -10,7 +10,7 @@ class Numeric extends BaseRule
             return true;
         }
 
-        return is_numeric($this->params[1]);
+        return $this->respect('Numeric')->validate(trim($this->getParams()[1]));
     }
 
     public function getMessage()

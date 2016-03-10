@@ -6,11 +6,16 @@ class Same extends BaseRule
 {
     public function isValid()
     {
-        $fieldValue = $this->params[1];
-        $comparedFieldName = $this->params[2];
-        $userData = $this->getConfig(BaseRule::CONFIG_DATA);
+        $data = $this->getConfig(BaseRule::CONFIG_DATA);
 
-        return isset($userData[$comparedFieldName]) && $fieldValue == $userData[$comparedFieldName];
+        $input = $this->getParams()[1];
+        $value = $this->getParams()[2];
+
+        if (!isset($data[$value])) {
+            return false;
+        }
+
+        return $this->respect('Equals', [$data[$value]])->validate($input);
     }
 
     public function getMessage()

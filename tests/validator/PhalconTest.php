@@ -13,20 +13,21 @@ class PhalconTest extends PHPUnit_Framework_TestCase
         }
 
         $this->nonUniqueEmail = 'dd@dd.dd';
+
+        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconAdapter');
     }
 
     public function testNonUniqueError()
     {
-        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
-        $validationResult = V::make(
-            ['email' => $this->nonUniqueEmail],
+        $validator = V::make(
+            ['email'        => $this->nonUniqueEmail],
             ['email'        => 'unique:users'],
             ['email.unique' => 'nonunique']
         );
 
-        $this->assertFalse($validationResult->passes());
+        $this->assertFalse($validator->passes());
 
-        $errorMessage = $validationResult->messages('email');
+        $errorMessage = $validator->messages('email');
 
         $this->assertTrue(is_array($errorMessage));
         $this->assertArraySubset(['nonunique'], $errorMessage);
@@ -35,14 +36,13 @@ class PhalconTest extends PHPUnit_Framework_TestCase
 
     public function testIsUniqueEmail()
     {
-        V::setDataProvider('Progsmile\Validator\DbProviders\PhalconORM');
-        $validationResult = V::make(
-            ['email' => 'some.unique.email@to.check'],
+        $validator = V::make(
+            ['email'        => 'some.unique.email@to.check'],
             ['email'        => 'unique:users'],
             ['email.unique' => 'nonunique']
         );
 
-        $this->assertTrue($validationResult->passes());
-        $this->assertEmpty($validationResult->messages('email'));
+        $this->assertTrue($validator->passes());
+        $this->assertEmpty($validator->messages('email'));
     }
 }
