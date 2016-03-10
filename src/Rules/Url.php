@@ -10,15 +10,9 @@ class Url extends BaseRule
             return true;
         }
 
-        $url = trim($this->params[1]);
+        $input = trim($this->getParams()[1]);
 
-        if ($parts = parse_url($url)) {
-            if (!isset($parts['scheme'])) {
-                $url = 'http://'.$url;
-            }
-        }
-
-        return substr_count($url, '.') >= 1 && filter_var($url, FILTER_VALIDATE_URL) !== false;
+        return $this->respect('Url')->validate($input);
     }
 
     public function getMessage()

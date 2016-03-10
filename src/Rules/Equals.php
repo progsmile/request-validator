@@ -10,7 +10,8 @@ class Equals extends BaseRule
             return true;
         }
 
-        return trim($this->params[1]) == trim($this->params[2]);
+        return $this->respect('Equals', [$this->getParams()[1]])
+            ->validate(trim($this->getParams()[2]));
     }
 
     public function getMessage()

@@ -9,8 +9,20 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $config = require dirname(__DIR__).'/config/database.php';
+
+        V::setDataProvider('Progsmile\Validator\DbProviders\PdoAdapter');
+
         try {
-            V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '');
+            V::setupPDO(
+                'mysql:'.
+                    "host={$config['host']};".
+                    "dbname={$config['dbname']};".
+                    'charset=utf8',
+
+                $config['username'],
+                $config['password']
+            );
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
@@ -25,7 +37,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'ip'              => '192.168.0.0',
             'password'        => '123456789',
             'password_repeat' => '123456789',
-            'json'            => '[]',
+            'json'            => '[{"foo":"bar"}]',
             'randNum'         => rand(1, 100),
             'site'            => 'https://github.com/progsmile/request-validator',
         ];
@@ -216,12 +228,33 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testUrl()
     {
         $v = V::make([
-            'site' => 'duv.com-sk.com',
+            'http'  => 'http://duv.com-sk.com',
+            'https' => 'https://duv.com-sk.com',
+            'ldap'  => 'ldap://[::1]',
+            'mail'  => 'mailto:john.do@example.com',
+            'news'  => 'news:news.yahoo.com',
+        ], [
+            'http'  => 'url',
+            'https' => 'url',
+            'ldap'  => 'url',
+            'mail'  => 'url',
+            'news'  => 'url',
+        ]);
+        $this->assertTrue($v->passes());
+
+        $v = V::make([
+            'site'  => 'duv.com-sk.com',
+        ], [
+            'site'  => 'url',
+        ]);
+        $this->assertFalse($v->passes());
+
+        $v = V::make([
+            'site' => '/var/www/files',
         ], [
             'site' => 'url',
         ]);
-
-        $this->assertTrue($v->passes());
+        $this->assertFalse($v->passes());
     }
 
     public function testAllTypesOfErrorMessages()

@@ -10,9 +10,9 @@ class Size extends BaseRule
             return true;
         }
 
-        $value = trim($this->params[1]);
+        $value = trim($this->getParams()[1]);
 
-        return mb_strlen($value) == $this->params[2];
+        return mb_strlen($value) == $this->getParams()[2];
     }
 
     /**

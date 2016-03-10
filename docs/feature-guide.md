@@ -27,7 +27,7 @@ $v->age->messages(); //the same
 $v->firsts(); // returns one error message from each invalid rule
 
 
-$v->first(); // returns first non-valid message 
+$v->first(); // returns first non-valid message
 
 $v->first('homepage'); // returns first non-valid message for specific field
 
@@ -115,14 +115,14 @@ Simple create new PDO connection, or pass ready PDO instance
 
 ```php
 V::setupPDO('mysql:host=localhost;dbname=valid;charset=utf8', 'root', '123')
- 
+
 //or
- 
+
 $pdo = ServiceContainer::getMyPDOObject();
 V::setPDO($pdo);
 
 ```
- 
+
 ### Using built-in ORMs
 
 ```php
@@ -140,7 +140,7 @@ $v = V::make([
     'email' => 'this.email@unique.com',
 ], [
     'id'    => 'required|numeric|exists:products', // id - table attribute, products - table
-    'email' => 'required|email|unique:users',      // email - table attr, users - table 
+    'email' => 'required|email|unique:users',      // email - table attr, users - table
 ]);
 
 ```

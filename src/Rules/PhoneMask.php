@@ -10,8 +10,8 @@ class PhoneMask extends BaseRule
             return true;
         }
 
-        $phone = trim($this->params[1]);
-        $phoneMask = substr($this->params[2], 1, -1);
+        $phone = trim($this->getParams()[1]);
+        $phoneMask = substr($this->getParams()[2], 1, -1);
 
         if (strlen($phone) != strlen($phoneMask)) {
             return false;

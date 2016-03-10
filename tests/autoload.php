@@ -14,12 +14,8 @@ if (extension_loaded('phalcon')) {
     Di::reset();
 
     $di->set('db', function () {
-        return new Mysql([
-                'host'     => 'localhost',
-                'username' => 'root',
-                'password' => '',
-                'dbname'   => 'valid',
-            ]
+        return new Mysql(
+            require(__DIR__.'/config/database.php')
         );
     });
 
