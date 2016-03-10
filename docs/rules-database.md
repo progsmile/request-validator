@@ -2,8 +2,9 @@
 
 Some of the existing rules requires to connect via database to check some table's column or the value, etc.
 
-
-### Connect with PDO or use built-in Data Providers (just for unique and exists rules)
+Rules who uses this:
+- Unique
+- Exists
 
 ```php
 <?php
@@ -12,7 +13,7 @@ use Progsmile\Validator\Validator as v;
 use Progsmile\Validator\DbProviders\Wpdb;       // Wordpress
 use Progsmile\Validator\DbProviders\PhalconORM; // Phalcon
 
-# to set the database adapter to use
+# to set the data adapter
 v::setDataProvider(PhalconORM::class);
 v::setDataProvider(Wpdb::class);
 
