@@ -129,7 +129,7 @@ V::setPDO($pdo);
 use \Progsmile\Validator\DbProviders\PhalconORM; //Phalcon ORM is by default
 use \Progsmile\Validator\DbProviders\Wpdb;
 
-V::setDataProvider(PhalconORM::Wpdb);
+V::setDataProvider(PhalconORM::class);
 ```
 
 ## Checking up table values
