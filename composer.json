@@ -1,6 +1,7 @@
 {
     "name": "progsmile/request-validator",
     "description": "Simple PHP Request Validator",
+    "version": "2.0.0",
     "keywords": [
         "validation",
         "PHP",
@@ -11,6 +12,7 @@
     ],
     "require": {
         "php": ">=5.4",
+        "ext-json": "*",
         "respect/validation": "1.0.*"
     },
     "require-dev": {
@@ -19,7 +21,7 @@
     "license": "GPL-2.0+",
     "authors": [
         {
-            "name": "Denis K",
+            "name": "Denys Klymenko",
             "email": "denis.klimenko.dx@gmail.com"
         }
     ],

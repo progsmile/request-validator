@@ -4,7 +4,7 @@
 ### Installing via Composer
 
 If you already have composer:
-```composer require progsmile/request-validator=dev-master```
+```composer require progsmile/request-validator```
 ___
 
 Install [Composer](http://getcomposer.org) in a common location or in your project:
@@ -18,7 +18,7 @@ Create the `composer.json` file as follows:
 ```json
 {
     "require": {
-        "progsmile/request-validator": "@dev"
+        "progsmile/request-validator": "2.0.*"
     }
 }
 ```

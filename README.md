@@ -17,10 +17,8 @@ Suggested Links:
 - [Feature Guide](/docs/feature-guide.md)
 - Rules
     - [Existing Rules](/docs/rules.md)
-    - [Data Provider](/docs/rules-database.md)
-    - [Customization](/docs/rules-customization.md)
+    - [Adding custom Rules](/docs/custom-rules.md)
     - [Formatting Message](/docs/formatting-message.md)
-- [Integrations](/docs/integrations.md)
 
 ----
 
@@ -30,7 +28,7 @@ Suggested Links:
 <?php
 
 $rules = [
-    # firstname and lastname must exists
+    # firstname and lastname must be present
     # they should be alphanumeric
     # atleast 2 characters
     'firstname, lastname' => 'required|alpha|min:2',
@@ -39,14 +37,13 @@ $rules = [
     'lastname'            => 'max:18',
 
     # must be an email format
-    # must be unique under 'users' table
-    'email'               => 'email|unique:users',
+    # adding custom rule
+    'email'               => ['email', MyCustomRule::class],
 
     # must be numeric
-    # must exists under 'users' table
-    'id'                  => 'numeric|exists:users',
-    'age'                 => 'min:16|numeric',
-    'info[country]'       => 'required|alpha',
+    'id'                  => 'numeric',
+    'age'                 => ['min:16', 'numeric'],
+    'info[country]'       => ['required', 'alpha'],
 
     # roll[0] or roll[1] values must be in the middle 1 to 100
     'roll[0], roll[1]'    => 'numeric|between:1, 100',
@@ -91,40 +88,40 @@ $customMessage = [
    'elevatorFloor.notIn' => 'Oops',
 ];
 
-$v = V::make($_POST, $rules, $customMessage);
+$validation = \Progsmile\Validator\Validator::make($_POST, $rules, $customMessage);
 
 # for specific field
 # you can use below code.
-$v->lastname->passes();
-$v->lastname->fails();
+$validation->lastname->passes();
+$validation->lastname->fails();
 
 # if you're required to check everything
 # and there must no failing validation
-$v->passes();
-$v->fails();
+$validation->passes();
+$validation->fails();
 
 # get first error message
-$v->first();
+$validation->first();
 
 # get first error for `firstname`
-$v->first('lastname');
-$v->firstname->first();
+$validation->first('lastname');
+$validation->firstname->first();
 
 # return first error message from each field
-$v->firsts();
+$validation->firsts();
 
 # get all messages (with param for concrete field)
-$v->messages();
-$v->messages('password');
+$validation->messages();
+$validation->messages('password');
 
 # get all `password` messages
-$v->password->messages();
+$validation->password->messages();
 
 # get 2d array with fields and messages
-$v->raw();
+$validation->raw();
 
 # to append a message
-$v->add('someField', 'Something is wrong with this');
+$validation->add('someField', 'Something is wrong with this');
 ```
 
 <a name="contributing"></a>
@@ -143,21 +140,7 @@ The testing suite can be run on your own machine. The main dependency is [PHPUni
 ```sh
 # run this command from project root
 $ composer install --dev --prefer-source
-```
-
-A MySQL database is also required for several tests. Follow these instructions to create the database:
-
-```sh
-echo 'create database valid charset=utf8mb4 collate=utf8mb4_unicode_ci;' | mysql -u root
-cat tests/dist/schema.sql | mysql valid -u root
-```
-
-For these tests we use the user `root` without a password. You may need to change this in `tests/TestHelper.php` file.
-
-Once the database is created, run the tests on a terminal:
-
-```sh
-vendor/bin/phpunit --configuration phpunit.xml --coverage-text
+$ vendor/bin/phpunit --configuration phpunit.xml --coverage-text
 ```
 
 For additional information see [PHPUnit The Command-Line Test Runner](http://phpunit.de/manual/current/en/textui.html).

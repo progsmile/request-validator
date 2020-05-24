@@ -1,6 +1,6 @@
 <?php
 
-namespace Progsmile\Validator\Contracts\Format;
+namespace Progsmile\Validator\Format;
 
 interface FormatInterface
 {

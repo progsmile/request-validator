@@ -1,3 +1,5 @@
+.idea
+laradock
 vendor
 composer.lock
 composer.phar

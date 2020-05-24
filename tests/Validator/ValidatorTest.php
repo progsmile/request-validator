@@ -1,33 +1,16 @@
 <?php
 
-use Progsmile\Validator\Validator as V;
+namespace Tests\Validator;
 
-class ValidatorTest extends PHPUnit_Framework_TestCase
+use Progsmile\Validator\Validator;
+
+class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    private $postData;
-    private $nonUniqueEmail;
+    private $testData;
 
     public function setUp()
     {
-        $config = require dirname(__DIR__).'/config/database.php';
-
-        V::setDataProvider('Progsmile\Validator\DbProviders\PdoAdapter');
-
-        try {
-            V::setupPDO(
-                'mysql:'.
-                    "host={$config['host']};".
-                    "dbname={$config['dbname']};".
-                    'charset=utf8',
-
-                $config['username'],
-                $config['password']
-            );
-        } catch (\Exception $e) {
-            $this->markTestSkipped($e->getMessage());
-        }
-
-        $this->postData = [
+        $this->testData = [
             'firstname'       => 'Denis',
             'lastname'        => 'Klimenko',
             'email'           => 'denis.klimenko.dx@gmail.com',
@@ -41,47 +24,30 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'randNum'         => rand(1, 100),
             'site'            => 'https://github.com/progsmile/request-validator',
         ];
-
-        $this->nonUniqueEmail = 'dd@dd.dd';
     }
 
     public function testValidationOK()
     {
-        $validationResult = V::make($this->postData, [
+        $validationResult = Validator::make($this->testData, [
             'firstname, lastname' => 'required|alpha|min:2',
-            'lastname'            => 'max:18',
-            'email'               => 'email|unique:users',
-            'age'                 => 'min:16|numeric',
-            'date'                => 'dateFormat:(m-Y.d H:i)',
-            'randNum'             => 'between:1, 100',
-            'ip'                  => 'ip',
-            'password'            => 'required|min:6',
-            'password_repeat'     => 'same:password',
-            'json'                => 'json',
-            'site'                => 'url',
+            'lastname' => 'max:18',
+            'email' => 'email',
+            'age' => 'min:16|numeric',
+            'date' => 'dateFormat:(m-Y.d H:i)',
+            'randNum' => 'between:1, 100',
+            'ip' => 'ip',
+            'password' => 'required|min:6',
+            'password_repeat' => 'same:password',
+            'json' => 'json',
+            'site' => 'url',
         ]);
 
         $this->assertEmpty($validationResult->messages());
     }
 
-    public function testNonUniqueError()
-    {
-        $validationResult = V::make(['email' => $this->nonUniqueEmail], [
-            'email' => 'unique:users',
-        ], [
-            'email.unique' => 'nonunique',
-        ]);
-
-        $this->assertFalse($validationResult->passes());
-
-        $errorMessage = $validationResult->messages('email');
-
-        $this->assertEquals('nonunique', reset($errorMessage));
-    }
-
     public function testNumeric()
     {
-        $validationResult = V::make([
+        $validationResult = Validator::make([
             'n1' => '100',
             'n2' => '1asdasd',
             'n3' => 'sd1asdasd',
@@ -96,18 +62,18 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testGroupedRules()
     {
-        $validationResult = V::make([
-            'n1'        => '111',
-            'n2'        => '333',
-            'n3'        => '7s7s7',
+        $validationResult = Validator::make([
+            'n1' => '111',
+            'n2' => '333',
+            'n3' => '7s7s7',
             'firstname' => 'Den1s',
-            'lastname'  => 'Klimenko',
+            'lastname' => 'Smith',
         ], [
-            'n1, n2, n3'          => 'required|numeric',
+            'n1, n2, n3' => 'required|numeric',
             'firstname, lastname' => 'required|alpha',
         ], [
-            'firstname.alpha' => 'Your real name needed)',
-            'n3.numeric'      => 'N3 is not a number',
+            'firstname.alpha' => 'Your real name needed!',
+            'n3.numeric' => 'N3 is not a number',
         ]);
 
         $this->assertCount(2, $validationResult->messages());
@@ -115,11 +81,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testRequiredRule()
     {
-        $validationResult = V::make([
-            'fieldZero'  => '0',
+        $validationResult = Validator::make([
+            'fieldZero' => '0',
             'fieldSpace' => ' ',   //false
             'fieldEmpty' => '',    //false
-            'fieldNull'  => null,  //false
+            'fieldNull' => null,  //false
             'fieldFalse' => 'false',
         ], [
             'fieldZero, fieldSpace, fieldEmpty, fieldFalse, fieldNull' => 'required',
@@ -130,14 +96,14 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testEquals()
     {
-        $v = V::make([
+        $v = Validator::make([
             'greetings' => 'hello',
-            'pinCode'   => '1111',
-            'buy'       => '@!#@!',
+            'pinCode' => '1111',
+            'buy' => '@!#@!',
         ], [
             'greetings' => 'equals:hello',
-            'pinCode'   => 'equals:1111',
-            'buy'       => 'equals:buy',
+            'pinCode' => 'equals:1111',
+            'buy' => 'equals:buy',
         ]);
 
         $this->assertFalse($v->passes());
@@ -146,15 +112,15 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testInNotInValidator()
     {
-        $validationResult = V::make([
-            'cash10'        => '10',
-            'cash25'        => '25',   //false
-            'shop'          => 'Metro',
+        $validationResult = Validator::make([
+            'cash10' => '10',
+            'cash25' => '25',   //false
+            'shop' => 'Metro',
             'elevatorFloor' => '13',    //false
         ], [
             'cash10, cash25' => 'in:1, 2, 5, 10, 20, 50, 100, 200, 500',
-            'shop'           => 'in:ATB, Billa, Metro',
-            'elevatorFloor'  => 'notIn:13',
+            'shop' => 'in:ATB, Billa, Metro',
+            'elevatorFloor' => 'notIn:13',
 
         ], [
             'elevatorFloor.notIn' => 'Oops',
@@ -166,7 +132,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testPhoneMask()
     {
-        $validationResult = V::make([
+        $validationResult = Validator::make([
             'phone1' => '+38(097)123-45-67',
             'phone2' => '1-234-567-8901',
             'phone3' => '(020) 4420 7123',
@@ -179,37 +145,19 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validationResult->passes());
     }
 
-    public function testExists()
-    {
-        $errorMessageIdExists = 'Such ID is not exist!';
-
-        $validationResult = V::make([
-            'email' => $this->nonUniqueEmail,
-            'id'    => '9999999999999999',
-        ], [
-            'email' => 'required|email|exists:users',
-            'id'    => 'required|numeric|exists:users',  //false
-        ], [
-            'id.exists' => $errorMessageIdExists,
-        ]);
-
-        $this->assertFalse($validationResult->passes());
-        $this->assertEquals($errorMessageIdExists, $validationResult->first('id'));
-    }
-
     public function testAllMessagesMethods()
     {
-        $v = V::make([], [
-            'age'     => 'min:16|required',
-            'date'    => 'dateFormat:(d-m-Y)|required',
+        $v = Validator::make([], [
+            'age' => 'min:16|required',
+            'date' => 'dateFormat:(d-m-Y)|required',
             'randNum' => 'between:1, 100|required',
-            'ip'      => 'ip|required',
-            'email'   => 'email|required',
+            'ip' => 'ip|required',
+            'email' => 'email|required',
         ], [
-            'age.required'   => 'age required',
-            'age.min'        => 'min 10',
+            'age.required' => 'age required',
+            'age.min' => 'min 10',
             'email.required' => 'email required',
-            'email.email'    => 'bad email',
+            'email.email' => 'bad email',
         ]);
 
         $this->assertFalse($v->passes());
@@ -227,29 +175,29 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testUrl()
     {
-        $v = V::make([
-            'http'  => 'http://duv.com-sk.com',
+        $v = Validator::make([
+            'http' => 'http://duv.com-sk.com',
             'https' => 'https://duv.com-sk.com',
-            'ldap'  => 'ldap://[::1]',
-            'mail'  => 'mailto:john.do@example.com',
-            'news'  => 'news:news.yahoo.com',
+            'ldap' => 'ldap://[::1]',
+            'mail' => 'mailto:john.do@example.com',
+            'news' => 'news:news.yahoo.com',
         ], [
-            'http'  => 'url',
+            'http' => 'url',
             'https' => 'url',
-            'ldap'  => 'url',
-            'mail'  => 'url',
-            'news'  => 'url',
+            'ldap' => 'url',
+            'mail' => 'url',
+            'news' => 'url',
         ]);
         $this->assertTrue($v->passes());
 
-        $v = V::make([
-            'site'  => 'duv.com-sk.com',
+        $v = Validator::make([
+            'site' => 'duv.com-sk.com',
         ], [
-            'site'  => 'url',
+            'site' => 'url',
         ]);
         $this->assertFalse($v->passes());
 
-        $v = V::make([
+        $v = Validator::make([
             'site' => '/var/www/files',
         ], [
             'site' => 'url',
@@ -260,27 +208,27 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testAllTypesOfErrorMessages()
     {
         //default message from file
-        $v = V::make([
+        $v = Validator::make([
             'myEmail' => '',
-            'name'    => '',
-            'php'     => '5.6',
-            'mmx'     => '',
-            'login'   => 'admin',
-            'age'     => '17',
-            'age2'    => '20',
+            'name' => '',
+            'php' => '5.6',
+            'mmx' => '',
+            'login' => 'admin',
+            'age' => '17',
+            'age2' => '20',
 
         ], [
             'myEmail' => 'email|required|min:5',
-            'name'    => 'alpha|required',
-            'php'     => 'equals:7',
-            'mmx'     => 'required',
-            'login'   => 'min:8|required',
-            'age'     => 'min:18|numeric|required',
-            'age2'    => 'max:18|numeric|required',
+            'name' => 'alpha|required',
+            'php' => 'equals:7',
+            'mmx' => 'required',
+            'login' => 'min:8|required',
+            'age' => 'min:18|numeric|required',
+            'age2' => 'max:18|numeric|required',
         ], [
             'mmx.required' => 'mmx is required',
-            'login.min'    => 'minimum 8',
-            'age.min'      => 'min 18, sorry',
+            'login.min' => 'minimum 8',
+            'age.min' => 'min 18, sorry',
         ]);
 
         $this->assertEquals('min 18, sorry', $v->first('age'));
@@ -297,7 +245,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testMessagesFieldValue()
     {
-        $v = V::make([
+        $v = Validator::make([
             'myEmail' => 'bobbob.ru',
         ], [
             'myEmail' => 'email',
@@ -312,19 +260,19 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testArray()
     {
-        $v = V::make([
+        $v = Validator::make([
             'firstname' => 'Den',
-            'lastname'  => 'K',
-            'info'      => ['phone' => '+380987365432', 'country' => 'Albania'],
-            'email'     => 'ddx@mmx.uk',
-            'test'      => [10, 20, 30, 'fail' => 40],
+            'lastname' => 'K',
+            'info' => ['phone' => '+380987365432', 'country' => 'Albania'],
+            'email' => 'ddx@mmx.uk',
+            'test' => [10, 20, 30, 'fail' => 40],
         ], [
-            'firstname, lastname'       => 'required|alpha',
-            'info[phone]'               => 'required|phoneMask:(+380#########)',
-            'info[country]'             => 'required|alpha',
-            'email'                     => 'required|email',
+            'firstname, lastname' => 'required|alpha',
+            'info[phone]' => 'required|phoneMask:(+380#########)',
+            'info[country]' => 'required|alpha',
+            'email' => 'required|email',
             'test[0], test[1], test[2]' => 'numeric|between:1, 100',
-            'test[fail]'                => 'required|equals:41',
+            'test[fail]' => 'required|equals:41',
         ], [
             'test[fail].equals' => '40 need',
         ]);
@@ -338,7 +286,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testSizeRule()
     {
-        $v = V::make([
+        $v = Validator::make([
             'testSize' => '123456',
             'failSize' => 'max_int',
         ], [
@@ -355,12 +303,12 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testBetweenNumberAndString()
     {
-        $v = V::make([
-            'age'      => '33',
-            'name'     => 'Umar al-Khayyām',
+        $v = Validator::make([
+            'age' => '33',
+            'name' => 'Umar al-Khayyām',
             'fullname' => 'Armin van Buuren',
         ], [
-            'age'            => 'required|numeric|between:30, 40',
+            'age' => 'required|numeric|between:30, 40',
             'name, fullname' => 'required|between:2, 20',
         ]);
 
@@ -369,22 +317,22 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     public function testAllNewMessagesMethodsAndMagicFields()
     {
-        $v = V::make([
+        $v = Validator::make([
             'firstName' => 'Armin1',
-            'lastName'  => 'Buuren2',
+            'lastName' => 'Buuren2',
             'userEmail' => 'bob.bob.not-email.com',
-            'age'       => 'sercet!!1',
-            'valids'    => ['YES', 'Yep'],
+            'age' => 'sercet!!1',
+            'valids' => ['YES', 'Yep'],
         ], [
 
-            'firstName, lastName'  => 'alpha',
-            'userEmail'            => 'email',
-            'age'                  => 'numeric|min:16',
+            'firstName, lastName' => 'alpha',
+            'userEmail' => 'email',
+            'age' => 'numeric|min:16',
             'valids[0], valids[1]' => 'required|alpha',
         ], [
             'firstName.alpha' => 'non-alpha-1',   // total 5 errors
-            'lastName.alpha'  => 'non-alpha-2',
-            'age.numeric'     => 'NaN',
+            'lastName.alpha' => 'non-alpha-2',
+            'age.numeric' => 'NaN',
             'userEmail.email' => 'NaE',
         ]);
 

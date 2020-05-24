@@ -2,8 +2,6 @@
 
 namespace Progsmile\Validator\Format;
 
-use Progsmile\Validator\Contracts\Format\FormatInterface;
-
 class HTML implements FormatInterface
 {
     public function reformat($messages)
